@@ -4,10 +4,12 @@ define(function (require) {
         LosingScreenFactory = require('ui/screens/losing-screen-factory'),
         WinningScreenFactory = require('ui/screens/winning-screen-factory'),
         MapFactory = require('game/map/map-factory'),
-        TileFactory = require('game/tile/tile-factory'),
+        TileFactory = require('game/tiles/tile-factory'),
         Game = require('game'),
         Engine = require('game/engine'),
         UI = require('ui/ui'),
+        AsciiTiles = require('ui/tiles/ascii-tiles'),
+        TileType = require('enums/tile-type'),
         DebugLogger = require('debug-logger');
 
     return CompositionRoot;
@@ -19,11 +21,14 @@ define(function (require) {
         injector.register('PlayingScreenFactory', PlayingScreenFactory);
         injector.register('LosingScreenFactory', LosingScreenFactory);
         injector.register('WinningScreenFactory', WinningScreenFactory);
+        injector.register('AsciiTiles', AsciiTiles, true);
         injector.register('MapFactory', MapFactory);
         injector.register('TileFactory', TileFactory);
         injector.register('Game', Game);
         injector.register('Engine', Engine, true);
         injector.register('Logger', DebugLogger, true);
         injector.register('UI', UI);
+        injector.register('TileType', TileType);
+
     }
 });

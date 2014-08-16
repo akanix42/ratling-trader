@@ -4,7 +4,7 @@ define(function (require) {
 
         return Constructor;
 
-        function Constructor(ui, logger) {
+        function Constructor(ui, logger, asciiTiles) {
             var gameCommands = getCommands();
             var display = ui.getDisplay();
             var engine = ui.getEngine();
@@ -17,18 +17,12 @@ define(function (require) {
             self.handleInput = handleInput;
 
             function render() {
-                var foreground, background, colors;
-                for (var i = 0; i < 15; i++) {
-                    // Calculate the foreground color, getting progressively darker
-                    // and the background color, getting progressively lighter.
-                    foreground = ROT.Color.toRGB([255 - (i * 20),
-                                                  255 - (i * 20),
-                                                  255 - (i * 20)]);
-                    background = ROT.Color.toRGB([i * 20, i * 20, i * 20]);
-                    // Create the color format specifier.
-                    colors = "%c{" + foreground + "}%b{" + background + "}";
-                    // Draw the text at col 2 and row i
-                    display.drawText(2, i, colors + "Hello, world!");
+                var level = engine.getCurrentLevel();
+                for (var x = 0; x < level.map.getWidth(); x++) {
+                    for (var y = 0; y < level.map.getHeight(); y++) {
+                        asciiTiles.get(level.map.getTile(x, y).getType())
+                            .draw(display, x, y);
+                    }
                 }
             }
 
@@ -47,7 +41,7 @@ define(function (require) {
             }
 
             function enter() {
-
+                engine.enterWorld();
             }
 
             function exit() {

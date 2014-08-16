@@ -1,11 +1,15 @@
 define(function (require) {
-    var Tile = require('game/tile/tile');
+    var Tile = require('game/tiles/tile');
 
     return Constructor;
 
-    function Constructor(tileType) {
+    function Constructor() {
         var self = this;
+        self.get = get;
 
-        return new Tile(tileType);
+        function get(tileType) {
+            return new Tile(tileType);
+
+        }
     }
 });
