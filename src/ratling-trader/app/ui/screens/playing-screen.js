@@ -5,39 +5,52 @@ define(function (require) {
         return Constructor;
 
         function Constructor(ui, logger, asciiTiles) {
-            var gameCommands = getCommands();
-            var display = ui.getDisplay();
-            var engine = ui.getEngine();
-
-            var self = this;
+            var self = this,
+                gameCommands = getCommands(),
+                display = ui.getDisplay(),
+                engine = ui.getEngine();
 
             self.enter = enter;
             self.exit = exit;
             self.render = render;
             self.handleInput = handleInput;
 
+
             function render() {
+                var gameState = engine.getGameState(),
+                    screenWidth = ui.getWidth(),
+                    screenHeight = ui.getHeight(),
+                    topLeftX = Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.map.getWidth() - screenWidth),
+                    topLeftY = Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.map.getHeight() - screenHeight);
+
                 var level = engine.getCurrentLevel();
-                for (var x = 0; x < level.map.getWidth(); x++) {
-                    for (var y = 0; y < level.map.getHeight(); y++) {
-                        asciiTiles.get(level.map.getTile(x, y).getType())
-                            .draw(display, x, y);
+                for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
+                    for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
+                        asciiTiles
+                            .get(level.map.getTile(x, y).getType())
+                            .draw(display, x - topLeftX, y - topLeftY);
                     }
                 }
+                display.draw(
+                        gameState.cursorPosition.x - topLeftX,
+                        gameState.cursorPosition.y - topLeftY,
+                    '@',
+                    'white',
+                    'black'
+                );
             }
 
             function handleInput(inputType, inputData) {
-                if (!(inputData.keyCode in gameCommands))
-                    return;
-
-                var command = gameCommands[inputData.keyCode];
-                if (command === undefined)
-                    logger.warn(inputData.keyCode + ' is an invalid command');
-
+                var command = gameCommands[inputType][inputData.keyCode];
+                
                 if (typeof command === 'function')
                     command();
-                else
-                    logger.log(engine.processCommand(command));
+                else {
+                    var result = engine.processCommand(command);
+                    if (!result.error)
+                        render();
+                }
+
             }
 
             function enter() {
@@ -49,13 +62,15 @@ define(function (require) {
             }
 
             function getCommands() {
-                var commands = {};
-                commands[ROT.VK_RETURN] = win;
-                commands[ROT.VK_ESCAPE] = lose;
-                commands[ROT.VK_LEFT] = GameCommands.GoLeft;
-                commands[ROT.VK_RIGHT] = GameCommands.GoRight;
-                commands[ROT.VK_UP] = GameCommands.GoUp;
-                commands[ROT.VK_DOWN] = GameCommands.GoDown;
+                var commands = {keydown: {}, keyup: {}, keypress: {}};
+                var keydown = commands.keydown,
+                    keyup = commands.keyup;
+                keyup[ROT.VK_RETURN] = win;
+                keyup[ROT.VK_ESCAPE] = lose;
+                keydown[ROT.VK_LEFT] = GameCommands.GoLeft;
+                keydown[ROT.VK_RIGHT] = GameCommands.GoRight;
+                keydown[ROT.VK_UP] = GameCommands.GoUp;
+                keydown[ROT.VK_DOWN] = GameCommands.GoDown;
 
                 return commands;
 

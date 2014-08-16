@@ -7,7 +7,8 @@ define(function (require) {
 
     function Constructor(tileFactory) {
         var self = this;
-
+        var mapWidth = 500,
+            mapHeight = 500;
         self.get = get;
 
         function get() {
@@ -19,7 +20,7 @@ define(function (require) {
 
         function generateCaveMap() {
             var tiles = createEmptyMap();
-            var generator = new ROT.Map.Cellular(80, 24);
+            var generator = new ROT.Map.Cellular(mapWidth, mapHeight);
             generator.randomize(0.5);
 
             var totalIterations = 3;
@@ -39,9 +40,9 @@ define(function (require) {
         function createEmptyMap() {
             var tiles = [];
             var nullTile = tileFactory.get(TileType.Null);
-            for (var x = 0; x < 80; x++) {
+            for (var x = 0; x < mapWidth; x++) {
                 tiles.push([]);
-                for (var y = 0; y < 24; y++)
+                for (var y = 0; y < mapHeight; y++)
                     tiles[x].push(nullTile);
             }
 

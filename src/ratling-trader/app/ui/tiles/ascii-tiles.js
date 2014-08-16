@@ -17,7 +17,7 @@ define(function (require) {
 
     function defineTiles() {
         tiles[TileType.Floor] = new AsciiTile('.');
-        tiles[TileType.Wall] = new AsciiTile('#.', 'goldenrod');
+        tiles[TileType.Wall] = new AsciiTile('#', 'goldenrod');
 
     }
 });

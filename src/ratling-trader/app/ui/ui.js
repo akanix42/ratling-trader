@@ -6,13 +6,15 @@ define(function (require) {
 
     function Constructor(engine, playingScreenFactory, winningScreenFactory, losingScreenFactory, logger) {
         var self = this;
-        var display, screens = {};
+        var display, screens = {}, width = 80, height = 24;
 
         self.init = init;
         self.getScreens = getScreens;
         self.switchScreen = switchScreen;
         self.getDisplay = getDisplay;
         self.getEngine = getEngine;
+        self.getWidth = getWidth;
+        self.getHeight = getHeight;
 
         function init() {
             display = createDisplay();
@@ -27,10 +29,8 @@ define(function (require) {
         }
 
         function createDisplay() {
-            // Create a display 80 characters wide and 20 characters tall
-            var display = new ROT.Display({width: 80, height: 20});
+            var display = new ROT.Display({width: width, height: height});
             var container = display.getContainer();
-            // Add the container to our HTML page
             document.body.appendChild(container);
 
             return display;
@@ -76,6 +76,14 @@ define(function (require) {
 
         function getEngine() {
             return engine;
+        }
+
+        function getWidth() {
+            return width;
+        }
+
+        function getHeight() {
+            return height;
         }
     }
 });
