@@ -1,6 +1,6 @@
 define(function (require) {
     var Map = require('game/map/map'),
-        TileType = require('enums/tile-type'),
+        EntityType = require('enums/entity-type'),
         ROT = require('rot');
 
     return Constructor;
@@ -32,14 +32,14 @@ define(function (require) {
 
             function updateMapTile(x, y, type) {
                 tiles[x][y] = type === 1
-                    ? tileFactory.get(TileType.Floor)
-                    : tileFactory.get(TileType.Wall);
+                    ? tileFactory.get(EntityType.stoneFloor)
+                    : tileFactory.get(ROT.RNG.getUniform() < 0.4 ? EntityType.stoneWall : EntityType.dirtWall);
             }
         }
 
         function createEmptyMap() {
             var tiles = [];
-            var nullTile = tileFactory.get(TileType.Null);
+            var nullTile = tileFactory.get(EntityType.null);
             for (var x = 0; x < mapWidth; x++) {
                 tiles.push([]);
                 for (var y = 0; y < mapHeight; y++)

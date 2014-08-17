@@ -15,6 +15,7 @@ define(function (require) {
             self.render = render;
             self.handleInput = handleInput;
 
+            var drawCounter = 0;
 
             function render() {
                 var gameState = engine.getGameState(),
@@ -26,23 +27,24 @@ define(function (require) {
                 var level = engine.getCurrentLevel();
                 for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
                     for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
+                        var gameTile = level.map.getTile(x, y);
                         asciiTiles
-                            .get(level.map.getTile(x, y).getType())
+                            .get(gameTile)
                             .draw(display, x - topLeftX, y - topLeftY);
                     }
                 }
-                display.draw(
-                        gameState.cursorPosition.x - topLeftX,
-                        gameState.cursorPosition.y - topLeftY,
-                    '@',
-                    'white',
-                    'black'
-                );
+                //                display.draw(
+                //                        gameState.cursorPosition.x - topLeftX,
+                //                        gameState.cursorPosition.y - topLeftY,
+                //                    '@',
+                //                    'white',
+                //                    'black'
+                //                );
             }
 
             function handleInput(inputType, inputData) {
                 var command = gameCommands[inputType][inputData.keyCode];
-                
+
                 if (typeof command === 'function')
                     command();
                 else {
