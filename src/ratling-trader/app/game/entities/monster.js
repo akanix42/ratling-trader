@@ -4,23 +4,20 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor(data) {
+    function Constructor(data, Abilities) {
         var self = this;
         inherit(Creature, self, data);
-        //Creature.apply(self, data);
-        //        var base = extend({}, self);
-        //
-        self.move = move;
-        function move(dX, dY) {
-            self.base.move(dX, dY);
-            data.level.resume();
-        }
 
         self.act = act;
 
         function act() {
+            var ability = pickAbility();
+            Abilities.get(ability.name).execute(self, ability);
             data.level.getEngine().updateUI(self);
-            data.level.pause();
+        }
+
+        function pickAbility() {
+            return data.type.abilities[0];
         }
     }
 });

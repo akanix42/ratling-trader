@@ -31,7 +31,7 @@ define(function (require) {
         }
 
         function createDisplay() {
-            var display = new ROT.Display({width: width, height: height});
+            var display = new ROT.Display({width: width, height: height, fontSize: 20});
             ROT.Display.Rect.cache = true
             var container = display.getContainer();
             document.body.appendChild(container);

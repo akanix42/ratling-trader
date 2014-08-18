@@ -1,7 +1,11 @@
 require(['./require-config'], function () {
-    require(['./composition-root'], function (CompositionRoot) {
+    require(['./composition-root','when'], function (CompositionRoot, when) {
         var compositionRoot = new CompositionRoot();
-        var game = compositionRoot.injector.resolve('Game');
-        game.run();
+        when(compositionRoot.compositionPromise)
+            .then(function () {
+                var game = compositionRoot.injector.resolve('Game');
+                game.run();
+            });
+
     });
 });

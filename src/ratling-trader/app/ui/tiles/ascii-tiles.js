@@ -26,6 +26,7 @@ define(function (require) {
         addTile(EntityType.dirtWall, new AsciiTile('#', 'goldenrod'));
         addTile(EntityType.dirtFloor, new AsciiTile('.', 'goldenrod'));
         addTile(EntityType.player, new AsciiTile('@', 'white'));
+        addTile(EntityType.fungus, new AsciiTile('F', '#66FF00'));
 
     }
 

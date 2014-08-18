@@ -2,7 +2,7 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor(data) {
+    function Constructor(data, monsterFactory) {
         var self = this;
         var scheduler = new ROT.Scheduler.Simple(),
             schedulingEngine = new ROT.Engine(scheduler);
@@ -15,6 +15,23 @@ define(function (require) {
 
         schedulingEngine.start();
         pause();
+
+        processCreatures();
+
+        function processCreatures() {
+            for (var i = 0; i < data.creatures.length; i++) {
+                data.creatures[i] = processCreature(data.creatures[i])
+
+            }
+        }
+
+        function processCreature(creature) {
+            creature = monsterFactory.get(creature);
+            creature.setLevel(self);
+            creature.setPosition(6, 5);
+            addEntity(creature);
+            return creature;
+        }
 
         function pause() {
             schedulingEngine.lock();

@@ -1,17 +1,21 @@
 define(function (require) {
-    var Injector = require('injector'),
+    var when = require('when'),
+        Injector = require('injector'),
         PlayingScreenFactory = require('ui/screens/playing-screen-factory'),
         LosingScreenFactory = require('ui/screens/losing-screen-factory'),
         WinningScreenFactory = require('ui/screens/winning-screen-factory'),
         MapFactory = require('game/map/map-factory'),
         LevelFactory = require('game/levels/level-factory'),
+        MonsterFactory = require('game/entities/monster-factory'),
         TileFactory = require('game/tiles/tile-factory'),
         PlayerFactory = require('game/entities/player-factory'),
         Game = require('game'),
         Engine = require('game/engine'),
         UI = require('ui/ui'),
         AsciiTiles = require('ui/tiles/ascii-tiles'),
-        DebugLogger = require('debug-logger');
+        DebugLogger = require('debug-logger'),
+        Abilities = require('enums/abilities'),
+        abilityList = require('config/ability-list');
 
     return CompositionRoot;
 
@@ -26,11 +30,33 @@ define(function (require) {
         injector.register('MapFactory', MapFactory);
         injector.register('LevelFactory', LevelFactory);
         injector.register('TileFactory', TileFactory);
+        injector.register('MonsterFactory', MonsterFactory);
         injector.register('PlayerFactory', PlayerFactory);
         injector.register('Game', Game);
         injector.register('Engine', Engine, true);
         injector.register('Logger', DebugLogger, true);
         injector.register('UI', UI);
+        injector.register('Abilities', Abilities, true);
 
+        self.compositionPromise = when(registerAbilities());
+
+
+        function registerAbilities() {
+            Abilities = injector.resolve('Abilities');
+            return when.map(abilityList, addAbility);
+        }
+
+        function addAbility(ability) {
+            var deferred = when.defer();
+            require([ability.path], function (abilityModule) {
+                var registeredName = ability.name + 'Ability';
+                injector.register(registeredName, abilityModule, true);
+                Abilities.register(ability.name, injector.resolve(registeredName));
+                deferred.resolve();
+            });
+            return deferred.promise;
+        }
     }
+
+
 });

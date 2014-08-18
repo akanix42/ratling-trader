@@ -16,6 +16,18 @@ define(function (require) {
 
     function defineCreatures() {
         addEntity({name: 'player', type: 'player'});
+        addEntity({
+            name: 'fungus',
+            type: 'monster',
+            abilities: [
+                {name: 'clone',
+                    cooldown: 1,
+                    limits: [
+                        {material: 'stone'}
+                    ]
+                }
+            ]
+        });
     }
 
     function addArchitecture(entityType) {
