@@ -15,6 +15,8 @@ define(function (require) {
         self.getEngine = getEngine;
         self.getWidth = getWidth;
         self.getHeight = getHeight;
+        self.update = update;
+        engine.setUI(self);
 
         function init() {
             display = createDisplay();
@@ -85,6 +87,10 @@ define(function (require) {
 
         function getHeight() {
             return height;
+        }
+
+        function update() {
+            screens.current.render();
         }
     }
 });

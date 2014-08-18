@@ -21,25 +21,18 @@ define(function (require) {
                 var gameState = engine.getGameState(),
                     screenWidth = ui.getWidth(),
                     screenHeight = ui.getHeight(),
-                    topLeftX = Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.map.getWidth() - screenWidth),
-                    topLeftY = Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.map.getHeight() - screenHeight);
+                    topLeftX = Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.getMap().getWidth() - screenWidth),
+                    topLeftY = Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.getMap().getHeight() - screenHeight);
 
                 var level = engine.getCurrentLevel();
                 for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
                     for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
-                        var gameTile = level.map.getTile(x, y);
+                        var gameTile = level.getMap().getTile(x, y);
                         asciiTiles
                             .get(gameTile)
                             .draw(display, x - topLeftX, y - topLeftY);
                     }
                 }
-                //                display.draw(
-                //                        gameState.cursorPosition.x - topLeftX,
-                //                        gameState.cursorPosition.y - topLeftY,
-                //                    '@',
-                //                    'white',
-                //                    'black'
-                //                );
             }
 
             function handleInput(inputType, inputData) {
@@ -49,8 +42,8 @@ define(function (require) {
                     command();
                 else {
                     var result = engine.processCommand(command);
-                    if (!result.error)
-                        render();
+//                    if (!result.error)
+                       // render();
                 }
 
             }

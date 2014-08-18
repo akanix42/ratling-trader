@@ -2,12 +2,14 @@ define(function (require) {
         var GameCommands = require('enums/commands');
         return Constructor;
 
-        function Constructor(mapFactory, logger, playerFactory) {
+        function Constructor(levelFactory, logger, playerFactory) {
             var self = this,
                 levels = {},
                 actions = getActions(),
                 player = playerFactory.get({}),
-                isCursorLockedToPlayer = true;
+                isCursorLockedToPlayer = true
+                ;
+            var ui;
 
             self.processCommand = processCommand;
             self.enterWorld = enterWorld;
@@ -15,8 +17,14 @@ define(function (require) {
             self.getCurrentLevel = getCurrentLevel;
             self.setCurrentLevel = setCurrentLevel;
             self.getGameState = getGameState;
+            self.updateUI = updateUI;
+            self.setUI = setUI;
 
             var cursorPosition = {x: 0, y: 0};
+
+            function setUI(value) {
+                ui = value;
+            }
 
             function processCommand(command) {
                 if (!command || !(command in actions))
@@ -36,11 +44,11 @@ define(function (require) {
             }
 
             function enterWorld() {
-                setCurrentLevel(levels.world = {map: mapFactory.get()});
+                setCurrentLevel(levels.world = levelFactory.get(self, 'world'));
                 player.setLevel(getCurrentLevel());
                 player.setPosition(5, 5);
                 lockCursorToPlayer();
-
+                getCurrentLevel().resume();
             }
 
             function getLevels() {
@@ -68,6 +76,7 @@ define(function (require) {
             function movePlayerOrCursor(command, action) {
                 player.move(action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
+                updateUI();
             }
 
             function moveCursor(command) {
@@ -88,6 +97,11 @@ define(function (require) {
             function lockCursorToPlayer() {
                 cursorPosition.x = player.getPosition().x;
                 cursorPosition.y = player.getPosition().y;
+            }
+
+            function updateUI(entity) {
+                if (ui)
+                    ui.update();
             }
         }
     }

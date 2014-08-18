@@ -11,6 +11,7 @@ define(function (require) {
         self.setLevel = setLevel;
         self.getLevel = getLevel;
         self.move = move;
+        self.act = act;
 
         function getType() {
             return data.type;
@@ -21,16 +22,17 @@ define(function (require) {
         }
 
         function setPosition(x, y) {
-            data.level.map.getTile(data.position.x, data.position.y).creature = null;
+            data.level.getMap().getTile(data.position.x, data.position.y).creature = null;
             data.position.x = x;
             data.position.y = y;
 
-            var newTile = data.level.map.getTile(x, y);
+            var newTile = data.level.getMap().getTile(x, y);
             newTile.creature = self;
         }
 
         function setLevel(level) {
             data.level = level;
+            level.addEntity(self);
         }
 
         function getLevel() {
@@ -38,15 +40,22 @@ define(function (require) {
         }
 
         function move(dX, dY) {
-            var newX = Math.max(0, Math.min(data.level.map.getWidth() - 1, data.position.x + dX)),
-                newY = Math.max(0, Math.min(data.level.map.getHeight() - 1, data.position.y + dY));
+            var newX = Math.max(0, Math.min(data.level.getMap().getWidth() - 1, data.position.x + dX)),
+                newY = Math.max(0, Math.min(data.level.getMap().getHeight() - 1, data.position.y + dY));
 
-            var newTile = data.level.map.getTile(newX, newY);
+            var newTile = data.level.getMap().getTile(newX, newY);
             if (newTile.isWalkable())
                 setPosition(newX, newY);
             else if (newTile.isDiggable())
                 newTile.dig();
 
+         //   data.level.getEngine().updateUI(self);
+            data.level.resume();
+        }
+
+        function act() {
+            data.level.getEngine().updateUI(self);
+            data.level.pause();
         }
     }
 });

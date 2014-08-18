@@ -4,6 +4,7 @@ define(function (require) {
         LosingScreenFactory = require('ui/screens/losing-screen-factory'),
         WinningScreenFactory = require('ui/screens/winning-screen-factory'),
         MapFactory = require('game/map/map-factory'),
+        LevelFactory = require('game/levels/level-factory'),
         TileFactory = require('game/tiles/tile-factory'),
         PlayerFactory = require('game/entities/player-factory'),
         Game = require('game'),
@@ -23,6 +24,7 @@ define(function (require) {
         injector.register('WinningScreenFactory', WinningScreenFactory);
         injector.register('AsciiTiles', AsciiTiles, true);
         injector.register('MapFactory', MapFactory);
+        injector.register('LevelFactory', LevelFactory);
         injector.register('TileFactory', TileFactory);
         injector.register('PlayerFactory', PlayerFactory);
         injector.register('Game', Game);

@@ -1,5 +1,5 @@
 define(function (require) {
-
+var ROT = require('rot');
     return Constructor;
 
     function Constructor(tiles, nullTile) {
@@ -7,6 +7,7 @@ define(function (require) {
 
         var width = tiles.length,
             height = tiles[0].length;
+
         self.getTile = getTile;
         self.getWidth = getWidth;
         self.getHeight = getHeight;
