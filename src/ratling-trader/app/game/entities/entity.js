@@ -26,7 +26,7 @@ define(function (require) {
         function setPublicMethods() {
             entityBase.getLogger = getLogger;
             entityBase.getData = getData;
-            entityBase.getBehaviors = getBehaviors;
+            entityBase.getState = getState;
             entityBase.getId = getId;
             entityBase.getType = getType;
             entityBase.getPosition = getPosition;
@@ -91,7 +91,7 @@ define(function (require) {
             }
         }
 
-        function getBehaviors() {
+        function getState() {
             return states[currentState];
         }
 
@@ -172,13 +172,14 @@ define(function (require) {
         }
 
         function decideOnAction() {
-            for (var i = 0; i < getBehaviors().length; i++) {
-                var behavior = getBehaviors()[i];
+            for (var i = 0; i < getState().behaviors.length; i++) {
+                var behavior = getState().behaviors[i];
                 if (behavior.probability >= ROT.RNG.getUniform()) {
                     if (self.hasAlreadyActed = performAction(behavior))
                         return;
                 }
             }
+            logger.log('do nothing');
         }
 
         function performAction(behavior) {

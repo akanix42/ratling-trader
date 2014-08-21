@@ -2,17 +2,13 @@ define(function (require) {
 
     return AttackEnemy;
 
-    function AttackEnemy(logger) {
+    function AttackEnemy() {
         var self = this;
 
-        self.execute = execute;
+        self.attack = attack;
 
-        function execute(entity) {
-            var newTile = self.getTile().getNeighbor(dX, dY);
-            if (newTile.isWalkable())
-                self.setTile(newTile);
-            else if (newTile.isDiggable())
-                newTile.dig();
+        function attack(entity) {
+            self.getLogger().log('attack!');
         }
 
     }
