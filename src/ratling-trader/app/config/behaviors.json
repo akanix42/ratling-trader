@@ -1,0 +1,4 @@
+{
+    "attack-enemy": "game/behaviors/attack-enemy",
+    "clone-self": "game/behaviors/clone-self",
+}

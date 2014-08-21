@@ -10,6 +10,9 @@ require.config({
     },
     paths: {
         requirejs: '../bower_components/requirejs/require',
+        json: '../bower_components/requirejs-plugins/src/json',
+        text: '../bower_components/text/text',
+        promise: '../bower_components/requirejs-promise/requirejs-promise',
         rot: '../bower_components/rot.js/rot',
         injector: '../lib/injector/injector',
         extend: '../lib/extend/extend',

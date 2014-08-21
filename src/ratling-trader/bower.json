@@ -22,6 +22,9 @@
     "requirejs": "~2.1.14",
     "rot.js": "ondras/rot.js",
     "stringformat.js": "jcayzac/stringformat.js#~0.0.6",
-    "when": "~3.4.4"
+    "when": "~3.4.4",
+    "requirejs-plugins": "~1.0.2",
+    "requirejs-promise": "~1.2.0",
+    "text": "requirejs/text#~2.0.12"
   }
 }

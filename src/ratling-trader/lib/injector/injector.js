@@ -22,6 +22,10 @@ define(function (require) {
             return self.dependencies[name].initializer.initialize(dependencyTree);
         }
 
+        function inject(module) {
+            new Initializer(self, '', module, false).initialize({});
+        }
+
         var injector = {
 
             dependencies: {},
@@ -33,6 +37,8 @@ define(function (require) {
                     }
                 );
             },
+
+            inject: inject,
 
             register: function (name, item, isSingleton) {
                 self.dependencies[self.fixDependencyCasing(name)] = {item: item, initializer: new Initializer(self, name, item, isSingleton)};

@@ -87,6 +87,8 @@ define(function (require) {
         function processBehaviors(state) {
             for (var i = 0; i < state.behaviors.length; i++) {
                 var behavior = state.behaviors[i];
+                if (!('probability' in  behavior ))
+                    behavior.probability = 1;
                 behavior.execute = Behaviors.get(behavior.name);
             }
         }
