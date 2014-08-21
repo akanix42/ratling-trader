@@ -89,7 +89,7 @@ define(function (require) {
                 var behavior = state.behaviors[i];
                 if (!('probability' in  behavior ))
                     behavior.probability = 1;
-                behavior.execute = Behaviors.get(behavior.name);
+                behavior.execute = Behaviors.get(behavior.name).execute;
             }
         }
 

@@ -8,7 +8,7 @@ define(function (require) {
     var behaviorPaths = getBehaviorPathsArray();
     loadBehaviors(behaviorKeys, behaviorPaths);
 
-    return deferred.promise();
+    return deferred.promise;
 
     function getBehaviorPathsArray() {
         var behaviorPaths = [];

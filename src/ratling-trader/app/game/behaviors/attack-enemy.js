@@ -1,10 +1,13 @@
 define(function (require) {
 
-    return attackEnemy;
+    return AttackEnemy;
 
-    function attackEnemy(entity) {
-        entity.getLogger().log('attack!!!!');
+    function AttackEnemy() {
+
+        return {execute: attackEnemy};
+
+        function attackEnemy(entity) {
+            entity.getLogger().log('attack!!!!');
+        }
     }
-
-
 });

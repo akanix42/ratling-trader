@@ -18,6 +18,7 @@ define(function (require) {
             Abilities = require('enums/abilities'),
             EntityTypes = require('game/entities/entity-types'),
             behaviorsLoader = require('promise!game/loaders/behaviors-loader'),
+            Behaviors = require('game/behaviors'),
             abilityList = require('config/ability-list');
 
         return CompositionRoot;
@@ -42,6 +43,9 @@ define(function (require) {
             injector.register('Logger', DebugLogger, true);
             injector.register('UI', UI);
             injector.register('Abilities', Abilities, true);
+            injector.register('Behaviors', function () {
+                return Behaviors;
+            }, true);
 
             injectLoader(behaviorsLoader);
             self.compositionPromise = when(registerAbilities());
@@ -49,9 +53,10 @@ define(function (require) {
             function injectLoader(loader) {
                 var modules = loader.getAll();
                 var moduleKeys = Object.keys(modules);
-                for (var i = 0; i < moduleKeys.length; i++)
-                     var key = moduleKeys[i];
-                modules[key] = injector.inject(modules[key]);
+                for (var i = 0; i < moduleKeys.length; i++) {
+                    var key = moduleKeys[i];
+                    Behaviors.add(key, injector.inject(modules[key]));
+                }
             }
 
             function registerAbilities() {

@@ -1,4 +1,4 @@
 {
-    "attack-enemy": "game/behaviors/attack-enemy",
-    "clone-self": "game/behaviors/clone-self",
+  "attack-enemy": "app\\game\\behaviors\\attack-enemy.js",
+  "clone-self": "app\\game\\behaviors\\clone-self.js"
 }

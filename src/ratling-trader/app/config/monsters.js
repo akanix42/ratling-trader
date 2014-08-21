@@ -19,7 +19,7 @@ define(function (require) {
             states: {
                 default: {
                     behaviors: [
-                        {name: 'attackEnemy', probability: 0.6},
+                        {name: 'attack-enemy', probability: 0.6},
                         {name: 'clone-self'},
                     ]
                 }
@@ -38,9 +38,9 @@ define(function (require) {
             states: {
                 default: {
                     behaviors: [
-                        {name: 'attackEnemy'},
-                        {name: 'moveTowardTarget'},
-                        {name: 'moveRandomly'},
+                        {name: 'attack-enemy'},
+                        {name: 'move-toward-target'},
+                        {name: 'move-randomly'},
                     ]
                 }
             },

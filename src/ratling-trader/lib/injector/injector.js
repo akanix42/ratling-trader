@@ -23,7 +23,7 @@ define(function (require) {
         }
 
         function inject(module) {
-            new Initializer(self, '', module, false).initialize({});
+            return new Initializer(self, '', module, false).initialize({});
         }
 
         var injector = {
