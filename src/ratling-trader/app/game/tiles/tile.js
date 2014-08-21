@@ -46,16 +46,16 @@ define(function (require) {
             if (!isDiggable())
                 return false;
 
-            architecture = entityFactory.get(architecture.baseEntity);
+            architecture = entityFactory.get(architecture.getData().baseEntity);
             return true;
         }
 
         function isDiggable() {
-            return architecture.isDiggable && architecture.baseEntity;
+            return getArchitecture().getData().isDiggable && architecture.getData().baseEntity;
         }
 
         function isWalkable() {
-            return architecture.isWalkable;
+            return getArchitecture().getData().isWalkable;
         }
 
         function getPosition() {

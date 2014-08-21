@@ -7,7 +7,7 @@ define(function (require) {
 
     return Entity;
 
-    function Entity(data, Mixins, logger) {
+    function Entity(data, Mixins, Behaviors, logger) {
         var self = this,
             id = data.id || Uuid.v4(),
             abilities = {},
@@ -20,12 +20,12 @@ define(function (require) {
         setPublicMethods();
 
         addMixins();
+        addStates();
         setInitialState();
 
         function setPublicMethods() {
             entityBase.getLogger = getLogger;
             entityBase.getData = getData;
-            entityBase.addBehavior = addBehavior;
             entityBase.getBehaviors = getBehaviors;
             entityBase.getId = getId;
             entityBase.getType = getType;
@@ -76,10 +76,19 @@ define(function (require) {
             return data;
         }
 
-        function addBehavior(state, name, behavior) {
-            if (!(state in states))
-                states[state] = [];
-            states.push({name: name, execute: behavior});
+        function addStates() {
+            extend(true, states, self.getData().states);
+            var keys = Object.keys(states);
+            for (var i = 0; i < keys.length; i++) {
+                processBehaviors(states[keys[i]]);
+            }
+        }
+
+        function processBehaviors(state) {
+            for (var i = 0; i < state.behaviors.length; i++) {
+                var behavior = state.behaviors[i];
+                behavior.execute = Behaviors.get(behavior.name);
+            }
         }
 
         function getBehaviors() {
@@ -158,18 +167,22 @@ define(function (require) {
 
         function act() {
             if (!self.hasAlreadyActed)
-                performAction();
+                decideOnAction();
             self.hasAlreadyActed = false;
         }
 
-        function performAction() {
+        function decideOnAction() {
             for (var i = 0; i < getBehaviors().length; i++) {
                 var behavior = getBehaviors()[i];
                 if (behavior.probability >= ROT.RNG.getUniform()) {
-                    if (self.hasAlreadyActed = behavior.execute(self))
+                    if (self.hasAlreadyActed = performAction(behavior))
                         return;
                 }
             }
+        }
+
+        function performAction(behavior) {
+            behavior.execute(self);
         }
     }
 });

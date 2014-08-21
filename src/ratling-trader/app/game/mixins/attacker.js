@@ -1,14 +1,13 @@
 define(function (require) {
 
-    return Attack;
+    return AttackEnemy;
 
-    function Attack(logger) {
+    function AttackEnemy(logger) {
         var self = this;
-        var name = 'Attack';
 
-        self.addBehaviour(name, execute);
+        self.execute = execute;
 
-        function execute(dX, dY) {
+        function execute(entity) {
             var newTile = self.getTile().getNeighbor(dX, dY);
             if (newTile.isWalkable())
                 self.setTile(newTile);

@@ -82,7 +82,8 @@ define(function (require) {
             }
 
             function movePlayerOrCursor(command, action) {
-                player.move(action.data.x || 0, action.data.y || 0);
+                player.performAction('move', action.data.x || 0, action.data.y || 0);
+                //                player.move(action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
                 updateUI();
             }

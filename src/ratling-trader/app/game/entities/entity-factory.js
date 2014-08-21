@@ -1,8 +1,7 @@
 define(function (require) {
-    var //Player = require('game/entities/mixins'),
-        extend = require('lib/extend/extend'),
-        //        Entities = require('enums/entity-type'),
+    var extend = require('lib/extend/extend'),
         Mixins = require('game/mixins'),
+        Behaviors = require('game/behaviors'),
         Entity = require('game/entities/entity');
 
 
@@ -17,15 +16,8 @@ define(function (require) {
             if (typeof data === 'string')
                 data = {type: data};
 
-//            var entityType= entityTypes.get(data.type);
-//
-//            if (entityType.type === 'architecture') {
-//                if (!entityTypes.get(data.type).getType)
-//                    entityTypes.get(data.type).getType = function () {return data.type;}
-//                return Object.create(extend(true, {}, entityTypes.get(data.type)));
-//            }
             data = extend(true, getDefaultData(), entityTypes.get(data.type), data);
-            var entity = new Entity(data, Mixins, logger);
+            var entity = new Entity(data, Mixins, Behaviors, logger);
             return entity;
         }
 

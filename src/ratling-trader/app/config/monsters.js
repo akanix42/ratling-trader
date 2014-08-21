@@ -5,18 +5,12 @@ define(function (require) {
             type: 'player',
             mixins: [
                 'mobile',
-                'destructible'
+                'destructible',
+                'player'
             ],
             attributes: {
                 strength: 1,
                 health: 10
-            },
-            states: {
-                default: {
-                    behaviours: [
-                        {name: 'player-input', probability: 0.6}
-                    ]
-                }
             }
         },
         {
@@ -24,8 +18,8 @@ define(function (require) {
             type: 'monster',
             states: {
                 default: {
-                    behaviours: [
-                        {name: 'attack', probability: 0.6},
+                    behaviors: [
+                        {name: 'attackEnemy', probability: 0.6},
                         {name: 'clone-self'},
                     ]
                 }
@@ -43,8 +37,8 @@ define(function (require) {
             type: 'monster',
             states: {
                 default: {
-                    behaviours: [
-                        {name: 'attack'},
+                    behaviors: [
+                        {name: 'attackEnemy'},
                         {name: 'moveTowardTarget'},
                         {name: 'moveRandomly'},
                     ]
