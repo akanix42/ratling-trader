@@ -5,6 +5,8 @@
       <w>keydown</w>
       <w>keypress</w>
       <w>keyup</w>
+      <w>mixins</w>
+      <w>stringformat</w>
     </words>
   </dictionary>
 </component>

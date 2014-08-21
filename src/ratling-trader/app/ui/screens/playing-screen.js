@@ -66,7 +66,14 @@ define(function (require) {
                 keydown[ROT.VK_RIGHT] = GameCommands.GoRight;
                 keydown[ROT.VK_UP] = GameCommands.GoUp;
                 keydown[ROT.VK_DOWN] = GameCommands.GoDown;
-
+                keydown[ROT.VK_NUMPAD4] = GameCommands.GoLeft;
+                keydown[ROT.VK_NUMPAD7] = GameCommands.GoUpLeft;
+                keydown[ROT.VK_NUMPAD8] = GameCommands.GoUp;
+                keydown[ROT.VK_NUMPAD9] = GameCommands.GoUpRight;
+                keydown[ROT.VK_NUMPAD6] = GameCommands.GoRight;
+                keydown[ROT.VK_NUMPAD3] = GameCommands.GoDownRight;
+                keydown[ROT.VK_NUMPAD2] = GameCommands.GoDown;
+                keydown[ROT.VK_NUMPAD1] = GameCommands.GoDownLeft;
                 return commands;
 
 

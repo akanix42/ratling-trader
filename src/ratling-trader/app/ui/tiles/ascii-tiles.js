@@ -1,37 +1,40 @@
 define(function (require) {
-    var EntityType = require('enums/entity-type'),
+    var //EntityType = require('enums/entity-type'),
         AsciiTile = require('ui/tiles/ascii-tile');
 
-    var tiles = {};
-    defineTiles();
+    return AsciiTiles;
 
-    return Constructor;
-
-    function Constructor() {
+    function AsciiTiles(entityTypes) {
         var self = this;
         self.get = get;
         function get(tile) {
-            var entityType = tile.getArchitecture();
+            var entityType = tile.getArchitecture().getType();
 
-            if (tile.creature)
-                entityType = tile.creature.getType();
+            if (tile.getCreature())
+                entityType = tile.getCreature().getType();
 
-            return tiles[entityType.name];
+            return tiles[entityType] || tiles['unknown'];
+        }
+
+        var tiles = {};
+        defineTiles();
+
+        function defineTiles() {
+            addTile(entityTypes.get('stoneFloor'), new AsciiTile('.'));
+            addTile(entityTypes.get('stoneWall'), new AsciiTile('#', 'gray'));
+            addTile(entityTypes.get('dirtWall'), new AsciiTile('#', 'goldenrod'));
+            addTile(entityTypes.get('dirtFloor'), new AsciiTile('.', 'goldenrod'));
+            addTile(entityTypes.get('player'), new AsciiTile('@', 'white'));
+            addTile(entityTypes.get('fungus'), new AsciiTile('F', '#66FF00'));
+            addTile({name: 'unknown'}, new AsciiTile('?', 'purple'));
+
+
+        }
+
+        function addTile(entityType, uiTile) {
+            tiles[entityType.name] = uiTile;
+
         }
     }
 
-    function defineTiles() {
-        addTile(EntityType.stoneFloor, new AsciiTile('.'));
-        addTile(EntityType.stoneWall, new AsciiTile('#', 'gray'));
-        addTile(EntityType.dirtWall, new AsciiTile('#', 'goldenrod'));
-        addTile(EntityType.dirtFloor, new AsciiTile('.', 'goldenrod'));
-        addTile(EntityType.player, new AsciiTile('@', 'white'));
-        addTile(EntityType.fungus, new AsciiTile('F', '#66FF00'));
-
-    }
-
-    function addTile(entityType, uiTile) {
-        tiles[entityType.name] = uiTile;
-
-    }
 });

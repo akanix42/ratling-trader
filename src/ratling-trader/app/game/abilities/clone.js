@@ -2,20 +2,34 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor(monsterFactory) {
+    function Constructor(entityFactory) {
         var self = this;
 
         self.execute = execute;
 
         function execute(creature, ability) {
+            var openTile = getAvailableTile();
+            if (!openTile)
+                return false;
             var clone = {
-                type: creature.getType(),
-                position: {x: creature.getPosition().x, y: creature.getPosition().y - 1}
+                type: creature.getType()
             };
-            clone = monsterFactory.get(clone);
+            clone = entityFactory.get(clone);
             clone.setLevel(creature.getLevel());
-            clone.setPosition(clone.getPosition().x, clone.getPosition().y);
+            clone.setTile(openTile);
             creature.getLevel().addEntity(clone);
+
+
+            function getAvailableTile() {
+                var adjacentTiles = creature.getLevel().getMap().getAdjacentTiles(creature.getPosition());
+                for (var tileIndex = 0; tileIndex < adjacentTiles.length; tileIndex++) {
+                    var tile = adjacentTiles[tileIndex];
+                    if (!tile.getCreature() && tile.isWalkable())
+                        return tile;
+                }
+                return false;
+            }
         }
+
     }
 });

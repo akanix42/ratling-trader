@@ -2,11 +2,11 @@ define(function (require) {
         var GameCommands = require('enums/commands');
         return Constructor;
 
-        function Constructor(levelFactory, logger, playerFactory) {
+        function Constructor(levelFactory, logger, entityFactory) {
             var self = this,
                 levels = {},
                 actions = getActions(),
-                player = playerFactory.get({}),
+                player = entityFactory.get({type: 'player'}),
                 isCursorLockedToPlayer = true
                 ;
             var ui;
@@ -44,11 +44,16 @@ define(function (require) {
             }
 
             function enterWorld() {
+                logger.log('entering world');
                 setCurrentLevel(levels.world = levelFactory.get(self, 'world'));
+                logger.log('level loaded');
+
                 player.setLevel(getCurrentLevel());
                 player.setPosition(5, 5);
                 lockCursorToPlayer();
                 getCurrentLevel().resume();
+                logger.log('entered world');
+
             }
 
             function getLevels() {
@@ -69,7 +74,10 @@ define(function (require) {
                 actions[GameCommands.GoRight] = {execute: movePlayerOrCursor, data: {x: 1}};
                 actions[GameCommands.GoUp] = {execute: movePlayerOrCursor, data: {y: -1}};
                 actions[GameCommands.GoDown] = {execute: movePlayerOrCursor, data: {y: 1}};
-
+                actions[GameCommands.GoUpLeft] = {execute: movePlayerOrCursor, data: {x: -1, y: -1}};
+                actions[GameCommands.GoUpRight] = {execute: movePlayerOrCursor, data: {x: 1, y: -1}};
+                actions[GameCommands.GoDownRight] = {execute: movePlayerOrCursor, data: {x: 1, y: 1}};
+                actions[GameCommands.GoDownLeft] = {execute: movePlayerOrCursor, data: {x: -1, y: 1}};
                 return actions;
             }
 

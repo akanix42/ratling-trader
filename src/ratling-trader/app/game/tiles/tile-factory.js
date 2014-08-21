@@ -3,12 +3,12 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor() {
+    function Constructor(entityFactory) {
         var self = this;
         self.get = get;
 
-        function get(tileType) {
-            return new Tile(tileType);
+        function get(initialArchitecture, data) {
+            return new Tile(initialArchitecture, data, entityFactory);
 
         }
     }

@@ -1,19 +1,11 @@
 define(function (require) {
-    var Uuid = require('uuid'),
-        inherit = require('helpers/inherit'),
-        stringFormat = require('stringformat');
 
-    return Constructor;
+    return Move;
 
-    function Constructor(data, logger) {
+    function Move() {
         var self = this;
 
-
-
-
         self.move = move;
-        self.act = act;
-
 
         function move(dX, dY) {
             var newTile = self.getTile().getNeighbor(dX, dY);
@@ -21,10 +13,6 @@ define(function (require) {
                 self.setTile(newTile);
             else if (newTile.isDiggable())
                 newTile.dig();
-        }
-
-        function act() {
-            self.getLevel().getEngine().updateUI(self);
         }
 
     }

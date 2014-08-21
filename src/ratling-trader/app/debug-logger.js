@@ -1,5 +1,6 @@
 define(function (require) {
-    var LogLevel = require('enums/log-level');
+    var LogLevel = require('enums/log-level'),
+        moment = require('moment');
 
     return DebugLogger;
 
@@ -13,12 +14,23 @@ define(function (require) {
         self.logError = new LogWriter(console.error, LogLevel.Error, self).log;
         self.logInfo = new LogWriter(console.info, LogLevel.Info, self).log;
 
+        self.group = consoleApply(console.group);
+        self.groupEnd = consoleApply(console.groupEnd);
+
+
+        function consoleApply(fn) {
+            return function () {
+                fn.apply(console, arguments);
+            }
+        }
+
         function LogWriter(outputFunction, level, logger) {
             var self = this;
             self.log = log;
             function log() {
+                var args = [moment().format('hh:mm:ss')].concat(Array.prototype.slice.call(arguments, 0));
                 if (level <= logger.logLevel)
-                    outputFunction.apply(console, arguments);
+                    outputFunction.apply(console, args);
             }
         }
     }

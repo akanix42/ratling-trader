@@ -6,15 +6,17 @@ define(function (require) {
         WinningScreenFactory = require('ui/screens/winning-screen-factory'),
         MapFactory = require('game/map/map-factory'),
         LevelFactory = require('game/levels/level-factory'),
-        MonsterFactory = require('game/entities/monster-factory'),
+//        MonsterFactory = require('game/entities/monster-factory'),
         TileFactory = require('game/tiles/tile-factory'),
-        PlayerFactory = require('game/entities/player-factory'),
+//        PlayerFactory = require('game/entities/player-factory'),
+        EntityFactory = require('game/entities/entity-factory'),
         Game = require('game'),
         Engine = require('game/engine'),
         UI = require('ui/ui'),
         AsciiTiles = require('ui/tiles/ascii-tiles'),
         DebugLogger = require('debug-logger'),
         Abilities = require('enums/abilities'),
+        EntityTypes = require('game/entities/entity-types'),
         abilityList = require('config/ability-list');
 
     return CompositionRoot;
@@ -30,9 +32,11 @@ define(function (require) {
         injector.register('MapFactory', MapFactory);
         injector.register('LevelFactory', LevelFactory);
         injector.register('TileFactory', TileFactory);
-        injector.register('MonsterFactory', MonsterFactory);
-        injector.register('PlayerFactory', PlayerFactory);
+//        injector.register('MonsterFactory', MonsterFactory);
+//        injector.register('PlayerFactory', PlayerFactory);
+        injector.register('EntityFactory', EntityFactory);
         injector.register('Game', Game);
+        injector.register('EntityTypes', EntityTypes, true);
         injector.register('Engine', Engine, true);
         injector.register('Logger', DebugLogger, true);
         injector.register('UI', UI);
