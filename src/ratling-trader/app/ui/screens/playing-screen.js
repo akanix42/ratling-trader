@@ -18,8 +18,11 @@ define(function (require) {
             var drawCounter = 0;
 
             function render() {
-                var gameState = engine.getGameState(),
-                    screenWidth = ui.getWidth(),
+                var gameState = engine.getGameState();
+                if (gameState.isGameOver)
+                    ui.switchScreen(ui.getScreens().losingScreen);
+
+                var screenWidth = ui.getWidth(),
                     screenHeight = ui.getHeight(),
                     topLeftX = Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.getMap().getWidth() - screenWidth),
                     topLeftY = Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.getMap().getHeight() - screenHeight);
@@ -42,8 +45,8 @@ define(function (require) {
                     command();
                 else {
                     var result = engine.processCommand(command);
-//                    if (!result.error)
-                       // render();
+                    //                    if (!result.error)
+                    // render();
                 }
 
             }

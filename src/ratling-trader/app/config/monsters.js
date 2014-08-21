@@ -19,13 +19,14 @@ define(function (require) {
             states: {
                 default: {
                     behaviors: [
-                        {name: 'attack-enemy', probability: 0.6},
+                        {name: 'attack-enemy', probability: 10.6},
                         {name: 'clone-self'},
                     ]
                 }
             },
             mixins: [
-                'destructible'
+                'destructible',
+                'attacker'
             ],
             attributes: {
                 strength: 1,

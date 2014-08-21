@@ -1,5 +1,5 @@
 define(function (require) {
-
+    var stringformat = require('stringformat');
     return Destructible;
 
     function Destructible() {
@@ -8,9 +8,12 @@ define(function (require) {
         self.takeDamage = takeDamage;
 
         function takeDamage(attack) {
-            self.health -= attack.damage;
+            self.getLogger().log(stringformat('ouch: {damage} ', attack));
 
-            if (self.health <= 0)
+            self.getData().attributes.health -= attack.damage;
+            self.getLogger().log(stringformat('health remaining: {health}', self.getData().attributes));
+
+            if (self.getData().attributes.health <= 0)
                 self.kill();
         }
 

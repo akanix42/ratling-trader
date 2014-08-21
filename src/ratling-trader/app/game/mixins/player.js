@@ -19,5 +19,9 @@ define(function (require) {
             self.getLevel().resume();
         };
 
+        self.kill = function kill() {
+            self.getEntityBase().kill();
+            self.getLevel().getEngine().gameOver();
+        }
     }
 });

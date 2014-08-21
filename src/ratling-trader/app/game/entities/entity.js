@@ -163,6 +163,7 @@ define(function (require) {
 
 
         function kill() {
+            self.state = 'dead';
             removeSelfFromCurrentTile();
             getLevel().removeEntity(self);
         }
@@ -179,13 +180,14 @@ define(function (require) {
                 if (behavior.probability >= ROT.RNG.getUniform()) {
                     if (self.hasAlreadyActed = performAction(behavior))
                         return;
+                    debugger;
                 }
             }
             logger.log('do nothing');
         }
 
         function performAction(behavior) {
-            behavior.execute(self);
+            return behavior.execute(self);
         }
     }
 });

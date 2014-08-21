@@ -7,7 +7,8 @@ define(function (require) {
                 levels = {},
                 actions = getActions(),
                 player = entityFactory.get({type: 'player'}),
-                isCursorLockedToPlayer = true
+                isCursorLockedToPlayer = true,
+                isGameOver = false
                 ;
             var ui;
 
@@ -19,6 +20,7 @@ define(function (require) {
             self.getGameState = getGameState;
             self.updateUI = updateUI;
             self.setUI = setUI;
+            self.gameOver = gameOver;
 
             var cursorPosition = {x: 0, y: 0};
 
@@ -39,7 +41,8 @@ define(function (require) {
             function getGameState() {
                 return {
                     cursorPosition: cursorPosition,
-                    level: levels.currentLevel
+                    level: levels.currentLevel,
+                    isGameOver: isGameOver
                 };
             }
 
@@ -53,6 +56,13 @@ define(function (require) {
                 lockCursorToPlayer();
                 getCurrentLevel().resume();
                 logger.log('entered world');
+
+            }
+
+            function gameOver() {
+                getCurrentLevel().pause();
+                isGameOver = true;
+                updateUI();
 
             }
 
