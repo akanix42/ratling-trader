@@ -159,3 +159,4 @@ src/ratling-trader/bower_components/
 src/ratling-trader/node_modules/
 src/ratling-trader/.idea/workspace.xml
 node_modules/
+builder/.idea/workspace.xml
