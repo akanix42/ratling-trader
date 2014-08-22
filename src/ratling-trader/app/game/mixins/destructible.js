@@ -1,20 +1,29 @@
 define(function (require) {
-    var stringformat = require('stringformat');
+    var stringformat = require('stringformat'),
+        extend = require('lib/extend/extend');
     return Destructible;
 
-    function Destructible() {
-        var self = this;
+    function Destructible(logger) {
+        return {attacked: attacked};
 
-        self.takeDamage = takeDamage;
+        function attacked(attack) {
+            var target = this;
+            takeDamage(attack);
 
-        function takeDamage(attack) {
-            self.getLogger().log(stringformat('ouch: {damage} ', attack));
+            function takeDamage(attack) {
+                var attackResult = extend({target: target}, attack);
+                logger.log(stringformat('ouch: {damage} ', attack));
 
-            self.getData().attributes.health -= attack.damage;
-            self.getLogger().log(stringformat('health remaining: {health}', self.getData().attributes));
+                target.getData().attributes.health -= attack.damage;
+                logger.log(stringformat('health remaining: {health}', target.getData().attributes));
 
-            if (self.getData().attributes.health <= 0)
-                self.kill();
+                if (target.getData().attributes.health <= 0)
+                    target.kill();
+
+                attackResult.wasSuccessful = true;
+                attack.source.raiseEvent('attackComplete', attackResult);
+            }
+
         }
 
     }

@@ -13,7 +13,8 @@ define(function (require) {
             currentState,
             mixins = {},
             states = {},
-            entityBase = {};
+            entityBase = {},
+            events = [];
 
 
         setPublicMethods();
@@ -38,6 +39,7 @@ define(function (require) {
             entityBase.act = act;
             entityBase.hasMixin = hasMixin;
             entityBase.getEntityBase = getEntityBase;
+            entityBase.raiseEvent = raiseEvent;
 
             extend(self, entityBase);
         }
@@ -57,12 +59,25 @@ define(function (require) {
         }
 
         function addMixin(name) {
-            if (!(name in Mixins)) {
+            var mixin = Mixins.get(name);
+
+            if (!mixin) {
                 logger.logWarning(stringFormat('Invalid mixin: {name}', {name: name}));
                 return;
             }
-            inherit(Mixins[name], self, data);
+
             mixins[name] = true;
+            var eventKeys = Object.keys(mixin);
+            for (var i = 0; i < eventKeys.length; i++) {
+                var event = eventKeys[i];
+                addEventHandler(event, mixin[event]);
+            }
+        }
+
+        function addEventHandler(name, handler) {
+            if (!(name in events))
+                events[name] = {handlers: []};
+            events[name].handlers.push(handler);
         }
 
         function hasMixin(name) {
@@ -151,11 +166,15 @@ define(function (require) {
 
         function kill() {
             self.state = 'dead';
+            raiseEvent('killed');
             removeSelfFromCurrentTile();
             getLevel().removeEntity(self);
         }
 
         function act() {
+            if (self.raiseEvent('act'))
+                return;
+
             if (!self.hasAlreadyActed)
                 decideOnAction();
             self.hasAlreadyActed = false;
@@ -164,17 +183,41 @@ define(function (require) {
         function decideOnAction() {
             for (var i = 0; i < getState().behaviors.length; i++) {
                 var behavior = getState().behaviors[i];
-                if (behavior.probability >= ROT.RNG.getUniform()) {
+                if (behavior.probability >= ROT.RNG.getUniform())
                     if (self.hasAlreadyActed = performAction(behavior))
                         return;
-                    debugger;
-                }
             }
             logger.log('do nothing');
         }
 
         function performAction(behavior) {
-            return behavior.execute(self);
+            var result = behavior.execute(self);
+            if (result === undefined)
+                result = true;
+            return result;
+        }
+
+        function raiseEvent(name) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            var event = events[name];
+            if (!event)
+                return false;
+
+            var result = {
+                metSuccess: false,
+                metFailure: false
+            };
+
+            for (var i = 0; i < event.handlers.length; i++) {
+                var handlerResult = event.handlers[i].apply(self, args);
+                if (handlerResult === undefined) handlerResult = true;
+                if (!result.metSuccess && handlerResult)
+                    result.metSuccess = true;
+                if (!result.metFailure && !handlerResult)
+                    result.metSuccess = true;
+            }
+
+            return result;
         }
     }
 });

@@ -20,7 +20,7 @@
                 "behaviors": [
                     {
                         "name": "attack-enemy",
-                        "probability": 10.6
+                        "probability": 0.6
                     },
                     {
                         "name": "clone-self"

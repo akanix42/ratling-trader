@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 
 var srcPath = '../src/ratling-trader/';
 
-gulp.task('default', ['clean', 'compile behaviors'], function () {
+gulp.task('default', ['clean', 'compile behaviors', 'compile mixins'], function () {
 
 });
 
@@ -23,13 +23,16 @@ gulp.task('compile behaviors', function (cb) {
     return compileFileList(srcPath, 'app/game/behaviors', 'app/config/behaviors.json');
 });
 
+gulp.task('compile mixins', function (cb) {
+    return compileFileList(srcPath, 'app/game/mixins', 'app/config/mixins.json');
+});
 function compileFileList(basePath, sourceDirectory, outputPath) {
-    return whenWalk(path.join(basePath,sourceDirectory))
+    return whenWalk(path.join(basePath, sourceDirectory))
         .then(function (fileList) {
             var files = {};
             for (var i = 0; i < fileList.length; i++) {
                 var file = fileList[i];
-                files[path.basename(file).replace(/\.js$/,'')] = path.relative(basePath, file);
+                files[path.basename(file).replace(/\.js$/, '')] = path.relative(basePath, file);
             }
             var deferred = when.defer();
             fs.writeFile(path.join(basePath, outputPath), JSON.stringify(files, null, 2), function (err) {

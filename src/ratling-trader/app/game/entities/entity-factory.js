@@ -1,12 +1,11 @@
 define(function (require) {
     var extend = require('lib/extend/extend'),
-        Mixins = require('game/mixins'),
         Entity = require('game/entities/entity');
 
 
     return EntityFactory;
 
-    function EntityFactory(logger, entityTemplatesLoader, behaviors) {
+    function EntityFactory(logger, entityTemplatesLoader, behaviors, mixins) {
         var self = this;
 
         self.get = get;
@@ -16,7 +15,7 @@ define(function (require) {
                 data = {type: data};
 
             data = extend(true, getDefaultData(), entityTemplatesLoader.get(data.type), data);
-            var entity = new Entity(data, Mixins, behaviors, logger);
+            var entity = new Entity(data, mixins, behaviors, logger);
             return entity;
         }
 

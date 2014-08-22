@@ -1,26 +1,35 @@
 define(function (require) {
-
+    var stringFormat = require('stringformat');
     return Player;
 
-    function Player() {
-        var self = this;
+    function Player(logger) {
+        return {
+            act: act,
+            performAction: performAction,
+            killed: killed
+        };
 
-        self.act = function act() {
+        function act() {
+            var self = this;
+
             self.getLevel().getEngine().updateUI(self);
             self.getLevel().pause();
+            self.getLevel().getEngine().acceptInput();
         };
 
-        self.performAction = function performAction(command) {
-            if (!command in self)
-                return {error: 'Invalid command'};
-            var args = Array.prototype.slice.call(arguments, 1);
-            self[command].apply(self, args);
+        function performAction() {
+            var self = this;
+            if (self.raiseEvent.apply(self, arguments).metSuccess)
+                self.getLevel().resume();
+            else {
+                logger.log(stringFormat('You can\'t do {that}!', {that: arguments[0]}));
+                self.getLevel().getEngine().acceptInput();
 
-            self.getLevel().resume();
+            }
         };
 
-        self.kill = function kill() {
-            self.getEntityBase().kill();
+        function killed() {
+            var self = this;
             self.getLevel().getEngine().gameOver();
         }
     }

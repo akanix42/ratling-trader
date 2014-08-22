@@ -8,7 +8,8 @@ define(function (require) {
                 actions = getActions(),
                 player = entityFactory.get({type: 'player'}),
                 isCursorLockedToPlayer = true,
-                isGameOver = false
+                isGameOver = false,
+                isProcessingCommand = false
                 ;
             var ui;
 
@@ -21,6 +22,7 @@ define(function (require) {
             self.updateUI = updateUI;
             self.setUI = setUI;
             self.gameOver = gameOver;
+            self.acceptInput = acceptInput;
 
             var cursorPosition = {x: 0, y: 0};
 
@@ -28,13 +30,21 @@ define(function (require) {
                 ui = value;
             }
 
+            function acceptInput() {
+                isProcessingCommand = false;
+            }
+
             function processCommand(command) {
+                if (isProcessingCommand)
+                    return;
+
                 if (!command || !(command in actions))
                     return {error: 'invalid command'};
 
+                isProcessingCommand = true;
+
                 var action = actions[command];
                 action.execute(command, action);
-
                 return {};
             }
 
@@ -92,7 +102,8 @@ define(function (require) {
             }
 
             function movePlayerOrCursor(command, action) {
-                player.performAction('move', action.data.x || 0, action.data.y || 0);
+                player.raiseEvent('performAction', 'move', action.data.x || 0, action.data.y || 0);
+//                getCurrentLevel().resume();
                 //                player.move(action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
                 updateUI();

@@ -3,14 +3,13 @@ define(function (require) {
     return AttackEnemy;
 
     function AttackEnemy() {
-
         var target;
+
         return {execute: attackEnemy};
 
         function attackEnemy(self) {
-            //entity.getLogger().log('attack!!!!');
             if (getTarget())
-                return self.attack(target);
+                return self.raiseEvent('attack', target);
 
             return false;
 

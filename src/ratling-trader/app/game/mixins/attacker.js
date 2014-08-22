@@ -1,30 +1,40 @@
 define(function (require) {
-
+    var stringFormat = require('stringformat');
     return AttackEnemy;
 
-    function AttackEnemy() {
-        var self = this;
-
-        self.attack = attack;
+    function AttackEnemy(logger) {
+        return {attack: attack, attackComplete: attackComplete};
 
         function attack(target) {
+            var source = this;
             if (isInRange()) {
-                self.getLogger().log('attack!');
-                target.takeDamage({damage: 1});
+                logger.log('attack!');
+                target.raiseEvent('attacked', {
+                    damage: 1,
+                    source: source,
+
+                });
+                //target.takeDamage();
                 return true;
             }
             return false;
 
             function isInRange() {
-                return getDistance(self.getPosition().x, self.getPosition().y, target.getPosition().x, target.getPosition().y) === 1;
+                return getDistance(source.getPosition().x, source.getPosition().y, target.getPosition().x, target.getPosition().y) === 1;
             }
 
             function getDistance(x1, y1, x2, y2) {
                 return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
-                //                return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
             }
         }
 
+        function attackComplete(attack) {
+            if (attack.wasSuccessful)
+                logger.log(stringFormat('{source.getType} hit {target.getType}', attack));
+            else
+                logger.log(stringFormat('{attack.source.getType} missed {attack.target.getType}'));
+
+        }
 
     }
 });

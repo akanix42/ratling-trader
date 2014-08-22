@@ -1,15 +1,21 @@
 define(function (require) {
 
-    return Destructible;
+    return Architecture;
 
-    function Destructible() {
-        var self = this;
+    function Architecture() {
 
-        self.isWalkable = isWalkable;
+        return {events: isWalkable};
 
-        function isWalkable() {
-            return self.getData().isWalkable;
+        //        function architecture(sourceEntity) {
+        //
+        //            return {
+        //                isWalkable: isWalkable
+        //            };
+
+        function isWalkable(sourceEntity) {
+            return sourceEntity.getData().isWalkable;
         }
 
+        //        }
     }
 });

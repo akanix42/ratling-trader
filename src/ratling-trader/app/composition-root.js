@@ -14,7 +14,8 @@ define(function (require) {
             AsciiTiles = require('ui/tiles/ascii-tiles'),
             DebugLogger = require('debug-logger'),
             EntityTemplatesLoader = require('game/loaders/entity-templates-loader'),
-            behaviorsLoader = require('promise!game/loaders/behaviors-loader'),
+            behaviorsLoader = require('promise!game/loaders/behavior-modules-loader'),
+            mixinsLoader = require('promise!game/loaders/mixin-modules-loader'),
             Behaviors = require('game/behaviors');
 
         return CompositionRoot;
@@ -30,24 +31,28 @@ define(function (require) {
             injector.register('MapFactory', MapFactory);
             injector.register('LevelFactory', LevelFactory);
             injector.register('TileFactory', TileFactory);
-            injector.register('EntityTemplatesLoader', EntityTemplatesLoader);
+            injector.register('EntityTemplatesLoader', EntityTemplatesLoader, true);
             injector.register('EntityFactory', EntityFactory);
             injector.register('Game', Game);
             injector.register('Engine', Engine, true);
             injector.register('Logger', DebugLogger, true);
             injector.register('UI', UI);
             injector.register('Behaviors', function () {
-                return Behaviors;
+                return behaviorsLoader;
+            }, true);
+            injector.register('Mixins', function () {
+                return mixinsLoader;
             }, true);
 
             injectLoader(behaviorsLoader);
+            injectLoader(mixinsLoader);
 
             function injectLoader(loader) {
-                var modules = loader.getAll();
+                var modules = loader.getModules();
                 var moduleKeys = Object.keys(modules);
                 for (var i = 0; i < moduleKeys.length; i++) {
                     var key = moduleKeys[i];
-                    Behaviors.add(key, injector.inject(modules[key]));
+                    loader.addModuleInstance(key, injector.inject(modules[key]));
                 }
             }
         }

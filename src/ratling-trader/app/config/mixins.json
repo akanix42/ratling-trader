@@ -1,0 +1,7 @@
+{
+  "architecture": "app\\game\\mixins\\architecture.js",
+  "attacker": "app\\game\\mixins\\attacker.js",
+  "destructible": "app\\game\\mixins\\destructible.js",
+  "mobile": "app\\game\\mixins\\mobile.js",
+  "player": "app\\game\\mixins\\player.js"
+}
