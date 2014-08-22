@@ -7,6 +7,7 @@ define(function (require) {
             // Game
             Game = require('game'),
             Engine = require('game/engine'),
+            EntityAttributes = require('game/entities/entity-attributes'),
 
             // Loaders
             EntityTemplatesLoader = require('game/loaders/entity-templates-loader'),
@@ -18,6 +19,7 @@ define(function (require) {
             LevelFactory = require('game/levels/level-factory'),
             TileFactory = require('game/tiles/tile-factory'),
             EntityFactory = require('game/entities/entity-factory'),
+            AttributeFactory = require('game/entities/attribute-factory'),
 
             // UI
             UI = require('ui/ui'),
@@ -38,7 +40,9 @@ define(function (require) {
             injector.register('Game', Game);
             injector.register('Engine', Engine, true);
             injector.register('EntityTemplatesLoader', EntityTemplatesLoader, true);
+            injector.register('EntityAttributes', EntityAttributes);
 
+            injector.register('AttributeFactory', AttributeFactory);
             injector.register('EntityFactory', EntityFactory);
             injector.register('LevelFactory', LevelFactory);
             injector.register('MapFactory', MapFactory);
@@ -50,10 +54,10 @@ define(function (require) {
             injector.register('PlayingScreenFactory', PlayingScreenFactory);
             injector.register('WinningScreenFactory', WinningScreenFactory);
 
-            injector.register('Behaviors', function () {
+            injector.register('loadedBehaviors', function () {
                 return behaviorsLoader;
             }, true);
-            injector.register('Mixins', function () {
+            injector.register('loadedMixins', function () {
                 return mixinsLoader;
             }, true);
 

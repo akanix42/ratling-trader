@@ -14,10 +14,11 @@ define(function (require) {
                 var attackResult = extend({target: target}, attack);
                 logger.log(stringformat('ouch: {damage} ', attack));
 
-                target.getData().attributes.health -= attack.damage;
-                logger.log(stringformat('health remaining: {health}', target.getData().attributes));
+                target.getAttributes().get('health').updateCurrent(-attack.damage);
+                var remainingHealth = target.getAttributes().get('health').getCurrent();
+                logger.log(stringformat('health remaining: {health}', {health: remainingHealth}));
 
-                if (target.getData().attributes.health <= 0)
+                if (remainingHealth <= 0)
                     target.kill();
 
                 attackResult.wasSuccessful = true;

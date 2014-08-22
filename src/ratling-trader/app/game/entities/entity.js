@@ -7,7 +7,7 @@ define(function (require) {
 
     return Entity;
 
-    function Entity(data, Mixins, Behaviors, logger) {
+    function Entity(data, entityAttributes, loadedMixins, loadedBehaviors, logger) {
         var self = this,
             id = data.id || Uuid.v4(),
             currentState,
@@ -20,8 +20,12 @@ define(function (require) {
         setPublicMethods();
 
         addMixins();
-        addStates();
-        setInitialState();
+        initAI();
+        init();
+
+        function init() {
+            entityAttributes.setAttributes(data.attributes);
+        }
 
         function setPublicMethods() {
             entityBase.getLogger = getLogger;
@@ -38,18 +42,38 @@ define(function (require) {
             entityBase.kill = kill;
             entityBase.act = act;
             entityBase.hasMixin = hasMixin;
-            entityBase.getEntityBase = getEntityBase;
             entityBase.raiseEvent = raiseEvent;
+            entityBase.getAttributes = getAttributes;
 
             extend(self, entityBase);
         }
 
-        function getEntityBase() {
-            return entityBase;
-        }
+        function initAI() {
 
-        function setInitialState() {
-            currentState = getData().initialState;
+            addStates();
+            setInitialState();
+
+            function addStates() {
+                extend(true, states, self.getData().states);
+                var keys = Object.keys(states);
+                for (var i = 0; i < keys.length; i++) {
+                    processBehaviors(states[keys[i]]);
+                }
+            }
+
+            function setInitialState() {
+                currentState = getData().initialState;
+            }
+
+            function processBehaviors(state) {
+                for (var i = 0; i < state.behaviors.length; i++) {
+                    var behavior = state.behaviors[i];
+                    if (!('probability' in  behavior ))
+                        behavior.probability = 1;
+                    behavior.execute = loadedBehaviors.get(behavior.name).execute;
+                }
+            }
+
         }
 
         function addMixins() {
@@ -59,7 +83,7 @@ define(function (require) {
         }
 
         function addMixin(name) {
-            var mixin = Mixins.get(name);
+            var mixin = loadedMixins.get(name);
 
             if (!mixin) {
                 logger.logWarning(stringFormat('Invalid mixin: {name}', {name: name}));
@@ -72,12 +96,13 @@ define(function (require) {
                 var event = eventKeys[i];
                 addEventHandler(event, mixin[event]);
             }
-        }
 
-        function addEventHandler(name, handler) {
-            if (!(name in events))
-                events[name] = {handlers: []};
-            events[name].handlers.push(handler);
+            function addEventHandler(name, handler) {
+                if (!(name in events))
+                    events[name] = {handlers: []};
+                events[name].handlers.push(handler);
+            }
+
         }
 
         function hasMixin(name) {
@@ -86,23 +111,6 @@ define(function (require) {
 
         function getData() {
             return data;
-        }
-
-        function addStates() {
-            extend(true, states, self.getData().states);
-            var keys = Object.keys(states);
-            for (var i = 0; i < keys.length; i++) {
-                processBehaviors(states[keys[i]]);
-            }
-        }
-
-        function processBehaviors(state) {
-            for (var i = 0; i < state.behaviors.length; i++) {
-                var behavior = state.behaviors[i];
-                if (!('probability' in  behavior ))
-                    behavior.probability = 1;
-                behavior.execute = Behaviors.get(behavior.name).execute;
-            }
         }
 
         function getState() {
@@ -115,6 +123,10 @@ define(function (require) {
 
         function getType() {
             return data.type;
+        }
+
+        function getAttributes() {
+            return entityAttributes;
         }
 
         function getPosition() {
