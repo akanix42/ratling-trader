@@ -23,7 +23,6 @@ define(function (require) {
         function processCreatures() {
             for (var i = 0; i < data.creatures.length; i++) {
                 data.creatures[i] = processCreature(data.creatures[i])
-
             }
         }
 
