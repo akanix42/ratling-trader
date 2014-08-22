@@ -6,20 +6,18 @@ define(function (require) {
             WinningScreenFactory = require('ui/screens/winning-screen-factory'),
             MapFactory = require('game/map/map-factory'),
             LevelFactory = require('game/levels/level-factory'),
-            //        MonsterFactory = require('game/entities/monster-factory'),
             TileFactory = require('game/tiles/tile-factory'),
-            //        PlayerFactory = require('game/entities/player-factory'),
             EntityFactory = require('game/entities/entity-factory'),
             Game = require('game'),
             Engine = require('game/engine'),
             UI = require('ui/ui'),
             AsciiTiles = require('ui/tiles/ascii-tiles'),
             DebugLogger = require('debug-logger'),
-            EntityTypes = require('game/entities/entity-types'),
+            EntityTemplatesLoader = require('game/loaders/entity-templates-loader'),
             behaviorsLoader = require('promise!game/loaders/behaviors-loader'),
             Behaviors = require('game/behaviors');
 
-            return CompositionRoot;
+        return CompositionRoot;
 
         function CompositionRoot() {
             var self = this;
@@ -32,11 +30,9 @@ define(function (require) {
             injector.register('MapFactory', MapFactory);
             injector.register('LevelFactory', LevelFactory);
             injector.register('TileFactory', TileFactory);
-            //        injector.register('MonsterFactory', MonsterFactory);
-            //        injector.register('PlayerFactory', PlayerFactory);
+            injector.register('EntityTemplatesLoader', EntityTemplatesLoader);
             injector.register('EntityFactory', EntityFactory);
             injector.register('Game', Game);
-            injector.register('EntityTypes', EntityTypes, true);
             injector.register('Engine', Engine, true);
             injector.register('Logger', DebugLogger, true);
             injector.register('UI', UI);

@@ -1,38 +1,37 @@
 define(function (require) {
-    var //EntityType = require('enums/entity-type'),
-        AsciiTile = require('ui/tiles/ascii-tile');
+    var AsciiTile = require('ui/tiles/ascii-tile');
 
     return AsciiTiles;
 
-    function AsciiTiles(entityTypes) {
+    function AsciiTiles(entityTemplatesLoader) {
         var self = this;
         self.get = get;
         function get(tile) {
-            var entityType = tile.getArchitecture().getType();
+            var entityTemplate = tile.getArchitecture().getType();
 
             if (tile.getCreature())
-                entityType = tile.getCreature().getType();
+                entityTemplate = tile.getCreature().getType();
 
-            return tiles[entityType] || tiles['unknown'];
+            return tiles[entityTemplate] || tiles['unknown'];
         }
 
         var tiles = {};
         defineTiles();
 
         function defineTiles() {
-            addTile(entityTypes.get('stoneFloor'), new AsciiTile('.'));
-            addTile(entityTypes.get('stoneWall'), new AsciiTile('#', 'gray'));
-            addTile(entityTypes.get('dirtWall'), new AsciiTile('#', 'goldenrod'));
-            addTile(entityTypes.get('dirtFloor'), new AsciiTile('.', 'goldenrod'));
-            addTile(entityTypes.get('player'), new AsciiTile('@', 'white'));
-            addTile(entityTypes.get('fungus'), new AsciiTile('F', '#66FF00'));
+            addTile(entityTemplatesLoader.get('stoneFloor'), new AsciiTile('.'));
+            addTile(entityTemplatesLoader.get('stoneWall'), new AsciiTile('#', 'gray'));
+            addTile(entityTemplatesLoader.get('dirtWall'), new AsciiTile('#', 'goldenrod'));
+            addTile(entityTemplatesLoader.get('dirtFloor'), new AsciiTile('.', 'goldenrod'));
+            addTile(entityTemplatesLoader.get('player'), new AsciiTile('@', 'white'));
+            addTile(entityTemplatesLoader.get('fungus'), new AsciiTile('F', '#66FF00'));
             addTile({name: 'unknown'}, new AsciiTile('?', 'purple'));
 
 
         }
 
-        function addTile(entityType, uiTile) {
-            tiles[entityType.name] = uiTile;
+        function addTile(entityTemplate, uiTile) {
+            tiles[entityTemplate.name] = uiTile;
 
         }
     }

@@ -7,7 +7,7 @@ define(function (require) {
 
     return EntityFactory;
 
-    function EntityFactory(logger, entityTypes) {
+    function EntityFactory(logger, entityTemplatesLoader) {
         var self = this;
 
         self.get = get;
@@ -16,7 +16,7 @@ define(function (require) {
             if (typeof data === 'string')
                 data = {type: data};
 
-            data = extend(true, getDefaultData(), entityTypes.get(data.type), data);
+            data = extend(true, getDefaultData(), entityTemplatesLoader.get(data.type), data);
             var entity = new Entity(data, Mixins, Behaviors, logger);
             return entity;
         }

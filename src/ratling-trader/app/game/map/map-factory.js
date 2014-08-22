@@ -1,11 +1,10 @@
 define(function (require) {
     var Map = require('game/map/map'),
-//        EntityType = require('enums/entity-type'),
         ROT = require('rot');
 
     return Constructor;
 
-    function Constructor(tileFactory, entityFactory, entityTypes) {
+    function Constructor(tileFactory, entityFactory) {
         var self = this;
         var mapWidth = 100,
             mapHeight = 80;
