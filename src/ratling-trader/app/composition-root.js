@@ -15,13 +15,11 @@ define(function (require) {
             UI = require('ui/ui'),
             AsciiTiles = require('ui/tiles/ascii-tiles'),
             DebugLogger = require('debug-logger'),
-            Abilities = require('enums/abilities'),
             EntityTypes = require('game/entities/entity-types'),
             behaviorsLoader = require('promise!game/loaders/behaviors-loader'),
-            Behaviors = require('game/behaviors'),
-            abilityList = require('config/ability-list');
+            Behaviors = require('game/behaviors');
 
-        return CompositionRoot;
+            return CompositionRoot;
 
         function CompositionRoot() {
             var self = this;
@@ -42,13 +40,11 @@ define(function (require) {
             injector.register('Engine', Engine, true);
             injector.register('Logger', DebugLogger, true);
             injector.register('UI', UI);
-            injector.register('Abilities', Abilities, true);
             injector.register('Behaviors', function () {
                 return Behaviors;
             }, true);
 
             injectLoader(behaviorsLoader);
-            self.compositionPromise = when(registerAbilities());
 
             function injectLoader(loader) {
                 var modules = loader.getAll();
@@ -58,25 +54,7 @@ define(function (require) {
                     Behaviors.add(key, injector.inject(modules[key]));
                 }
             }
-
-            function registerAbilities() {
-                Abilities = injector.resolve('Abilities');
-                return when.map(abilityList, addAbility);
-            }
-
-            function addAbility(ability) {
-                var deferred = when.defer();
-                require([ability.path], function (abilityModule) {
-                    var registeredName = ability.name + 'Ability';
-                    injector.register(registeredName, abilityModule, true);
-                    Abilities.register(ability.name, injector.resolve(registeredName));
-                    deferred.resolve();
-                });
-                return deferred.promise;
-            }
         }
-
-
     }
 )
 ;

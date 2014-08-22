@@ -10,7 +10,6 @@ define(function (require) {
     function Entity(data, Mixins, Behaviors, logger) {
         var self = this,
             id = data.id || Uuid.v4(),
-            abilities = {},
             currentState,
             mixins = {},
             states = {},
@@ -35,8 +34,6 @@ define(function (require) {
             entityBase.setTile = setTile;
             entityBase.getLevel = getLevel;
             entityBase.setLevel = setLevel;
-            entityBase.getAbility = getAbility;
-            entityBase.addAbility = addAbility;
             entityBase.kill = kill;
             entityBase.act = act;
             entityBase.hasMixin = hasMixin;
@@ -97,18 +94,8 @@ define(function (require) {
             return states[currentState];
         }
 
-        function addAbility(name, ability) {
-            if (name in self)
-                logger.logInfo(stringFormat('Replacing ability {name}', {name: name}));
-            abilities[name] = ability;
-        }
-
         function getId() {
             return id;
-        }
-
-        function getAbility(name) {
-            return abilities[name];
         }
 
         function getType() {
