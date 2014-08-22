@@ -15,11 +15,12 @@ define(function (require) {
             mixinsLoader = require('promise!game/loaders/mixin-modules-loader'),
 
             // Game Factories
+            AttributeFactory = require('game/entities/attribute-factory'),
+            EntityFactory = require('game/entities/entity-factory'),
+            EntityPositionFactory = require('game/entities/entity-position-factory'),
             MapFactory = require('game/map/map-factory'),
             LevelFactory = require('game/levels/level-factory'),
             TileFactory = require('game/tiles/tile-factory'),
-            EntityFactory = require('game/entities/entity-factory'),
-            AttributeFactory = require('game/entities/attribute-factory'),
 
             // UI
             UI = require('ui/ui'),
@@ -44,6 +45,7 @@ define(function (require) {
 
             injector.register('AttributeFactory', AttributeFactory);
             injector.register('EntityFactory', EntityFactory);
+            injector.register('EntityPositionFactory', EntityPositionFactory);
             injector.register('LevelFactory', LevelFactory);
             injector.register('MapFactory', MapFactory);
             injector.register('TileFactory', TileFactory);

@@ -18,7 +18,7 @@ define(function (require) {
             }
 
             function findTarget() {
-                var neighboringTiles = self.getTile().getNeighbors(4);
+                var neighboringTiles = self.getPositionManager().getTile().getNeighbors(4);
                 for (var i = 0; i < neighboringTiles.length; i++) {
                     var tile = neighboringTiles[i];
                     if (tile.getCreature() && tile.getCreature().getType() === 'player')

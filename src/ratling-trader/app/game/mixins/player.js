@@ -12,25 +12,26 @@ define(function (require) {
         function act() {
             var self = this;
 
-            self.getLevel().getEngine().updateUI(self);
-            self.getLevel().pause();
-            self.getLevel().getEngine().acceptInput();
+            var positionManager = self.getPositionManager();
+            positionManager.getLevel().getEngine().updateUI(self);
+            positionManager.getLevel().pause();
+            positionManager.getLevel().getEngine().acceptInput();
         };
 
         function performAction() {
             var self = this;
             if (self.raiseEvent.apply(self, arguments).metSuccess)
-                self.getLevel().resume();
+                self.getPositionManager().getLevel().resume();
             else {
                 logger.log(stringFormat('You can\'t do {that}!', {that: arguments[0]}));
-                self.getLevel().getEngine().acceptInput();
+                self.getPositionManager().getLevel().getEngine().acceptInput();
 
             }
         };
 
         function killed() {
             var self = this;
-            self.getLevel().getEngine().gameOver();
+            self.getPositionManager().getLevel().getEngine().gameOver();
         }
     }
 });

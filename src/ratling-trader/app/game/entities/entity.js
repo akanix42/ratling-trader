@@ -7,14 +7,15 @@ define(function (require) {
 
     return Entity;
 
-    function Entity(data, entityAttributes, loadedMixins, loadedBehaviors, logger) {
+    function Entity(data, entityAttributes, entityPositionFactory, loadedMixins, loadedBehaviors, logger) {
         var self = this,
             id = data.id || Uuid.v4(),
             currentState,
             mixins = {},
             states = {},
             entityBase = {},
-            events = [];
+            events = [],
+            positionManager;
 
 
         setPublicMethods();
@@ -25,25 +26,20 @@ define(function (require) {
 
         function init() {
             entityAttributes.setAttributes(data.attributes);
+            positionManager = entityPositionFactory.get(self);
         }
 
         function setPublicMethods() {
-            entityBase.getLogger = getLogger;
             entityBase.getData = getData;
             entityBase.getState = getState;
             entityBase.getId = getId;
             entityBase.getType = getType;
-            entityBase.getPosition = getPosition;
-            entityBase.setPosition = setPosition;
-            entityBase.getTile = getTile;
-            entityBase.setTile = setTile;
-            entityBase.getLevel = getLevel;
-            entityBase.setLevel = setLevel;
             entityBase.kill = kill;
             entityBase.act = act;
             entityBase.hasMixin = hasMixin;
             entityBase.raiseEvent = raiseEvent;
             entityBase.getAttributes = getAttributes;
+            entityBase.getPositionManager = getPositionManager;
 
             extend(self, entityBase);
         }
@@ -129,58 +125,15 @@ define(function (require) {
             return entityAttributes;
         }
 
-        function getPosition() {
-            return data.position;
+        function getPositionManager() {
+            return positionManager;
         }
-
-        function setPosition(x, y) {
-            removeSelfFromCurrentTile();
-
-            var newTile = getLevel().getMap().getTile(x, y);
-            addSelfToTile(newTile);
-        }
-
-        function setTile(newTile) {
-            removeSelfFromCurrentTile();
-            addSelfToTile(newTile);
-        }
-
-        function addSelfToTile(tile) {
-            data.position.x = tile.getPosition().x;
-            data.position.y = tile.getPosition().y;
-
-            tile.setCreature(self);
-        }
-
-        function getTile() {
-            return getLevel().getMap().getTile(getPosition().x, getPosition().y);
-        }
-
-        function removeSelfFromCurrentTile() {
-            var tile = getLevel().getMap().getTile(getPosition().x, getPosition().y);
-            if (tile && tile.getCreature() === self)
-                tile.setCreature(null);
-        }
-
-        function setLevel(level) {
-            data.level = level;
-            level.addEntity(self);
-        }
-
-        function getLevel() {
-            return data.level;
-        }
-
-        function getLogger() {
-            return logger;
-        }
-
 
         function kill() {
             self.state = 'dead';
             raiseEvent('killed');
-            removeSelfFromCurrentTile();
-            getLevel().removeEntity(self);
+            positionManager.setTile(null);
+            positionManager.getLevel().removeEntity(self);
         }
 
         function act() {

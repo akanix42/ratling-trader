@@ -20,7 +20,7 @@ define(function (require) {
             return false;
 
             function isInRange() {
-                return getDistance(source.getPosition().x, source.getPosition().y, target.getPosition().x, target.getPosition().y) === 1;
+                return getDistance(source.getPositionManager().getPosition().x, source.getPositionManager().getPosition().y, target.getPositionManager().getPosition().x, target.getPositionManager().getPosition().y) === 1;
             }
 
             function getDistance(x1, y1, x2, y2) {

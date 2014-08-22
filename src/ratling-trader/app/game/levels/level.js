@@ -28,9 +28,9 @@ define(function (require) {
 
         function processCreature(creature) {
             creature = entityFactory.get(creature);
-            creature.setLevel(self);
-            creature.setPosition(6, 5);
-            addEntity(creature);
+            creature.getPositionManager().setLevel(self);
+            creature.getPositionManager().setPosition(6, 5);
+            //addEntity(creature);
             return creature;
         }
 

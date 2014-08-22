@@ -61,8 +61,8 @@ define(function (require) {
                 setCurrentLevel(levels.world = levelFactory.get(self, 'world'));
                 logger.log('level loaded');
 
-                player.setLevel(getCurrentLevel());
-                player.setPosition(5, 5);
+                player.getPositionManager().setLevel(getCurrentLevel());
+                player.getPositionManager().setPosition(5, 5);
                 lockCursorToPlayer();
                 getCurrentLevel().resume();
                 logger.log('entered world');
@@ -122,12 +122,12 @@ define(function (require) {
                 cursorPosition.x = Math.max(0, Math.min(levels.currentLevel.map.getWidth() - 1, cursorPosition.x));
                 cursorPosition.y = Math.max(0, Math.min(levels.currentLevel.map.getHeight() - 1, cursorPosition.y));
                 if (isCursorLockedToPlayer)
-                    player.setPosition(cursorPosition.x, cursorPosition.y);
+                    player.getPositionManager().setPosition(cursorPosition.x, cursorPosition.y);
             }
 
             function lockCursorToPlayer() {
-                cursorPosition.x = player.getPosition().x;
-                cursorPosition.y = player.getPosition().y;
+                cursorPosition.x = player.getPositionManager().getPosition().x;
+                cursorPosition.y = player.getPositionManager().getPosition().y;
             }
 
             function updateUI(entity) {
