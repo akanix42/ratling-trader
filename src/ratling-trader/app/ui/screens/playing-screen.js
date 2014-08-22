@@ -77,6 +77,7 @@ define(function (require) {
                 keydown[ROT.VK_NUMPAD3] = GameCommands.GoDownRight;
                 keydown[ROT.VK_NUMPAD2] = GameCommands.GoDown;
                 keydown[ROT.VK_NUMPAD1] = GameCommands.GoDownLeft;
+                keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
                 return commands;
 
 

@@ -98,6 +98,7 @@ define(function (require) {
                 actions[GameCommands.GoUpRight] = {execute: movePlayerOrCursor, data: {x: 1, y: -1}};
                 actions[GameCommands.GoDownRight] = {execute: movePlayerOrCursor, data: {x: 1, y: 1}};
                 actions[GameCommands.GoDownLeft] = {execute: movePlayerOrCursor, data: {x: -1, y: 1}};
+                actions[GameCommands.WaitInPlace] = {execute: movePlayerOrCursor, data: {x: 0, y: 0}};
                 return actions;
             }
 

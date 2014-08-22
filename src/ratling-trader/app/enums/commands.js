@@ -9,6 +9,7 @@ var i = 1;
         GoDownRight: i++,
         GoDown: i++,
         GoDownLeft: i++,
+        WaitInPlace: i++,
 
     };
 
