@@ -1,5 +1,5 @@
 define(function (require) {
-
+    var ROT = require('rot');
     return AttackEnemy;
 
     function AttackEnemy() {
@@ -18,7 +18,7 @@ define(function (require) {
             }
 
             function findTarget() {
-                var neighboringTiles = self.getPositionManager().getTile().getNeighbors(4);
+                var neighboringTiles = self.getPositionManager().getTile().getNeighbors(4).randomize();
                 for (var i = 0; i < neighboringTiles.length; i++) {
                     var tile = neighboringTiles[i];
                     if (tile.getCreature() && tile.getCreature().getType() === 'player')

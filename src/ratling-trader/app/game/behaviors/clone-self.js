@@ -1,8 +1,9 @@
 define(function (require) {
+    var ROT = require('rot');
 
     return CloneSelf;
 
-    function CloneSelf (entityFactory){
+    function CloneSelf(entityFactory) {
         return {execute: cloneSelf};
 
         function cloneSelf(self) {
@@ -19,9 +20,9 @@ define(function (require) {
 
 
             function getAvailableTile() {
-                var adjacentTiles = self.getPositionManager().getLevel().getMap().getAdjacentTiles(self.getPositionManager().getPosition());
-                for (var tileIndex = 0; tileIndex < adjacentTiles.length; tileIndex++) {
-                    var tile = adjacentTiles[tileIndex];
+                var neighboringTiles = self.getPositionManager().getTile().getNeighbors(1).randomize();
+                for (var tileIndex = 0; tileIndex < neighboringTiles.length; tileIndex++) {
+                    var tile = neighboringTiles[tileIndex];
                     if (!tile.getCreature() && tile.isWalkable())
                         return tile;
                 }
