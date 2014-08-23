@@ -10,12 +10,24 @@ define(function (require) {
             if (dX === 0 && dY === 0)
                 return;
             var newTile = self.getPositionManager().getTile().getNeighbor(dX, dY);
-            if (newTile.isWalkable())
+            if (attack())
+                return;
+
+            if (newTile.getCreature())
+                self.raiseEvent('attack')
+            else if (newTile.isWalkable())
                 self.getPositionManager().setTile(newTile);
             else if (newTile.isDiggable())
                 newTile.dig();
             else
                 return false;
+
+
+            function attack() {
+                if (newTile.getCreature())
+                    return self.raiseEvent('attack', newTile.getCreature()).metSuccess;
+                return false;
+            }
         }
 
     }
