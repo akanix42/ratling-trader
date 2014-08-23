@@ -67,8 +67,10 @@ define(function (require) {
             var bottom = getPosition().y + (radiusLevel + 1);
             for (var x = left; x <= right; x++)
                 for (var y = top; y <= bottom; (x === left || x === right) ? y++ : y += (radiusLevel + 1) * 2)
-                    if (!(x === getPosition().x && y === getPosition().y))
-                        neighborsAtRadiusLevel.push(getMap().getTile(x, y));
+                    if (!(x === getPosition().x && y === getPosition().y)) {
+                        var tile = getMap().getTile(x, y);
+                        if (tile) neighborsAtRadiusLevel.push(tile);
+                    }
 
             return neighbors[radiusLevel] = neighborsAtRadiusLevel;
 
