@@ -21,13 +21,7 @@ define(function (require) {
         setPublicMethods();
 
         addMixins();
-        initAI();
         init();
-
-        function init() {
-            entityAttributes.setAttributes(data.attributes);
-            positionManager = entityPositionFactory.get(self);
-        }
 
         function setPublicMethods() {
             entityBase.getData = getData;
@@ -42,6 +36,12 @@ define(function (require) {
             entityBase.getPositionManager = getPositionManager;
 
             extend(self, entityBase);
+        }
+
+        function init() {
+            initAI();
+            entityAttributes.setAttributes(data.attributes);
+            positionManager = entityPositionFactory.get(self);
         }
 
         function initAI() {
@@ -152,7 +152,7 @@ define(function (require) {
                     if (self.hasAlreadyActed = performAction(behavior))
                         return;
             }
-            logger.log('do nothing');
+//            logger.log('do nothing');
         }
 
         function performAction(behavior) {
