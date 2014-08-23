@@ -9,10 +9,11 @@ define(function (require) {
         var mapWidth = 100,
             mapHeight = 80;
         self.get = get;
+        var nullTile = tileFactory.get('null', {position: {x: 0, y: 0}});
 
         function get() {
             var tiles = generateCaveMap();
-            var map = new Map(tiles);
+            var map = new Map(tiles, nullTile);
             return map;
         }
 
@@ -38,7 +39,6 @@ define(function (require) {
 
         function createEmptyMap() {
             var tiles = [];
-            var nullTile = tileFactory.get(null, {position: {x: x, y: y}});
             for (var x = 0; x < mapWidth; x++) {
                 tiles.push([]);
                 for (var y = 0; y < mapHeight; y++)

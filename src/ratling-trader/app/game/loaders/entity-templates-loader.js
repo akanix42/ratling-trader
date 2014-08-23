@@ -1,6 +1,7 @@
 define(function (require) {
     var architectures = require('json!config/architectures.json'),
-        monsters = require('json!config/monsters.json');
+        monsters = require('json!config/monsters.json'),
+        extend = require('lib/extend/extend');
 
     return EntityTemplatesLoader;
 
@@ -28,8 +29,12 @@ define(function (require) {
         }
 
         function addArchitecture(template) {
-            template.type = 'architecture';
-            addEntityTemplate(template);
+            var defaultData = {
+                type: 'architecture',
+                isWalkable: false
+            };
+
+            addEntityTemplate(extend({}, defaultData, template));
         }
 
         function addEntityTemplate(template) {

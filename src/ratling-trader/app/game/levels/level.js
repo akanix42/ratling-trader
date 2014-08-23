@@ -29,7 +29,7 @@ define(function (require) {
         function processCreature(creature) {
             creature = entityFactory.get(creature);
             creature.getPositionManager().setLevel(self);
-            creature.getPositionManager().setPosition(6, 5);
+            creature.getPositionManager().setTile(getMap().getRandomTile({architectures: ['stoneFloor']}));
             //addEntity(creature);
             return creature;
         }
