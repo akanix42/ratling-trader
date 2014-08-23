@@ -104,8 +104,6 @@ define(function (require) {
 
             function movePlayerOrCursor(command, action) {
                 player.raiseEvent('performAction', 'move', action.data.x || 0, action.data.y || 0);
-//                getCurrentLevel().resume();
-                //                player.move(action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
                 updateUI();
             }
@@ -126,8 +124,8 @@ define(function (require) {
             }
 
             function lockCursorToPlayer() {
-                cursorPosition.x = player.getPositionManager().getPosition().x;
-                cursorPosition.y = player.getPositionManager().getPosition().y;
+                cursorPosition.x = player.getPositionManager().getLastKnownPosition().x;
+                cursorPosition.y = player.getPositionManager().getLastKnownPosition().y;
             }
 
             function updateUI(entity) {

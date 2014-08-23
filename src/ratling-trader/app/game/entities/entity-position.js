@@ -3,6 +3,7 @@ define(function (require) {
 
     function position(entity, initialLevel, initialTile) {
         var tile = initialTile,
+            previousTile,
             level = initialLevel;
 
         return {
@@ -14,6 +15,7 @@ define(function (require) {
 
             getPosition: getPosition,
             setPosition: setPosition,
+            getLastKnownPosition: getLastKnownPosition,
         };
 
         function setLevel(newLevel) {
@@ -37,7 +39,17 @@ define(function (require) {
         }
 
         function getPosition() {
+            if (!tile)
+                return null;
             return tile.getPosition();
+        }
+
+        function getLastKnownPosition() {
+            var position = getPosition()
+                || (previousTile
+                    ? previousTile.getPosition()
+                    : {x: -1, y: -1});
+            return position;
         }
 
         function setPosition(x, y) {
@@ -46,9 +58,12 @@ define(function (require) {
         }
 
         function setTile(newTile) {
+            if (newTile && newTile.getCreature() && newTile.getCreature() !== entity)
+                return;
             removeFromCurrentTile();
             if (!newTile)
                 return;
+            previousTile = tile;
             tile = newTile;
             tile.setCreature(entity);
         }
