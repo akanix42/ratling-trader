@@ -46,6 +46,9 @@ define(function (require) {
 
             function bindInputEvent(event) {
                 window.addEventListener(event, function (e) {
+                    if (e.keyCode === ROT.VK_F5)
+                        return;
+                    e.preventDefault();
                     if (screens.current !== null) {
                         screens.current.handleInput(event, e);
                     }
