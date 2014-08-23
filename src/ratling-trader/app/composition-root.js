@@ -16,6 +16,7 @@ define(function (require) {
 
             // Game Factories
             AttributeFactory = require('game/entities/attribute-factory'),
+            EntityAttributesFactory = require('game/entities/entity-attributes-factory'),
             EntityFactory = require('game/entities/entity-factory'),
             EntityPositionFactory = require('game/entities/entity-position-factory'),
             MapFactory = require('game/map/map-factory'),
@@ -44,6 +45,7 @@ define(function (require) {
             injector.register('EntityAttributes', EntityAttributes);
 
             injector.register('AttributeFactory', AttributeFactory);
+            injector.register('EntityAttributesFactory', EntityAttributesFactory);
             injector.register('EntityFactory', EntityFactory);
             injector.register('EntityPositionFactory', EntityPositionFactory);
             injector.register('LevelFactory', LevelFactory);
