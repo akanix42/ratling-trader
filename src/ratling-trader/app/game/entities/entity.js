@@ -179,10 +179,10 @@ define(function (require) {
                 if (!result.metSuccess && handlerResult)
                     result.metSuccess = true;
                 if (!result.metFailure && !handlerResult)
-                    result.metSuccess = true;
+                    result.metFailure = true;
             }
 
-            return result;
+            return result.metSuccess && !result.metFailure;
         }
     }
 });

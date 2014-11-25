@@ -20,7 +20,7 @@ define(function (require) {
 
         function performAction() {
             var self = this;
-            if (self.raiseEvent.apply(self, arguments).metSuccess)
+            if (self.raiseEvent.apply(self, arguments))
                 self.getPositionManager().getLevel().resume();
             else {
                 logger.log(stringFormat('You can\'t do {that}!', {that: arguments[0]}));

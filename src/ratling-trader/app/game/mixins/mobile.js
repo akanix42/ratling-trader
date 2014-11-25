@@ -7,8 +7,17 @@ define(function (require) {
 
         function move(dX, dY) {
             var self = this;
+            if (dX instanceof Object)
+            {
+                dY = dX.y;
+                dX = dX.x;
+            }
+            dX = Math.floor(dX);
+            dY = Math.floor(dY);
+
             if (dX === 0 && dY === 0)
                 return;
+
             var newTile = self.getPositionManager().getTile().getNeighbor(dX, dY);
             if (attack())
                 return;
@@ -25,7 +34,7 @@ define(function (require) {
 
             function attack() {
                 if (newTile.getCreature())
-                    return self.raiseEvent('attack', newTile.getCreature()).metSuccess;
+                    return self.raiseEvent('attack', newTile.getCreature());
                 return false;
             }
         }

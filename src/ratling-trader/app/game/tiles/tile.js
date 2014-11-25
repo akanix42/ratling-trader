@@ -85,11 +85,17 @@ define(function (require) {
         }
 
         function isDiggable() {
-            return getArchitecture().getData().isDiggable && architecture.getData().baseEntity;
+            var architecture = getArchitecture();
+            if (architecture === 'null')
+                return false;
+            return architecture.getData().isDiggable && architecture.getData().baseEntity;
         }
 
         function isWalkable() {
-            return getArchitecture().getData().isWalkable;
+            var architecture = getArchitecture();
+            if (architecture === 'null')
+                return false;
+            return architecture.getData().isWalkable;
         }
 
         function getPosition() {

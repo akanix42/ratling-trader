@@ -22,7 +22,21 @@ define(function (require) {
                 engine: engine,
                 map: mapFactory.get(),
                 creatures: [
-                    {type: 'fungus'}
+                    //{type: 'fungus'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
+                    {type: 'zombie'},
                 ]
             };
 

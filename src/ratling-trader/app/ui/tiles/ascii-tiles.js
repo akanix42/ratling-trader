@@ -19,6 +19,7 @@ define(function (require) {
         defineTiles();
 
         function defineTiles() {
+            addTile(entityTemplatesLoader.get('null'), new AsciiTile('8', 'gray'));
             addTile(entityTemplatesLoader.get('stoneFloor'), new AsciiTile('.'));
             addTile(entityTemplatesLoader.get('stoneWall'), new AsciiTile('#', 'gray'));
             addTile(entityTemplatesLoader.get('dirtWall'), new AsciiTile('#', 'goldenrod'));
