@@ -13,7 +13,16 @@ define(function (require) {
                 alert("The rot.js library isn't supported by your browser.");
                 return;
             }
-            ui.init();
+            if (hasDomContentLoaded) {
+                console.log('load game');
+                ui.init();
+            }
+            else {
+                console.log('wait load game');
+                onDomContentLoaded = function () {
+                    ui.init();
+                };
+            }
         }
 
     }

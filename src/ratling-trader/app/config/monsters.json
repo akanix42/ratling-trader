@@ -56,7 +56,7 @@
             "name": "attack-enemy"
           },
           {
-            "name": "move-toward-target"
+            "name": "path-toward-target"
           },
           {
             "name": "move-randomly"

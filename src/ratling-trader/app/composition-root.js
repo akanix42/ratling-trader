@@ -3,6 +3,7 @@ define(function (require) {
 
             Injector = require('injector'),
             DebugLogger = require('debug-logger'),
+            Stopwatch = require('helpers/stopwatch'),
 
             // Game
             Game = require('game'),
@@ -25,6 +26,7 @@ define(function (require) {
 
             // UI
             UI = require('ui/ui'),
+            AsciiLoader = require('promise!ui/loaders/ascii-loader'),
             AsciiTiles = require('ui/tiles/ascii-tiles'),
             LosingScreenFactory = require('ui/screens/losing-screen-factory'),
             PlayingScreenFactory = require('ui/screens/playing-screen-factory'),
@@ -37,6 +39,7 @@ define(function (require) {
             var self = this;
             var injector = self.injector = new Injector();
 
+            injector.register('Stopwatch', Stopwatch);
             injector.register('Logger', DebugLogger, true);
 
             injector.register('Game', Game);
@@ -54,6 +57,7 @@ define(function (require) {
 
             injector.register('UI', UI);
             injector.register('AsciiTiles', AsciiTiles, true);
+            injector.register('AsciiLoader', AsciiLoader, true);
             injector.register('LosingScreenFactory', LosingScreenFactory);
             injector.register('PlayingScreenFactory', PlayingScreenFactory);
             injector.register('WinningScreenFactory', WinningScreenFactory);

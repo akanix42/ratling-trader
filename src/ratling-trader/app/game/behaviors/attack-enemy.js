@@ -3,7 +3,7 @@ define(function (require) {
     return AttackEnemy;
 
     function AttackEnemy() {
-        var target;
+        var target = null;
 
         return {execute: attackEnemy};
 
@@ -14,7 +14,13 @@ define(function (require) {
             return false;
 
             function getTarget() {
-                return target || (target = findTarget());
+                return verifyTarget() || (target = findTarget());
+            }
+
+            function verifyTarget() {
+                return target
+                    ? (target.state === 'dead' ? (target = null) : target)
+                    : target;
             }
 
             function findTarget() {

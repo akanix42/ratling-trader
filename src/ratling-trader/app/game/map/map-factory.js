@@ -6,8 +6,8 @@ define(function (require) {
 
     function Constructor(tileFactory, entityFactory) {
         var self = this;
-        var mapWidth = 50,
-            mapHeight = 20;
+        var mapWidth = 150,
+            mapHeight = 203;
         self.get = get;
         var nullTile = tileFactory.get(entityFactory.get('null'), {position: {x: 0, y: 0}});
 

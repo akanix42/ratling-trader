@@ -31,10 +31,13 @@ define(function (require) {
         }
 
         function createDisplay() {
+            width = Math.floor(document.getElementById('ui').offsetWidth/11);
+            console.log(width);
             var display = new ROT.Display({width: width, height: height, fontSize: 20});
             ROT.Display.Rect.cache = true
             var container = display.getContainer();
-            document.body.appendChild(container);
+
+            document.getElementById('ui-screen').appendChild(container);
 
             return display;
         }

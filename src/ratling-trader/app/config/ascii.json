@@ -1,0 +1,46 @@
+[
+  {
+    "name": "null",
+    "character": "",
+    "color": "gray"
+  },
+  {
+    "name": "unknown",
+    "character": "?",
+    "color": "purple"
+  },
+  {
+    "name": "stoneFloor",
+    "character": "."
+  },
+  {
+    "name": "stoneWall",
+    "character": "#",
+    "color": "gray"
+  },
+  {
+    "name": "dirtWall",
+    "character": "#",
+    "color": "goldenrod"
+  },
+  {
+    "name": "dirtFloor",
+    "character": ".",
+    "color": "goldenrod"
+  },
+  {
+    "name": "player",
+    "character": "@",
+    "color": "white"
+  },
+  {
+    "name": "fungus",
+    "character": "F",
+    "color": "#66FF00"
+  },
+  {
+    "name": "zombie",
+    "character": "z",
+    "color": "brown"
+  }
+]
