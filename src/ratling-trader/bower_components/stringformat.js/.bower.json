@@ -1,0 +1,15 @@
+{
+  "name": "stringformat.js",
+  "homepage": "https://github.com/jcayzac/stringformat.js",
+  "version": "0.0.6",
+  "_release": "0.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.6",
+    "commit": "0338a776ef51e750a67b2d79b7645bcdb511381b"
+  },
+  "_source": "git://github.com/jcayzac/stringformat.js.git",
+  "_target": "~0.0.6",
+  "_originalSource": "jcayzac/stringformat.js",
+  "_direct": true
+}
