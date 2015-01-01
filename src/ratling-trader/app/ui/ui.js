@@ -2,9 +2,9 @@ define(function (require) {
     var ROT = require('rot')
         ;
 
-    return Constructor;
+    return UI;
 
-    function Constructor(engine, playingScreenFactory, winningScreenFactory, losingScreenFactory, logger) {
+    function UI(game, playingScreenFactory, winningScreenFactory, losingScreenFactory, logger) {
         var self = this;
         var display, screens = {}, width = 80, height = 24;
 
@@ -16,7 +16,7 @@ define(function (require) {
         self.getWidth = getWidth;
         self.getHeight = getHeight;
         self.update = update;
-        engine.setUI(self);
+        game.setUI(self);
 
         function init() {
             display = createDisplay();
@@ -84,7 +84,7 @@ define(function (require) {
         }
 
         function getEngine() {
-            return engine;
+            return game;
         }
 
         function getWidth() {

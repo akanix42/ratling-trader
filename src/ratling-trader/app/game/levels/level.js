@@ -10,7 +10,7 @@ define(function (require) {
 
         self.pause = pause;
         self.resume = resume;
-        self.getEngine = getEngine;
+        self.getEngine = getGame;
         self.getMap = getMap;
         self.addEntity = addEntity;
         self.removeEntity = removeEntity;
@@ -42,8 +42,8 @@ define(function (require) {
             schedulingEngine.unlock();
         }
 
-        function getEngine() {
-            return data.engine;
+        function getGame() {
+            return data.game;
         }
 
         function getMap() {

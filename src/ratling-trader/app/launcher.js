@@ -1,9 +1,9 @@
 define(function (require) {
     var when = require('when'),
         ROT = require('rot');
-    return Constructor;
+    return Launcher;
 
-    function Constructor(ui) {
+    function Launcher(ui) {
         var self = this;
 
         self.run = run;

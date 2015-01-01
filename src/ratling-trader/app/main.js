@@ -7,9 +7,9 @@ require(['./require-config'], function () {
             .then(function () {
                 var logger = compositionRoot.injector.resolve('logger');
                 logger.logInfo('resolving game');
-                var game = compositionRoot.injector.resolve('Game');
+                var launcher = compositionRoot.injector.resolve('launcher');
                 logger.logInfo('running game');
-                game.run();
+                launcher.run();
             });
 
     });

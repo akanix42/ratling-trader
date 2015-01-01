@@ -6,8 +6,8 @@ define(function (require) {
             Stopwatch = require('helpers/stopwatch'),
 
             // Game
-            Game = require('game'),
-            Engine = require('game/engine'),
+            Launcher = require('launcher'),
+            Game = require('game/game'),
             EntityAttributes = require('game/entities/entity-attributes'),
 
             // Loaders
@@ -42,8 +42,8 @@ define(function (require) {
             injector.register('Stopwatch', Stopwatch);
             injector.register('Logger', DebugLogger, true);
 
-            injector.register('Game', Game);
-            injector.register('Engine', Engine, true);
+            injector.register('Launcher', Launcher);
+            injector.register('Game', Game, true);
             injector.register('EntityTemplatesLoader', EntityTemplatesLoader, true);
             injector.register('EntityAttributes', EntityAttributes);
 

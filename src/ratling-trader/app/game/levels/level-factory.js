@@ -10,16 +10,16 @@ define(function (require) {
 
         self.get = get;
 
-        function get(engine, levelType) {
+        function get(game, levelType) {
             var level;
             if (levelType == 'world')
-                level = generateWorld(engine);
+                level = generateWorld(game);
             return level;
         }
 
-        function generateWorld(engine) {
+        function generateWorld(game) {
             var levelData = {
-                engine: engine,
+                game: game,
                 map: mapFactory.get(),
                 creatures: [
                     //{type: 'fungus'},

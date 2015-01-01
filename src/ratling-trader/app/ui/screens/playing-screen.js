@@ -2,13 +2,13 @@ define(function (require) {
         var ROT = require('rot'),
             GameCommands = require('enums/commands');
 
-        return Constructor;
+        return PlayingScreen;
 
-        function Constructor(ui, logger, asciiTiles) {
+        function PlayingScreen(ui, logger, asciiTiles) {
             var self = this,
                 gameCommands = getCommands(),
                 display = ui.getDisplay(),
-                engine = ui.getEngine();
+                game = ui.getEngine();
 
             self.enter = enter;
             self.exit = exit;
@@ -19,7 +19,7 @@ define(function (require) {
             var previousTopLeftX = null;
 
             function render() {
-                var gameState = engine.getGameState();
+                var gameState = game.getGameState();
                 if (gameState.isGameOver)
                     ui.switchScreen(ui.getScreens().losingScreen);
 
@@ -30,7 +30,7 @@ define(function (require) {
                 topLeftX = (screenWidth - gameState.cursorPosition.x <= 5 || previousTopLeftX===null) ? gameState.cursorPosition.x - (Math.round(screenWidth / 2)) : previousTopLeftX;
                 topLeftY = gameState.cursorPosition.y - (Math.round(screenHeight / 2))
 
-                var level = engine.getCurrentLevel();
+                var level = game.getCurrentLevel();
                 for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
                     for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
                         var gameTile = level.getMap().getTile(x, y);
@@ -48,7 +48,7 @@ define(function (require) {
                 if (typeof command === 'function')
                     command();
                 else {
-                    var result = engine.processCommand(command);
+                    var result = game.processCommand(command);
                     //                    if (!result.error)
                     // render();
                 }
@@ -56,7 +56,7 @@ define(function (require) {
             }
 
             function enter() {
-                engine.enterWorld();
+                game.enterWorld();
             }
 
             function exit() {
