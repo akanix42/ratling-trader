@@ -5,7 +5,7 @@ define(function (require) {
     function Constructor(logger) {
         var self = this;
         self.get = function get(display, ui) {
-            return new LosingScreen (ui, display, logger);
+            return new LosingScreen(ui, display, logger);
         };
     }
 });

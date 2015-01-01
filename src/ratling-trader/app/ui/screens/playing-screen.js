@@ -27,7 +27,7 @@ define(function (require) {
                     screenHeight = ui.getHeight(),
                     topLeftX = Math.min(0, Math.round(Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.getMap().getWidth() - screenWidth))),
                     topLeftY = Math.min(0, Math.round(Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.getMap().getHeight() - screenHeight)));
-                topLeftX = (screenWidth - gameState.cursorPosition.x <= 5 || previousTopLeftX===null) ? gameState.cursorPosition.x - (Math.round(screenWidth / 2)) : previousTopLeftX;
+                topLeftX = (screenWidth - gameState.cursorPosition.x <= 5 || previousTopLeftX === null) ? gameState.cursorPosition.x - (Math.round(screenWidth / 2)) : previousTopLeftX;
                 topLeftY = gameState.cursorPosition.y - (Math.round(screenHeight / 2))
 
                 var level = game.getCurrentLevel();
@@ -39,7 +39,7 @@ define(function (require) {
                             .draw(display, x - topLeftX, y - topLeftY);
                     }
                 }
-                previousTopLeftX=topLeftX;
+                previousTopLeftX = topLeftX;
             }
 
             function handleInput(inputType, inputData) {

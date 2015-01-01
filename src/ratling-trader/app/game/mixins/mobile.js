@@ -7,8 +7,7 @@ define(function (require) {
 
         function move(dX, dY) {
             var self = this;
-            if (dX instanceof Object)
-            {
+            if (dX instanceof Object) {
                 dY = dX.y;
                 dX = dX.x;
             }

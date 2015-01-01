@@ -33,7 +33,12 @@ define(function (require) {
             function updateMapTile(x, y, type) {
                 tiles[x][y] = type === 1
                     ? tileFactory.get(entityFactory.get('stoneFloor'), {position: {x: x, y: y}})
-                    : tileFactory.get(ROT.RNG.getUniform() < 0.4 ? entityFactory.get('stoneWall') : entityFactory.get('dirtWall'), {position: {x: x, y: y}});
+                    : tileFactory.get(ROT.RNG.getUniform() < 0.4 ? entityFactory.get('stoneWall') : entityFactory.get('dirtWall'), {
+                    position: {
+                        x: x,
+                        y: y
+                    }
+                });
             }
         }
 

@@ -31,7 +31,7 @@ define(function (require) {
         }
 
         function createDisplay() {
-            width = Math.floor(document.getElementById('ui').offsetWidth/11);
+            width = Math.floor(document.getElementById('ui').offsetWidth / 11);
             console.log(width);
             var display = new ROT.Display({width: width, height: height, fontSize: 20});
             ROT.Display.Rect.cache = true

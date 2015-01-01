@@ -10,7 +10,7 @@ define(function (require) {
         backgroundColor = backgroundColor || 'black';
 
         function draw(display, x, y) {
-                display.draw(x, y, character, foregroundColor, backgroundColor);
+            display.draw(x, y, character, foregroundColor, backgroundColor);
         }
     }
 });

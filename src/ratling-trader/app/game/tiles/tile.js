@@ -1,6 +1,6 @@
 define(function (require) {
     var extend = require('lib/extend/extend')
-        //        EntityType = require('enums/entity-type')
+    //        EntityType = require('enums/entity-type')
         ;
 
     return Constructor;

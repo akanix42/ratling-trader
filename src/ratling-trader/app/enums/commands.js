@@ -1,5 +1,5 @@
 define(function (require) {
-var i = 1;
+    var i = 1;
     return {
         GoLeft: i++,
         GoUpLeft: i++,

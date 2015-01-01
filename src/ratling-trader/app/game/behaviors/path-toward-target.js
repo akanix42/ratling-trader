@@ -34,9 +34,9 @@ define(function (require) {
                 path.shift();
                 return path.length
                     ? {
-                           x: normalizeDirection(currentPosition.x, path[0][0]),
-                           y: normalizeDirection(currentPosition.y, path[0][1])
-                       }
+                    x: normalizeDirection(currentPosition.x, path[0][0]),
+                    y: normalizeDirection(currentPosition.y, path[0][1])
+                }
                     : false;
             }
 

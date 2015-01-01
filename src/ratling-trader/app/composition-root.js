@@ -5,17 +5,17 @@ define(function (require) {
             DebugLogger = require('debug-logger'),
             Stopwatch = require('helpers/stopwatch'),
 
-            // Game
+        // Game
             Launcher = require('launcher'),
             Game = require('game/game'),
             EntityAttributes = require('game/entities/entity-attributes'),
 
-            // Loaders
+        // Loaders
             EntityTemplatesLoader = require('game/loaders/entity-templates-loader'),
             behaviorsLoader = require('promise!game/loaders/behavior-modules-loader'),
             mixinsLoader = require('promise!game/loaders/mixin-modules-loader'),
 
-            // Game Factories
+        // Game Factories
             AttributeFactory = require('game/entities/attribute-factory'),
             EntityAttributesFactory = require('game/entities/entity-attributes-factory'),
             EntityFactory = require('game/entities/entity-factory'),
@@ -24,7 +24,7 @@ define(function (require) {
             LevelFactory = require('game/levels/level-factory'),
             TileFactory = require('game/tiles/tile-factory'),
 
-            // UI
+        // UI
             UI = require('ui/ui'),
             AsciiLoader = require('promise!ui/loaders/ascii-loader'),
             AsciiTiles = require('ui/tiles/ascii-tiles'),
