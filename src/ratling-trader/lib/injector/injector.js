@@ -1,6 +1,5 @@
 define(function (require) {
-    var extend = require('lib/extend/extend'),
-        truthy = require('lib/truthy-falsy/truthy');
+    var extend = require('lib/extend/extend');
     return Injector;
 
     function Injector() {
@@ -14,7 +13,7 @@ define(function (require) {
                 debugger;
                 throw originalName + ' not registered';
             }
-            if (truthy(dependencyAbove) && name in dependencyTree)
+            if (dependencyAbove && name in dependencyTree)
                 throw dependencyAbove + ' has a circular dependency on ' + name;
             dependencyTree = extend({}, dependencyTree);
             dependencyTree[name] = '';
@@ -45,7 +44,7 @@ define(function (require) {
             },
 
             resolve: function (name) {
-                return resolve(name, undefined, {});
+                return resolve(name, null, {});
             }
 
         };
