@@ -1,8 +1,8 @@
 define(function (require) {
         var GameCommands = require('enums/commands');
-        return Constructor;
+        return Game;
 
-        function Constructor(levelFactory, logger, entityFactory) {
+        function Game(levelFactory, logger, entityFactory, scheduler) {
             var self = this,
                 levels = {},
                 actions = getActions(),
@@ -64,13 +64,13 @@ define(function (require) {
                 player.getPositionManager().setLevel(getCurrentLevel());
                 player.getPositionManager().setPosition(5, 5);
                 lockCursorToPlayer();
-                getCurrentLevel().resume();
+                scheduler.resume();
                 logger.log('entered world');
 
             }
 
             function gameOver() {
-                getCurrentLevel().pause();
+                scheduler.pause();
                 isGameOver = true;
                 updateUI();
 
@@ -132,6 +132,7 @@ define(function (require) {
                 if (ui)
                     ui.update();
             }
+
         }
     }
 )

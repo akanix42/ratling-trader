@@ -1,22 +1,15 @@
 define(function (require) {
     var stringFormat = require('stringformat');
-    return Constructor;
+    return Level;
 
-    function Constructor(data, entityFactory) {
+    function Level(data, entityFactory, scheduler, logger) {
         var self = this;
-        var scheduler = new ROT.Scheduler.Simple(),
-            schedulingEngine = new ROT.Engine(scheduler),
-            entities = {};
+        var entities = {};
 
-        self.pause = pause;
-        self.resume = resume;
         self.getEngine = getGame;
         self.getMap = getMap;
         self.addEntity = addEntity;
         self.removeEntity = removeEntity;
-
-        schedulingEngine.start();
-        pause();
 
         processCreatures();
 
@@ -30,16 +23,8 @@ define(function (require) {
             creature = entityFactory.get(creature);
             creature.getPositionManager().setLevel(self);
             creature.getPositionManager().setTile(getMap().getRandomTile({architectures: ['stoneFloor']}));
-            //addEntity(creature);
+
             return creature;
-        }
-
-        function pause() {
-            schedulingEngine.lock();
-        }
-
-        function resume() {
-            schedulingEngine.unlock();
         }
 
         function getGame() {
@@ -53,14 +38,14 @@ define(function (require) {
         function addEntity(entity) {
             if (entities[entity.getId()])
                 return;
-            console.log(stringFormat('adding {getId}', entity));
-            scheduler.add(entity, true);
+            logger.log(stringFormat('adding {getId}', entity));
+            scheduler.addEntity(entity);
             entities[entity.getId()] = entity;
 
         }
 
         function removeEntity(entity) {
-            scheduler.remove(entity, true);
+            scheduler.removeEntity(entity);
             entities[entity.getId()] = null;
 
         }

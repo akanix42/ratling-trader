@@ -8,6 +8,7 @@ define(function (require) {
         // Game
             Launcher = require('launcher'),
             Game = require('game/game'),
+            Scheduler = require('game/scheduler'),
             EntityAttributes = require('game/entities/entity-attributes'),
 
         // Loaders
@@ -44,6 +45,7 @@ define(function (require) {
 
             injector.register('Launcher', Launcher);
             injector.register('Game', Game, true);
+            injector.register('scheduler', Scheduler, true);
             injector.register('EntityTemplatesLoader', EntityTemplatesLoader, true);
             injector.register('EntityAttributes', EntityAttributes);
 

@@ -5,7 +5,7 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor(mapFactory, entityFactory) {
+    function Constructor(mapFactory, entityFactory, scheduler, logger) {
         var self = this;
 
         self.get = get;
@@ -41,7 +41,7 @@ define(function (require) {
             };
 
 
-            return new Level(levelData, entityFactory);
+            return new Level(levelData, entityFactory, scheduler, logger);
         }
     }
 
