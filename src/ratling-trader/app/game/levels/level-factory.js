@@ -1,11 +1,9 @@
 define(function (require) {
-    var Level = require('game/levels/level'),
-        ROT = require('rot');
-//        EntityType = require('enums/entity-type');
+    var Level = require('game/levels/level');
 
-    return Constructor;
+    return LevelFactory;
 
-    function Constructor(mapFactory, entityFactory, scheduler, logger) {
+    function LevelFactory(mapGenerator, entityFactory, scheduler, logger) {
         var self = this;
 
         self.get = get;
@@ -20,7 +18,8 @@ define(function (require) {
         function generateWorld(game) {
             var levelData = {
                 game: game,
-                map: mapFactory.get(),
+                map: mapGenerator.createMap(),
+                nullTile: null,
                 creatures: [
                     //{type: 'fungus'},
                     {type: 'zombie'},
@@ -39,7 +38,6 @@ define(function (require) {
                     {type: 'zombie'},
                 ]
             };
-
 
             return new Level(levelData, entityFactory, scheduler, logger);
         }

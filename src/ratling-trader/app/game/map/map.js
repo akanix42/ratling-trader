@@ -1,6 +1,7 @@
 define(function (require) {
         var ROT = require('rot'),
             extend = require('lib/extend/extend');
+
         return Constructor;
 
         function Constructor(tiles, nullTile) {

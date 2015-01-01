@@ -1,17 +1,33 @@
 define(function (require) {
-    var stringFormat = require('stringformat');
+    var stringFormat = require('stringformat'),
+        extend = require('lib/extend/extend');
+
     return Level;
 
     function Level(data, entityFactory, scheduler, logger) {
-        var self = this;
-        var entities = {};
+        var self = this,
+            entities = {},
+            map = data.map,
+            width = map.tiles.length,
+            height = map.tiles[0].length;
 
-        self.getEngine = getGame;
-        self.getMap = getMap;
-        self.addEntity = addEntity;
-        self.removeEntity = removeEntity;
+        for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
+                map.tiles[x][y].setMap(self);
+
+        exposePublicMethods();
 
         processCreatures();
+
+        function exposePublicMethods() {
+            self.addEntity = addEntity;
+            self.removeEntity = removeEntity;
+            self.getTile = getTile;
+            self.getWidth = getWidth;
+            self.getHeight = getHeight;
+            self.getAdjacentTiles = getAdjacentTiles;
+            self.getRandomTile = getRandomTile;
+        }
 
         function processCreatures() {
             for (var i = 0; i < data.creatures.length; i++) {
@@ -22,17 +38,9 @@ define(function (require) {
         function processCreature(creature) {
             creature = entityFactory.get(creature);
             creature.getPositionManager().setLevel(self);
-            creature.getPositionManager().setTile(getMap().getRandomTile({architectures: ['stoneFloor']}));
+            creature.getPositionManager().setTile(getRandomTile({architectures: ['stoneFloor']}));
 
             return creature;
-        }
-
-        function getGame() {
-            return data.game;
-        }
-
-        function getMap() {
-            return data.map;
         }
 
         function addEntity(entity) {
@@ -48,6 +56,59 @@ define(function (require) {
             scheduler.removeEntity(entity);
             entities[entity.getId()] = null;
 
+        }
+
+        function getTile(x, y) {
+            if (x < 0 || x >= width || y < 0 || y >= height) {
+                return map.nullTile;
+            } else {
+                return map.tiles[x][y] || map.nullTile;
+            }
+        }
+
+        function getRandomTile(filter) {
+            var defaultFilter = {
+                architectures: []
+            };
+            if (filter !== undefined)
+                filter = extend({}, defaultFilter, filter);
+
+            var tile;
+            do {
+                var x = Math.floor(Math.random() * width);
+                var y = Math.floor(Math.random() * height);
+                tile = getTile(x, y);
+            } while (!matchesFilter(tile));
+
+            return tile;
+
+            function matchesFilter(tile) {
+                if (filter === undefined)
+                    return true;
+
+                var type = tile.getArchitecture().getType();
+                for (var i = 0; i < filter.architectures.length; i++)
+                    if (filter.architectures[i] === type)
+                        return true;
+            }
+        }
+
+        function getWidth() {
+            return width;
+        }
+
+        function getHeight() {
+            return height;
+        }
+
+        function getAdjacentTiles(position) {
+            var adjacentTiles = [];
+            for (var x = Math.max(position.x - 1, 0); x < Math.min(position.x + 2, width); x++)
+                for (var y = Math.max(position.y - 1, 0); y < Math.min(position.y + 2, height); y++)
+                    if (!(x === position.x && y === position.y))
+                        adjacentTiles.push(getTile(x, y));
+
+            return adjacentTiles;
         }
     }
 });

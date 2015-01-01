@@ -21,7 +21,7 @@ define(function (require) {
                 var currentPosition = self.getPositionManager().getPosition();
                 var targetPosition = target.getPositionManager().getPosition();
                 var passableCallback = function (x, y) {
-                    var tile = self.getPositionManager().getLevel().getMap().getTile(x, y);
+                    var tile = self.getPositionManager().getLevel().getTile(x, y);
                     return tile.isWalkable() || tile.isDiggable();
                 };
                 var astar = new ROT.Path.AStar(targetPosition.x, targetPosition.y, passableCallback, {topology: 8});

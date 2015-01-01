@@ -53,7 +53,7 @@ define(function (require) {
         }
 
         function setPosition(x, y) {
-            var newTile = level.getMap().getTile(x, y);
+            var newTile = level.getTile(x, y);
             setTile(newTile);
         }
 

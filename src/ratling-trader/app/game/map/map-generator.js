@@ -1,20 +1,20 @@
 define(function (require) {
-    var Map = require('game/map/map'),
-        ROT = require('rot');
+    var ROT = require('rot');
 
-    return Constructor;
+    return MapGenerator;
 
-    function Constructor(tileFactory, entityFactory) {
+    function MapGenerator(tileFactory, entityFactory) {
         var self = this;
         var mapWidth = 150,
             mapHeight = 203;
-        self.get = get;
+        self.createMap = createMap;
         var nullTile = tileFactory.get(entityFactory.get('null'), {position: {x: 0, y: 0}});
 
-        function get() {
-            var tiles = generateCaveMap();
-            var map = new Map(tiles, nullTile);
-            return map;
+        function createMap() {
+            return {
+                tiles: generateCaveMap(),
+                nullTile: nullTile
+            };
         }
 
 
@@ -53,5 +53,4 @@ define(function (require) {
             return tiles;
         }
     }
-
 });
