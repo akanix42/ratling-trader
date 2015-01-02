@@ -4,11 +4,9 @@ define(function (require) {
 
     return PlayingScreen;
 
-    function PlayingScreen(ui, logger, asciiTiles) {
+    function PlayingScreen(screenManager, display, game, asciiTiles) {
         var self = this,
-            gameCommands = getCommands(),
-            display = ui.getDisplay(),
-            game = ui.getEngine();
+            gameCommands = getCommands();
 
         self.enter = enter;
         self.exit = exit;
@@ -23,12 +21,12 @@ define(function (require) {
         function render() {
             var gameState = game.getGameState();
             if (gameState.isGameOver)
-                ui.switchScreen(ui.getScreens().losingScreen);
+                screenManager.switchTo('losingScreen');
 
-            var cameraPosition = calculateCameraCoordinates(gameState.cursorPosition, ui, gameState.level, referenceLevelToScreenPoint);
+            var cameraPosition = calculateCameraCoordinates(gameState.cursorPosition, gameState.level, referenceLevelToScreenPoint);
             var level = gameState.level;
-            for (var x = cameraPosition.x; x < cameraPosition.x + ui.getWidth(); x++) {
-                for (var y = cameraPosition.y; y < cameraPosition.y + ui.getHeight(); y++) {
+            for (var x = cameraPosition.x; x < cameraPosition.x + display.getOptions().width; x++) {
+                for (var y = cameraPosition.y; y < cameraPosition.y + display.getOptions().height; y++) {
                     var gameTile = level.getTile(x, y);
                     asciiTiles
                         .get(gameTile)
@@ -37,9 +35,9 @@ define(function (require) {
             }
         }
 
-        function calculateCameraCoordinates(cursorPosition, ui, level, reference) {
-            var calculatedX = calculateCameraCoordinate(cursorPosition.x, ui.getWidth(), level.getWidth(), reference.x);
-            var calculatedY = calculateCameraCoordinate(cursorPosition.y, ui.getHeight(), level.getHeight(), reference.y);
+        function calculateCameraCoordinates(cursorPosition, level, reference) {
+            var calculatedX = calculateCameraCoordinate(cursorPosition.x, display.getOptions().width, level.getWidth(), reference.x);
+            var calculatedY = calculateCameraCoordinate(cursorPosition.y, display.getOptions().height, level.getHeight(), reference.y);
 
             reference.x = calculatedX.reference;
             reference.y = calculatedY.reference;
@@ -120,10 +118,10 @@ define(function (require) {
 
 
             function lose() {
-                ui.switchScreen(ui.getScreens().losingScreen);
+                screenManager.switchTo('losingScreen');
             };
             function win() {
-                ui.switchScreen(ui.getScreens().winningScreen);
+                screenManager.switchTo('winningScreen');
             };
         }
     }

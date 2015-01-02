@@ -29,11 +29,21 @@ define(function (require) {
 
         // UI
             UI = require('ui/ui'),
+            ScreenManager = require('ui/screen-manager'),
             AsciiLoader = require('promise!ui/loaders/ascii-loader'),
             AsciiTiles = require('ui/tiles/ascii-tiles'),
+
+        // UI Factories
+            DisplayFactory = require('ui/display-factory'),
+            ScreenFactory = require('ui/screens/screen-factory'),
             LosingScreenFactory = require('ui/screens/losing-screen-factory'),
             PlayingScreenFactory = require('ui/screens/playing-screen-factory'),
-            WinningScreenFactory = require('ui/screens/winning-screen-factory')
+            WinningScreenFactory = require('ui/screens/winning-screen-factory'),
+
+        // Screens
+            LosingScreen = require('ui/screens/losing-screen'),
+            PlayingScreen = require('ui/screens/playing-screen'),
+            WinningScreen = require('ui/screens/winning-screen')
             ;
 
         return CompositionRoot;
@@ -42,6 +52,8 @@ define(function (require) {
             var self = this;
             var injector = self.injector = new Injector();
 
+            injector.register('Injector', injector);
+            // ---- Game
             injector.register('Stopwatch', Stopwatch);
             injector.register('Logger', Logger, true);
 
@@ -57,15 +69,30 @@ define(function (require) {
             injector.register('EntityPositionFactory', EntityPositionFactory);
             injector.register('LevelFactory', LevelFactory);
             injector.register('TileFactory', TileFactory);
-
             injector.register('MapGenerator', MapGenerator);
+            // ====
 
+            // ---- UI
             injector.register('UI', UI);
+            injector.register('ScreenManager', ScreenManager);
             injector.register('AsciiTiles', AsciiTiles, true);
             injector.register('AsciiLoader', AsciiLoader, true);
+            injector.register('DisplayFactory', DisplayFactory);
+
+            injector.register('Display', function (displayFactory) {
+                return displayFactory.get();
+            }, true);
+
+            injector.register('ScreenFactory', ScreenFactory);
             injector.register('LosingScreenFactory', LosingScreenFactory);
             injector.register('PlayingScreenFactory', PlayingScreenFactory);
             injector.register('WinningScreenFactory', WinningScreenFactory);
+
+            injector.register('LosingScreen', LosingScreen);
+            injector.register('PlayingScreen', PlayingScreen);
+            injector.register('WinningScreen', WinningScreen);
+
+            // ====
 
             injector.register('loadedBehaviors', function () {
                 return behaviorsLoader;

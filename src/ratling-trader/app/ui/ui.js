@@ -1,48 +1,41 @@
 define(function (require) {
-    var ROT = require('rot')
-        ;
+    var ROT = require('rot');
 
     return UI;
 
-    function UI(game, playingScreenFactory, winningScreenFactory, losingScreenFactory, logger) {
+    function UI(game, screenManager, logger) {
         var self = this;
-        var display, screens = {}, width = 80, height = 24;
 
         self.init = init;
-        self.getScreens = getScreens;
-        self.switchScreen = switchScreen;
-        self.getDisplay = getDisplay;
-        self.getEngine = getEngine;
+        //self.getScreens = getScreens;
+        //self.switchScreen = switchScreen;
+        //self.getDisplay = getDisplay;
+        //self.getEngine = getEngine;
         self.getWidth = getWidth;
         self.getHeight = getHeight;
         self.update = update;
         game.setUI(self);
 
         function init() {
-            display = createDisplay();
+            //display = createDisplay();
             bindInputEvents();
 
-            screens.playingScreen = playingScreenFactory.get(display, self);
-            screens.winningScreen = winningScreenFactory.get(display, self);
-            screens.losingScreen = losingScreenFactory.get(display, self);
-            switchScreen(screens.playingScreen);
-
-            screens.current.render();
+            screenManager.switchTo('playingScreen');
         }
-
-        function createDisplay() {
-            width = Math.floor(document.getElementById('ui').offsetWidth / 11);
-            if (width % 2 !== 0)
-                width = 2 * Math.round((width - 1) / 2);
-            logger.log(width);
-            var display = new ROT.Display({width: width, height: height, fontSize: 20});
-            ROT.Display.Rect.cache = true
-            var container = display.getContainer();
-
-            document.getElementById('ui-screen').appendChild(container);
-
-            return display;
-        }
+        //
+        //function createDisplay() {
+        //    width = Math.floor(document.getElementById('ui').offsetWidth / 11);
+        //    if (width % 2 !== 0)
+        //        width = 2 * Math.round((width - 1) / 2);
+        //    logger.log(width);
+        //    var display = new ROT.Display({width: width, height: height, fontSize: 20});
+        //    ROT.Display.Rect.cache = true;
+        //    var container = display.getContainer();
+        //
+        //    document.getElementById('ui-screen').appendChild(container);
+        //
+        //    return display;
+        //}
 
         function bindInputEvents() {
             bindInputEvent('keydown');
@@ -54,39 +47,10 @@ define(function (require) {
                     if (e.keyCode === ROT.VK_F5)
                         return;
                     e.preventDefault();
-                    if (screens.current !== null) {
-                        screens.current.handleInput(event, e);
-                    }
+                    screenManager.handleInput(event, e);
+
                 });
             }
-        }
-
-        function switchScreen(screen) {
-            if (!screen) {
-                logger.logError('can\'t switch to undefined screen');
-                return;
-            }
-            if (screens.current)
-                screens.current.exit();
-
-            display.clear();
-
-            screens.current = screen;
-
-            screens.current.enter();
-            screens.current.render();
-        }
-
-        function getScreens() {
-            return screens;
-        }
-
-        function getDisplay() {
-            return display;
-        }
-
-        function getEngine() {
-            return game;
         }
 
         function getWidth() {
@@ -98,7 +62,7 @@ define(function (require) {
         }
 
         function update() {
-            screens.current.render();
+            screenManager.render();
         }
     }
 });
