@@ -2,7 +2,7 @@ define(function (require) {
         var when = require('when'),
 
             Injector = require('injector'),
-            DebugLogger = require('debug-logger'),
+            Logger = require('logger'),
             Stopwatch = require('helpers/stopwatch'),
 
         // Game
@@ -43,7 +43,7 @@ define(function (require) {
             var injector = self.injector = new Injector();
 
             injector.register('Stopwatch', Stopwatch);
-            injector.register('Logger', DebugLogger, true);
+            injector.register('Logger', Logger, true);
 
             injector.register('Launcher', Launcher);
             injector.register('Game', Game, true);
