@@ -12,7 +12,7 @@ define(function (require) {
         function act() {
             var self = this;
 
-            game.updateUI(self);
+            //game.updateUI(self);
             scheduler.pause();
             game.acceptInput();
         };
