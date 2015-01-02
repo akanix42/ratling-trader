@@ -15,31 +15,66 @@ define(function (require) {
             self.render = render;
             self.handleInput = handleInput;
 
-            var drawCounter = 0;
-            var previousTopLeftX = null;
+            var referenceLevelToScreenPoint = {
+                x: null,
+                y: null
+            };
+            var scrollAt = 10;
 
             function render() {
                 var gameState = game.getGameState();
                 if (gameState.isGameOver)
                     ui.switchScreen(ui.getScreens().losingScreen);
 
-                var screenWidth = ui.getWidth(),
-                    screenHeight = ui.getHeight(),
-                    topLeftX = Math.min(0, Math.round(Math.min(Math.max(0, gameState.cursorPosition.x - (screenWidth / 2)), gameState.level.getWidth() - screenWidth))),
-                    topLeftY = Math.min(0, Math.round(Math.min(Math.max(0, gameState.cursorPosition.y - (screenHeight / 2)), gameState.level.getHeight() - screenHeight)));
-                topLeftX = (screenWidth - gameState.cursorPosition.x <= 5 || previousTopLeftX === null) ? gameState.cursorPosition.x - (Math.round(screenWidth / 2)) : previousTopLeftX;
-                topLeftY = gameState.cursorPosition.y - (Math.round(screenHeight / 2))
-
-                var level = game.getCurrentLevel();
-                for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
-                    for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
+                var cameraPosition = calculateCameraCoordinates(gameState.cursorPosition, ui, gameState.level, referenceLevelToScreenPoint);
+                var level = gameState.level;
+                for (var x = cameraPosition.x; x < cameraPosition.x + ui.getWidth(); x++) {
+                    for (var y = cameraPosition.y; y < cameraPosition.y + ui.getHeight(); y++) {
                         var gameTile = level.getTile(x, y);
                         asciiTiles
                             .get(gameTile)
-                            .draw(display, x - topLeftX, y - topLeftY);
+                            .draw(display, x - cameraPosition.x, y - cameraPosition.y);
                     }
                 }
-                previousTopLeftX = topLeftX;
+            }
+
+            function calculateCameraCoordinates(cursorPosition, ui, level, reference) {
+                var calculatedX = calculateCameraCoordinate(cursorPosition.x, ui.getWidth(), level.getWidth(), reference.x);
+                var calculatedY = calculateCameraCoordinate(cursorPosition.y, ui.getHeight(), level.getHeight(), reference.y);
+
+                reference.x = calculatedX.reference;
+                reference.y = calculatedY.reference;
+                return {
+                    x: calculatedX.camera,
+                    y: calculatedY.camera
+                };
+            }
+
+            function calculateCameraCoordinate(cursorCoordinate, screenSize, mapSize, reference) {
+                var halfMap = mapSize / 2;
+                var halfScreen = screenSize / 2;
+                //var cursorScreenCoordinate = cursorCoordinate - reference;
+
+                if (mapSize < screenSize)
+                    return getCameraCoordinate(halfMap - halfScreen, reference);
+                if (cursorCoordinate < halfScreen)
+                    return getCameraCoordinate(0, reference);
+                if (cursorCoordinate > mapSize - halfScreen)
+                    return getCameraCoordinate(mapSize - screenSize, reference);
+
+                return getCameraCoordinate(cursorCoordinate - halfScreen, reference);
+            }
+
+            function getCameraCoordinate(position, reference) {
+                if (reference === undefined)
+                    throw "Reference must be defined.";
+                if (reference === null)
+                    reference = position;
+
+                return {
+                    camera: position,
+                    reference: reference
+                };
             }
 
             function handleInput(inputType, inputData) {

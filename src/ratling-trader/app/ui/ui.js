@@ -32,7 +32,9 @@ define(function (require) {
 
         function createDisplay() {
             width = Math.floor(document.getElementById('ui').offsetWidth / 11);
-            console.log(width);
+            if (width % 2 !== 0)
+                width = 2 * Math.round((width - 1) / 2);
+            logger.log(width);
             var display = new ROT.Display({width: width, height: height, fontSize: 20});
             ROT.Display.Rect.cache = true
             var container = display.getContainer();
