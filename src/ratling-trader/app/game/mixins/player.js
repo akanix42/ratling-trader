@@ -2,7 +2,7 @@ define(function (require) {
     var stringFormat = require('stringformat');
     return Player;
 
-    function Player(logger) {
+    function Player(logger, scheduler, game) {
         return {
             act: act,
             performAction: performAction,
@@ -12,26 +12,24 @@ define(function (require) {
         function act() {
             var self = this;
 
-            var positionManager = self.getPositionManager();
-            positionManager.getLevel().getEngine().updateUI(self);
-            positionManager.getLevel().pause();
-            positionManager.getLevel().getEngine().acceptInput();
+            game.updateUI(self);
+            scheduler.pause();
+            game.acceptInput();
         };
 
         function performAction() {
             var self = this;
             if (self.raiseEvent.apply(self, arguments))
-                self.getPositionManager().getLevel().resume();
+                scheduler.resume();
             else {
                 logger.log(stringFormat('You can\'t do {that}!', {that: arguments[0]}));
-                self.getPositionManager().getLevel().getEngine().acceptInput();
+                game.acceptInput();
 
             }
         };
 
         function killed() {
-            var self = this;
-            self.getPositionManager().getLevel().getEngine().gameOver();
+            game.gameOver();
         }
     }
 });

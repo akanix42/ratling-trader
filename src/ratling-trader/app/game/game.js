@@ -6,7 +6,7 @@ define(function (require) {
             var self = this,
                 levels = {},
                 actions = getActions(),
-                player = entityFactory.get({type: 'player'}),
+                player,
                 isCursorLockedToPlayer = true,
                 isGameOver = false,
                 isProcessingCommand = false
@@ -57,6 +57,7 @@ define(function (require) {
             }
 
             function enterWorld() {
+                player = entityFactory.get({type: 'player'});
                 logger.log('entering world');
                 setCurrentLevel(levels.world = levelFactory.get(self, 'world'));
                 logger.log('level loaded');
