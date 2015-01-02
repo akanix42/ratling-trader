@@ -36,9 +36,6 @@ define(function (require) {
         // UI Factories
             DisplayFactory = require('ui/display-factory'),
             ScreenFactory = require('ui/screens/screen-factory'),
-            LosingScreenFactory = require('ui/screens/losing-screen-factory'),
-            PlayingScreenFactory = require('ui/screens/playing-screen-factory'),
-            WinningScreenFactory = require('ui/screens/winning-screen-factory'),
 
         // Screens
             LosingScreen = require('ui/screens/losing-screen'),
@@ -84,9 +81,6 @@ define(function (require) {
             }, true);
 
             injector.register('ScreenFactory', ScreenFactory);
-            injector.register('LosingScreenFactory', LosingScreenFactory);
-            injector.register('PlayingScreenFactory', PlayingScreenFactory);
-            injector.register('WinningScreenFactory', WinningScreenFactory);
 
             injector.register('LosingScreen', LosingScreen);
             injector.register('PlayingScreen', PlayingScreen);
