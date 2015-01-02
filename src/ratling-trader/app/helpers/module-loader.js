@@ -11,12 +11,12 @@ define(function (require) {
 
         var keys = Object.keys(modulesToLoad);
         var paths = getPathsArray();
-        loadModules();
         var _public = {
             getModules: getModules,
             get: get,
             addModuleInstance: addModuleInstance
         };
+        loadModules();
 
         return deferred.promise;
 
