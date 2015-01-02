@@ -26,7 +26,7 @@ define(function (require) {
         }
 
         function addAsciiTile(template) {
-            tiles[template.name] = new AsciiTile(template.character, template.color);
+            tiles[template.name] = new AsciiTile(template.character, template.color, null, logger);
         }
 
 

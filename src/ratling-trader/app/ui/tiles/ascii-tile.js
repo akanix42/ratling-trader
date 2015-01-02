@@ -2,7 +2,7 @@ define(function (require) {
 
     return Constructor;
 
-    function Constructor(character, foregroundColor, backgroundColor) {
+    function Constructor(character, foregroundColor, backgroundColor, logger) {
         var self = this;
 
         self.draw = draw;
