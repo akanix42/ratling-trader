@@ -10,18 +10,9 @@
     "color": "purple"
   },
   {
-    "name": "stoneFloor",
-    "character": "."
-  },
-  {
-    "name": "stoneWall",
-    "character": "#",
-    "color": "gray"
-  },
-  {
-    "name": "dirtWall",
-    "character": "#",
-    "color": "goldenrod"
+    "name": "apple",
+    "character": "%",
+    "color": "limegreen"
   },
   {
     "name": "dirtFloor",
@@ -29,14 +20,28 @@
     "color": "goldenrod"
   },
   {
-    "name": "player",
-    "character": "@",
-    "color": "white"
+    "name": "dirtWall",
+    "character": "#",
+    "color": "goldenrod"
   },
   {
     "name": "fungus",
     "character": "F",
     "color": "#66FF00"
+  },
+  {
+    "name": "player",
+    "character": "@",
+    "color": "white"
+  },
+  {
+    "name": "stoneFloor",
+    "character": "."
+  },
+  {
+    "name": "stoneWall",
+    "character": "#",
+    "color": "gray"
   },
   {
     "name": "zombie",

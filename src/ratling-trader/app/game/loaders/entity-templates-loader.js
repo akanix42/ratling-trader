@@ -1,5 +1,6 @@
 define(function (require) {
     var architectures = require('json!config/architectures.json'),
+        items = require('json!config/items.json'),
         monsters = require('json!config/monsters.json'),
         extend = require('lib/extend/extend');
 
@@ -13,6 +14,7 @@ define(function (require) {
 
         loadArchitectures();
         loadCreatures();
+        loadItems();
 
         logger.logInfo('loaded entities');
         logger.groupEnd();
@@ -38,12 +40,26 @@ define(function (require) {
         }
 
         function addEntityTemplate(template) {
-            templates[template.name] = template;
+            var defaultData = {
+                "health": {
+                    "base": 10
+                }
+            };
+
+            templates[template.name] = extend({}, defaultData, template);
         }
 
         function loadCreatures() {
             for (var i = 0; i < monsters.length; i++)
                 addEntityTemplate(monsters[i]);
+        }
+
+        function loadItems() {
+            var defaultData = {
+                type: 'item'
+            };
+            for (var i = 0; i < items.length; i++)
+                addEntityTemplate(extend({}, defaultData, items[i]));
         }
 
         function getAll() {

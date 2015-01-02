@@ -36,6 +36,9 @@ define(function (require) {
                     {type: 'zombie'},
                     {type: 'zombie'},
                     {type: 'zombie'},
+                ],
+                items: [
+                    {type: 'apple'}
                 ]
             };
 

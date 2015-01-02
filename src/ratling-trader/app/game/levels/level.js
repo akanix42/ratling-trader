@@ -18,6 +18,7 @@ define(function (require) {
         exposePublicMethods();
 
         processCreatures();
+        processItems();
 
         function exposePublicMethods() {
             self.addEntity = addEntity;
@@ -41,6 +42,21 @@ define(function (require) {
             creature.getPositionManager().setTile(getRandomTile({architectures: ['stoneFloor']}));
 
             return creature;
+        }
+
+        function processItems() {
+            var entities = data.items;
+            for (var i = 0; i < entities.length; i++) {
+                entities[i] = processItem(entities[i])
+            }
+        }
+
+        function processItem(entity) {
+            entity = entityFactory.get(entity);
+            entity.getPositionManager().setLevel(self);
+            entity.getPositionManager().setTile(getTile(5,6));
+
+            return entity;
         }
 
         function addEntity(entity) {
