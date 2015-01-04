@@ -22,6 +22,7 @@ define(function (require) {
             EntityFactory = require('game/entities/entity-factory'),
             EntityPositionFactory = require('game/entities/entity-position-factory'),
             LevelFactory = require('game/levels/level-factory'),
+            MixinFactory = require('game/mixins/mixin-factory'),
             TileFactory = require('game/tiles/tile-factory'),
 
         // Maps
@@ -65,6 +66,7 @@ define(function (require) {
             injector.register('EntityFactory', EntityFactory);
             injector.register('EntityPositionFactory', EntityPositionFactory);
             injector.register('LevelFactory', LevelFactory);
+            injector.register('MixinFactory', MixinFactory);
             injector.register('TileFactory', TileFactory);
             injector.register('MapGenerator', MapGenerator);
             // ====

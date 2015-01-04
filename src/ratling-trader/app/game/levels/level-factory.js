@@ -22,23 +22,23 @@ define(function (require) {
                 nullTile: null,
                 creatures: [
                     //{type: 'fungus'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
-                    {type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
+                    //{type: 'zombie'},
                 ],
                 items: [
-                    {type: 'apple'}
+                    //{type: 'apple'}
                 ]
             };
 

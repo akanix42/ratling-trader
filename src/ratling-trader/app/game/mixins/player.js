@@ -1,8 +1,15 @@
 define(function (require) {
-    var stringFormat = require('stringformat');
+    var stringFormat = require('stringformat'),
+        actCommand = require('game/commands/act-command');
+
     return Player;
 
-    function Player(logger, scheduler, game) {
+    function Player(mixinFactory, logger, scheduler, game) {
+        var mixin = mixinFactory.get();
+        mixin.addCommand(actCommand, act);
+        //mixin.addEvent(killed)
+        return mixin;
+
         return {
             act: act,
             performAction: performAction,
@@ -15,7 +22,7 @@ define(function (require) {
             //game.updateUI(self);
             scheduler.pause();
             game.acceptInput();
-        };
+        }
 
         function performAction() {
             var self = this;
@@ -26,7 +33,7 @@ define(function (require) {
                 game.acceptInput();
 
             }
-        };
+        }
 
         function killed() {
             game.gameOver();

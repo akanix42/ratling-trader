@@ -58,19 +58,19 @@ define(function (require) {
         }
 
         function setTile(newTile) {
-            if (newTile && newTile.getCreature() && newTile.getCreature() !== entity)
-                return;
-            removeFromCurrentTile();
+            //if (newTile && newTile.getCreature() && newTile.getCreature() !== entity)
+            //    return;
+            //removeFromCurrentTile();
             if (!newTile)
                 return;
             previousTile = tile;
             tile = newTile;
-            tile.setCreature(entity);
+            tile.addEntity(entity);
         }
 
         function removeFromCurrentTile() {
-            if (tile && tile.getCreature() === entity)
-                tile.setCreature(null);
+            if (tile)
+                tile.removeEntity(entity);
             tile = null;
         }
 

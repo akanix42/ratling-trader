@@ -1,5 +1,6 @@
 define(function (require) {
-        var GameCommands = require('enums/commands');
+        var GameCommands = require('enums/commands'),
+            moveCommand = require('game/commands/move-command');
         return Game;
 
         function Game(levelFactory, logger, entityFactory, scheduler) {
@@ -104,7 +105,8 @@ define(function (require) {
             }
 
             function movePlayerOrCursor(command, action) {
-                player.raiseEvent('performAction', 'move', action.data.x || 0, action.data.y || 0);
+                player.perform(moveCommand({x: action.data.x || 0, y: action.data.y || 0}));
+                //player.raiseEvent('performAction', 'move', action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
                 updateUI();
             }

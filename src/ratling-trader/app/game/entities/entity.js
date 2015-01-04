@@ -15,6 +15,7 @@ define(function (require) {
             states = {},
             entityBase = {},
             events = [],
+            commands = [],
             positionManager;
 
 
@@ -34,7 +35,7 @@ define(function (require) {
             entityBase.raiseEvent = raiseEvent;
             entityBase.getAttributes = getAttributes;
             entityBase.getPositionManager = getPositionManager;
-
+            entityBase.perform = perform;
             extend(self, entityBase);
         }
 
@@ -87,16 +88,23 @@ define(function (require) {
             }
 
             mixins[name] = true;
-            var eventKeys = Object.keys(mixin);
-            for (var i = 0; i < eventKeys.length; i++) {
-                var event = eventKeys[i];
-                addEventHandler(event, mixin[event]);
+            if (!('commands' in mixin))
+                mixin = {events: [], commands: []};
+
+            registerHandlers(events, mixin.events);
+            registerHandlers(commands, mixin.commands);
+
+            function registerHandlers(registar, handlers) {
+                for (var i = 0; i < handlers.length; i++) {
+                    var handler = handlers[i];
+                    addEventHandler(handler.fn, handler.callback, registar);
+                }
             }
 
-            function addEventHandler(name, handler) {
-                if (!(name in events))
-                    events[name] = {handlers: []};
-                events[name].handlers.push(handler);
+            function addEventHandler(fn, handler, registrar) {
+                if (!(fn in registrar))
+                    registrar[fn] = [];
+                registrar[fn].push(handler);
             }
 
         }
@@ -162,19 +170,19 @@ define(function (require) {
             return result;
         }
 
-        function raiseEvent(name) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            var event = events[name];
-            if (!event)
-                return false;
+        function perform(command) {
+            var handlers = commands[command.constructor];
+            return invokeHandlers(handlers, command);
+        }
+
+        function invokeHandlers(handlers, data) {
 
             var result = {
                 metSuccess: false,
                 metFailure: false
             };
-
-            for (var i = 0; i < event.handlers.length; i++) {
-                var handlerResult = event.handlers[i].apply(self, args);
+            for (var i = 0; i < handlers.length; i++) {
+                var handlerResult = handlers[i].apply(self, data);
                 if (handlerResult === undefined) handlerResult = true;
                 if (!result.metSuccess && handlerResult)
                     result.metSuccess = true;
@@ -184,5 +192,33 @@ define(function (require) {
 
             return result.metSuccess && !result.metFailure;
         }
+
+        function raiseEvent(event){
+            var handlers = events[event.constructor];
+            return invokeHandlers(handlers, event);
+        }
+        //
+        //function raiseEvent(name) {
+        //    var args = Array.prototype.slice.call(arguments, 1);
+        //    var event = events[name];
+        //    if (!event)
+        //        return false;
+        //
+        //    var result = {
+        //        metSuccess: false,
+        //        metFailure: false
+        //    };
+        //
+        //    for (var i = 0; i < event.handlers.length; i++) {
+        //        var handlerResult = event.handlers[i].apply(self, args);
+        //        if (handlerResult === undefined) handlerResult = true;
+        //        if (!result.metSuccess && handlerResult)
+        //            result.metSuccess = true;
+        //        if (!result.metFailure && !handlerResult)
+        //            result.metFailure = true;
+        //    }
+        //
+        //    return result.metSuccess && !result.metFailure;
+        //}
     }
 });

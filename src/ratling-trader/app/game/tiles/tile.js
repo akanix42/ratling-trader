@@ -8,6 +8,8 @@ define(function (require) {
     function Constructor(initialArchitecture, data, entityFactory) {
         var self = this,
             architecture = initialArchitecture,
+            entities = [],
+            entitiesById = {},
             neighbors = [];
         ;
         var map, creature;
@@ -24,6 +26,9 @@ define(function (require) {
         self.getNeighbors = getNeighbors;
         self.getCreature = getCreature;
         self.setCreature = setCreature;
+        self.addEntity = addEntity;
+        self.removeEntity = removeEntity;
+        self.getEntities = getEntities;
 
         function setMap(value) {
             map = value;
@@ -112,6 +117,29 @@ define(function (require) {
 
         function setCreature(value) {
             creature = value;
+        }
+
+        function addEntity(entity) {
+            if (entity.id in entitiesById)
+                return;
+            entitiesById[entity.id] = entity;
+            entities.push(entity);
+        }
+
+        function removeEntity(entity) {
+            if (!(entity.id in entitiesById))
+                return;
+            for (var i = 0; i < entities.length; i++)
+                if (entities[i] === entity) {
+                    entities.splice(i, 1);
+                    break;
+                }
+
+            delete entitiesById[entity.id];
+        }
+
+        function getEntities() {
+            return entities.slice(0);
         }
     }
 });
