@@ -1,35 +1,41 @@
 define(function (require) {
-    var extend = require('lib/extend/extend')
+    var extend = require('lib/extend/extend'),
+        afterPlaceEvent = require('game/events/after-place-event');
+
     //        EntityType = require('enums/entity-type')
         ;
 
-    return Constructor;
+    return Tile;
 
-    function Constructor(initialArchitecture, data, entityFactory) {
+    function Tile(initialArchitecture, data, entityFactory, tileEventHub) {
         var self = this,
             architecture = initialArchitecture,
             entities = [],
             entitiesById = {},
             neighbors = [];
         ;
-        var map, creature;
+        var map;
         //        extend(self, type);
-        self.getArchitecture = getArchitecture;
-        self.dig = dig;
-        self.isDiggable = isDiggable;
-        self.isWalkable = isWalkable;
-        self.getPosition = getPosition;
-        self.setPosition = setPosition;
-        self.setMap = setMap;
-        self.getMap = getMap;
-        self.getNeighbor = getNeighbor;
-        self.getNeighbors = getNeighbors;
-        self.getCreature = getCreature;
-        self.setCreature = setCreature;
-        self.addEntity = addEntity;
-        self.removeEntity = removeEntity;
-        self.getCreatures = getCreatures;
 
+        setPublicMethods();
+        architecture.raiseEvent(afterPlaceEvent(architecture, self));
+
+        function setPublicMethods(){
+            self.getArchitecture = getArchitecture;
+            self.dig = dig;
+            self.isDiggable = isDiggable;
+            self.isWalkable = isWalkable;
+            self.getPosition = getPosition;
+            self.setPosition = setPosition;
+            self.setMap = setMap;
+            self.getMap = getMap;
+            self.getNeighbor = getNeighbor;
+            self.getNeighbors = getNeighbors;
+            self.addEntity = addEntity;
+            self.removeEntity = removeEntity;
+            self.getCreatures = getCreatures;
+            self.eventHub = tileEventHub;
+        }
         function setMap(value) {
             map = value;
         }
@@ -111,14 +117,6 @@ define(function (require) {
             data.position = value;
         }
 
-        function getCreature() {
-            return creature;
-        }
-
-        function setCreature(value) {
-            creature = value;
-        }
-
         function addEntity(entity) {
             if (entity.id in entitiesById)
                 return;
@@ -142,4 +140,5 @@ define(function (require) {
             return entities.slice(0);
         }
     }
+
 });

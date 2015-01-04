@@ -6,7 +6,8 @@
       "mobile",
       "destructible",
       "player",
-      "attacker"
+      "attacker",
+      "collidable"
     ],
     "attributes": {
       "strength": {

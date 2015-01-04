@@ -91,7 +91,9 @@ define(function (require) {
 
             mixins[name] = true;
             if (!('commands' in mixin))
-                mixin = {events: [], commands: []};
+                return;
+
+            mixin.init(self);
 
             registerHandlers(events, mixin.events);
             registerHandlers(commands, mixin.commands);

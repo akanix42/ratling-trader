@@ -8,16 +8,29 @@ define(function () {
 
         function get() {
             var events = [],
-                commands = []
+                commands = [],
+                initFn = null;
+
 
             return {
                 commands: commands,
                 events: events,
 
                 addEvent: addEvent,
-                addCommand: addCommand
+                addCommand: addCommand,
+                setInit: setInit,
+                init: init
+
             };
 
+            function setInit(fn) {
+                initFn = fn;
+            }
+
+            function init(entity) {
+                if (initFn)
+                    initFn(entity);
+            }
 
             function addEvent(event, callback) {
                 events.push({fn: event, callback: callback});

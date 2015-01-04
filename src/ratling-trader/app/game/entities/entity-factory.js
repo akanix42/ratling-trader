@@ -1,14 +1,15 @@
 define(function (require) {
     var extend = require('lib/extend/extend'),
         Entity = require('game/entities/entity');
+    var nullEntity = null;
 
 
     return EntityFactory;
 
     function EntityFactory(logger, entityTemplatesLoader, loadedBehaviors, loadedMixins, entityAttributesFactory, entityPositionFactory) {
         var self = this;
-
         self.get = get;
+        self.getNull = getNull;
 
         function get(data) {
             if (typeof data === 'string')
@@ -26,6 +27,10 @@ define(function (require) {
                 initialState: 'default',
                 states: {'default': {behaviors: []}}
             };
+        }
+
+        function getNull() {
+            return nullEntity || (nullEntity = get('null'));
         }
 
     }

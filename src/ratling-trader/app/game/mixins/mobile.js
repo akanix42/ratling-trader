@@ -6,7 +6,7 @@ define(function (require) {
 
     return move;
 
-    function move(mixinFactory) {
+    function move(mixinFactory, tileFactory) {
         var mixin = mixinFactory.get();
         mixin.addCommand(moveCommand, move);
         return mixin;
@@ -21,18 +21,20 @@ define(function (require) {
 
             var currentTile = self.getPositionManager().getTile();
             var newTile = self.getPositionManager().getTile().getNeighbor(dX, dY);
+            if (newTile === tileFactory.getNull())
+                return;
             var beforeMove = beforeMoveEvent(self, newTile);
             self.raiseEvent(beforeMove);
             if (beforeMove.blockedBy) {
                 //todo ui messages.add message(beforeMoveEvent)
             }
             else {
-               // todo newTile.raiseEvent(beforeMove);
+                newTile.eventHub.raise(beforeMove);
                 if (!beforeMove.blockedBy) {
                     self.getPositionManager().setTile(newTile);
                     var afterMove = afterMoveEvent(self, currentTile, newTile);
                     self.raiseEvent(afterMove);
-                   //todo newTile.raiseEvent(afterMove);
+                    newTile.eventHub.raise(afterMove);
                 }
                 else {
                     self.raiseEvent(attackCommand(self, beforeMove.blockedBy));

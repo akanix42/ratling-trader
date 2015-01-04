@@ -1,6 +1,8 @@
 define(function (require) {
     var stringFormat = require('stringformat'),
-        extend = require('lib/extend/extend');
+        extend = require('lib/extend/extend'),
+        afterPlaceEvent = require('game/events/after-place-event');
+    ;
 
     return Level;
 
@@ -41,6 +43,7 @@ define(function (require) {
             creature.getPositionManager().setLevel(self);
             creature.getPositionManager().setTile(getRandomTile({architectures: ['stoneFloor']}));
 
+            creature.raiseEvent(afterPlaceEvent(creature, creature.getPositionManager().getTile()));
             return creature;
         }
 

@@ -8,7 +8,7 @@ define(function (require) {
         var mapWidth = 20,
             mapHeight = 20;
         self.createMap = createMap;
-        var nullTile = tileFactory.get(entityFactory.get('null'), {position: {x: 0, y: 0}});
+        var nullTile = tileFactory.getNull();
 
         function createMap() {
             return {
@@ -16,7 +16,6 @@ define(function (require) {
                 nullTile: nullTile
             };
         }
-
 
         function generateCaveMap() {
             var tiles = createEmptyMap();
@@ -39,6 +38,7 @@ define(function (require) {
                         y: y
                     }
                 });
+
             }
         }
 

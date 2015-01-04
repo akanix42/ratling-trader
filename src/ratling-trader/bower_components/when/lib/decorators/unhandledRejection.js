@@ -93,7 +93,7 @@ define(function(require) {
 	}
 
 	function throwit(e) {
-		throw e;
+		throw e.stack || e;
 	}
 
 	function noop() {}

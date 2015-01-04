@@ -25,8 +25,8 @@ define(function (require) {
             MixinFactory = require('game/mixins/mixin-factory'),
             TileFactory = require('game/tiles/tile-factory'),
 
-        // Maps
             MapGenerator = require('game/map/map-generator'),
+            TileEventHub = require('game/tiles/tile-event-hub'),
 
         // UI
             UI = require('ui/ui'),
@@ -68,10 +68,16 @@ define(function (require) {
             injector.register('LevelFactory', LevelFactory);
             injector.register('MixinFactory', MixinFactory);
             injector.register('TileFactory', TileFactory);
+
             injector.register('MapGenerator', MapGenerator);
             // ====
 
             // ---- UI
+            injector.register('TileEventHubFactory', {
+                get: function () {
+                    return TileEventHub();
+                }
+            });
             injector.register('UI', UI);
             injector.register('ScreenManager', ScreenManager);
             injector.register('AsciiTiles', AsciiTiles, true);

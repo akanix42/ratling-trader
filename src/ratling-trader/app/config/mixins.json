@@ -1,7 +1,10 @@
 {
   "architecture": "app\\game\\mixins\\architecture.js",
   "attacker": "app\\game\\mixins\\attacker.js",
+  "collidable": "app\\game\\mixins\\collidable.js",
   "destructible": "app\\game\\mixins\\destructible.js",
+  "mixin-factory": "app\\game\\mixins\\mixin-factory.js",
   "mobile": "app\\game\\mixins\\mobile.js",
-  "player": "app\\game\\mixins\\player.js"
+  "player": "app\\game\\mixins\\player.js",
+  "vision": "app\\game\\mixins\\vision.js"
 }

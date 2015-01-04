@@ -8,7 +8,7 @@ define(function (require) {
     function Player(mixinFactory, logger, scheduler, game) {
         var mixin = mixinFactory.get();
         mixin.addCommand(actCommand, act);
-        mixin.addEvent(performedCommandEvent, performedAction)
+        mixin.addEvent(performedCommandEvent, performedAction);
         return mixin;
 
         return {
