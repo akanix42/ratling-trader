@@ -60,12 +60,16 @@ define(function (require) {
         function setTile(newTile) {
             //if (newTile && newTile.getCreature() && newTile.getCreature() !== entity)
             //    return;
-            //removeFromCurrentTile();
             if (!newTile)
                 return;
             previousTile = tile;
+            if (previousTile)
+                previousTile.removeEntity(entity);
+
+            //removeFromCurrentTile();
             tile = newTile;
             tile.addEntity(entity);
+
         }
 
         function removeFromCurrentTile() {

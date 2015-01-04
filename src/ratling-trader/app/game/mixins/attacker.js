@@ -1,26 +1,36 @@
 define(function (require) {
-    var stringFormat = require('stringformat');
-    return AttackEnemy;
+    var stringFormat = require('stringformat'),
+        attackCommand = require('game/commands/attack-command'),
+        attackEvent = require('game/events/attack-event'),
+        attackCompletedEvent = require('game/events/attack-completed-event');
 
-    function AttackEnemy(logger) {
-        return {attack: attack, attackComplete: attackComplete};
+    return attacker;
+
+    function attacker(logger, mixinFactory) {
+        var mixin = mixinFactory.get();
+        mixin.addCommand(attackCommand, attack);
+        mixin.addEvent(attackCompletedEvent, afterAttack);
+        return mixin;
 
         function attack(target) {
-            var source = this;
+            var self = this;
             if (isInRange()) {
                 logger.log('attack!');
-                target.raiseEvent('attacked', {
-                    damage: 1,
-                    source: source,
+                var attack = {
+                    damage: 1
+                };
+                var attackEvent = attackEvent(self, target, attack);
+                target.raiseEvent(attackEvent);
 
-                });
-                //target.takeDamage();
+                afterAttack(attackEvent);
                 return true;
             }
             return false;
 
             function isInRange() {
-                return getDistance(source.getPositionManager().getPosition().x, source.getPositionManager().getPosition().y, target.getPositionManager().getPosition().x, target.getPositionManager().getPosition().y) === 1;
+                var attackerPosition = self.getPositionManager().getPosition(),
+                    targetPosition = target.getPositionManager().getPosition();
+                return getDistance(attackerPosition.x, attackerPosition.y, targetPosition.x, targetPosition.y) === 1;
             }
 
             function getDistance(x1, y1, x2, y2) {
@@ -28,7 +38,7 @@ define(function (require) {
             }
         }
 
-        function attackComplete(attack) {
+        function afterAttack(attack) {
             if (attack.wasSuccessful)
                 logger.log(stringFormat('{source.getType} hit {target.getType}', attack));
             else

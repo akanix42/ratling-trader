@@ -1,7 +1,7 @@
 define(function (require) {
-    var beforeMoveEvent = require('game/events/beforeMoveEvent'),
-        afterMoveEvent = require('game/events/afterMoveEvent'),
-        meleeAttackEvent = require('game/events/meleeAttackEvent'),
+    var afterMoveEvent = require('game/events/after-move-event'),
+        attackCommand = require('game/commands/attack-command'),
+        beforeMoveEvent = require('game/events/before-move-event'),
         moveCommand = require('game/commands/move-command');
 
     return move;
@@ -11,35 +11,31 @@ define(function (require) {
         mixin.addCommand(moveCommand, move);
         return mixin;
 
-        function move(dX, dY) {
+        function move(moveCommand) {
             var self = this;
-            if (dX instanceof Object) {
-                dY = dX.y;
-                dX = dX.x;
-            }
-            dX = Math.floor(dX);
-            dY = Math.floor(dY);
+            var dX = Math.floor(moveCommand.direction.x);
+            var dY = Math.floor(moveCommand.direction.y);
 
             if (dX === 0 && dY === 0)
                 return;
 
             var currentTile = self.getPositionManager().getTile();
             var newTile = self.getPositionManager().getTile().getNeighbor(dX, dY);
-            var beforeMoveEvent = beforeMoveEvent(self, newTile);
-            self.raiseEvent(beforeMoveEvent);
-            if (beforeMoveEvent.blockedBy) {
+            var beforeMove = beforeMoveEvent(self, newTile);
+            self.raiseEvent(beforeMove);
+            if (beforeMove.blockedBy) {
                 //todo ui messages.add message(beforeMoveEvent)
             }
             else {
-                newTile.raiseEvent(beforeMoveEvent);
-                if (!beforeMoveEvent.blockedBy) {
+               // todo newTile.raiseEvent(beforeMove);
+                if (!beforeMove.blockedBy) {
                     self.getPositionManager().setTile(newTile);
-                    var afterMoveEvent = afterMoveEvent(self, currentTile, newTile);
-                    self.raiseEvent(afterMoveEvent);
-                    newTile.raiseEvent(afterMoveEvent);
+                    var afterMove = afterMoveEvent(self, currentTile, newTile);
+                    self.raiseEvent(afterMove);
+                   //todo newTile.raiseEvent(afterMove);
                 }
                 else {
-                    self.raiseEvent(meleeAttackEvent(beforeMoveEvent.blockedBy));
+                    self.raiseEvent(attackCommand(self, beforeMove.blockedBy));
                 }
             }
             //if (attack())

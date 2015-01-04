@@ -9,10 +9,14 @@ define(function (require) {
         self.get = get;
 
         function get(tile) {
-            var entityTemplate = tile.getArchitecture().getType();
+            var entityTemplate = null;
 
-            if (tile.getCreature())
-                entityTemplate = tile.getCreature().getType();
+            var entities = tile.getCreatures();
+            if (entities.length)
+                entityTemplate = entities[entities.length - 1].getType();
+
+            if (!entityTemplate)
+                entityTemplate = tile.getArchitecture().getType();
 
             return tiles[entityTemplate] || tiles['unknown'];
         }

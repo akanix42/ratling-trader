@@ -28,7 +28,7 @@ define(function (require) {
         self.setCreature = setCreature;
         self.addEntity = addEntity;
         self.removeEntity = removeEntity;
-        self.getEntities = getEntities;
+        self.getCreatures = getCreatures;
 
         function setMap(value) {
             map = value;
@@ -138,7 +138,7 @@ define(function (require) {
             delete entitiesById[entity.id];
         }
 
-        function getEntities() {
+        function getCreatures() {
             return entities.slice(0);
         }
     }

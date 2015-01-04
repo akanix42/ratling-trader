@@ -20,11 +20,11 @@ define(function () {
 
 
             function addEvent(event, callback) {
-                events.push({event: event, callback: callback});
+                events.push({fn: event, callback: callback});
             }
 
             function addCommand(command, callback) {
-                commands.push({command: command, callback: callback});
+                commands.push({fn: command, callback: callback});
             }
         }
     }

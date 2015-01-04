@@ -5,8 +5,8 @@ define(function (require) {
 
     function MapGenerator(tileFactory, entityFactory) {
         var self = this;
-        var mapWidth = 150,
-            mapHeight = 203;
+        var mapWidth = 20,
+            mapHeight = 20;
         self.createMap = createMap;
         var nullTile = tileFactory.get(entityFactory.get('null'), {position: {x: 0, y: 0}});
 

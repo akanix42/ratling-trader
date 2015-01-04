@@ -1,34 +1,44 @@
 define(function (require) {
-    var ROT = require('rot');
+    var attackCommand = require('game/commands/attack-command');
     return AttackEnemy;
 
     function AttackEnemy() {
-        var target = null;
-
         return {execute: attackEnemy};
 
         function attackEnemy(self) {
-            if (getTarget())
-                return self.raiseEvent('attack', target);
+            var target = getTarget();
+            if (target)
+                return self.perform(attackCommand(self, target));
 
             return false;
 
             function getTarget() {
-                return verifyTarget() || (target = findTarget());
+                return verifyTarget() || searchForTargetInNearbyTiles();
             }
 
             function verifyTarget() {
-                return target
-                    ? (target.state === 'dead' ? (target = null) : target)
-                    : target;
+                var target = self.getData('target');
+                if (target.state === 'creature')
+                    return target;
+
+                self.setData('target', null);
             }
 
-            function findTarget() {
+            function searchForTargetInNearbyTiles() {
                 var neighboringTiles = self.getPositionManager().getTile().getNeighbors(4).randomize();
                 for (var i = 0; i < neighboringTiles.length; i++) {
-                    var tile = neighboringTiles[i];
-                    if (tile.getCreature() && tile.getCreature().getType() === 'player')
-                        return tile.getCreature();
+                    var target = searchTileForTarget(neighboringTiles[i]);
+                    if (target !== undefined)
+                        return target;
+                }
+            }
+
+            function searchTileForTarget(tile) {
+                var creatures = tile.getCreatures();
+                for (var i = 0; i < creatures.length; i++) {
+                    var creature = creatures[i];
+                    if (creature.getType() === 'player')
+                        return creature;
                 }
             }
         }

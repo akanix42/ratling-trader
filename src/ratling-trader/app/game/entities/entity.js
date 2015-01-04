@@ -3,7 +3,8 @@ define(function (require) {
         inherit = require('helpers/inherit'),
         stringFormat = require('stringformat'),
         ROT = require('rot'),
-        extend = require('lib/extend/extend');
+        extend = require('lib/extend/extend'),
+        actCommand = require('game/commands/act-command');
 
     return Entity;
 
@@ -26,6 +27,7 @@ define(function (require) {
 
         function setPublicMethods() {
             entityBase.getData = getData;
+            entityBase.setData = setData;
             entityBase.getState = getState;
             entityBase.getId = getId;
             entityBase.getType = getType;
@@ -97,7 +99,7 @@ define(function (require) {
             function registerHandlers(registar, handlers) {
                 for (var i = 0; i < handlers.length; i++) {
                     var handler = handlers[i];
-                    addEventHandler(handler.fn, handler.callback, registar);
+                    addEventHandler(handler.fn.constructor, handler.callback, registar);
                 }
             }
 
@@ -113,8 +115,15 @@ define(function (require) {
             return name in mixins;
         }
 
-        function getData() {
-            return data;
+        function getData(key) {
+            if (key === undefined)
+                return data;
+
+            return data[key];
+        }
+
+        function setData(key, value) {
+            data[key] = value;
         }
 
         function getState() {
@@ -145,7 +154,7 @@ define(function (require) {
         }
 
         function act() {
-            if (self.raiseEvent('act'))
+            if (self.perform(actCommand()))
                 return;
 
             if (!self.hasAlreadyActed)
@@ -172,17 +181,21 @@ define(function (require) {
 
         function perform(command) {
             var handlers = commands[command.constructor];
-            return invokeHandlers(handlers, command);
+            var wasSuccessful = invokeHandlers(handlers, command);
+
+            return wasSuccessful;
         }
 
         function invokeHandlers(handlers, data) {
+            if (handlers === undefined || handlers.length === 0)
+                return true;
 
             var result = {
                 metSuccess: false,
                 metFailure: false
             };
             for (var i = 0; i < handlers.length; i++) {
-                var handlerResult = handlers[i].apply(self, data);
+                var handlerResult = handlers[i].call(self, data);
                 if (handlerResult === undefined) handlerResult = true;
                 if (!result.metSuccess && handlerResult)
                     result.metSuccess = true;
@@ -193,10 +206,12 @@ define(function (require) {
             return result.metSuccess && !result.metFailure;
         }
 
-        function raiseEvent(event){
+        function raiseEvent(event) {
             var handlers = events[event.constructor];
+
             return invokeHandlers(handlers, event);
         }
+
         //
         //function raiseEvent(name) {
         //    var args = Array.prototype.slice.call(arguments, 1);

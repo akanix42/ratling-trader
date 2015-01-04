@@ -1,14 +1,25 @@
+"use strict";
 define(function (require) {
     var stringformat = require('stringformat'),
-        extend = require('lib/extend/extend');
+        extend = require('lib/extend/extend'),
+        attackEvent = require('game/events/attack-event'),
+        attackCompletedEvent = require('game/events/attack-completed-event');
     return Destructible;
 
-    function Destructible(logger) {
+    function Destructible(logger, mixinFactory) {
+        var mixin = mixinFactory.get();
+        mixin.addEvent(attackEvent, attacked);
+        return mixin;
+
         return {attacked: attacked};
 
-        function attacked(attack) {
-            var target = this;
-            takeDamage(attack);
+        function attacked(event) {
+            var self = this;
+            var target = event.target;
+            if (target !== self)
+                return;
+
+            takeDamage(event.attack);
 
             function takeDamage(attack) {
                 var attackResult = extend({target: target}, attack);
@@ -21,8 +32,9 @@ define(function (require) {
                 if (remainingHealth <= 0)
                     target.kill();
 
+                attack.result = true;
                 attackResult.wasSuccessful = true;
-                attack.source.raiseEvent('attackComplete', attackResult);
+                //attack.source.raiseEvent(attackCompletedEvent('attackComplete', attackResult));
             }
 
         }

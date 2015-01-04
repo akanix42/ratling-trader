@@ -4,8 +4,6 @@ define(function (require) {
     return forceNew.whenCalled(moveCommand);
 
     function moveCommand(direction) {
-        return {
-            direction: direction
-        };
+        this.direction = direction
     }
 });
