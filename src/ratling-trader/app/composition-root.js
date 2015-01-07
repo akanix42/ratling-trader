@@ -26,7 +26,8 @@ define(function (require) {
             TileFactory = require('game/tiles/tile-factory'),
 
             MapGenerator = require('game/map/map-generator'),
-            TileEventHub = require('game/tiles/tile-event-hub'),
+            EventHub = require('game/events/event-hub'),
+            IntentHub = require('game/intents/intent-hub'),
 
         // UI
             UI = require('ui/ui'),
@@ -73,11 +74,18 @@ define(function (require) {
             // ====
 
             // ---- UI
-            injector.register('TileEventHubFactory', {
+
+            injector.register('EventHubFactory', {
                 get: function () {
-                    return TileEventHub();
+                    return EventHub();
                 }
             });
+            injector.register('IntentHubFactory', {
+                get: function () {
+                    return IntentHub();
+                }
+            });
+
             injector.register('UI', UI);
             injector.register('ScreenManager', ScreenManager);
             injector.register('AsciiTiles', AsciiTiles, true);

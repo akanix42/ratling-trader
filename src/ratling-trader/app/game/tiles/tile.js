@@ -7,7 +7,7 @@ define(function (require) {
 
     return Tile;
 
-    function Tile(initialArchitecture, data, entityFactory, tileEventHub) {
+    function Tile(initialArchitecture, data, entityFactory, eventHub, intentHub) {
         var self = this,
             architecture = initialArchitecture,
             entities = [],
@@ -18,7 +18,7 @@ define(function (require) {
         //        extend(self, type);
 
         setPublicMethods();
-        architecture.raiseEvent(afterPlaceEvent(architecture, self));
+        architecture.eventHub.broadcast(afterPlaceEvent(architecture, self));
 
         function setPublicMethods(){
             self.getArchitecture = getArchitecture;
@@ -34,7 +34,8 @@ define(function (require) {
             self.addEntity = addEntity;
             self.removeEntity = removeEntity;
             self.getCreatures = getCreatures;
-            self.eventHub = tileEventHub;
+            self.eventHub = eventHub;
+            self.intentHub = intentHub;
         }
         function setMap(value) {
             map = value;

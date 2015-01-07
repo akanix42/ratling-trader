@@ -1,15 +1,16 @@
 define(function (require) {
-        var beforeMoveEvent = require('game/events/before-move-event'),
-            afterMoveEvent = require('game/events/after-move-event'),
-            afterPlaceEvent = require('game/events/after-place-event');
+        var MoveIntent = require('game/intents/move-intent'),
+            MoveEvent = require('game/events/after-move-event'),
+            PlaceEvent = require('game/events/after-place-event');
 
         return collidable;
 
         function collidable(mixinFactory) {
             var mixin = mixinFactory.get();
-            mixin.addEvent(afterPlaceEvent, afterPlace);
-            mixin.addEvent(afterMoveEvent, afterMove);
+            mixin.addEvent(PlaceEvent, afterPlace);
+            mixin.addEvent(MoveEvent, afterMove);
             mixin.setInit(init);
+
             return mixin;
 
             function init(entity) {
@@ -33,11 +34,11 @@ define(function (require) {
             }
 
             function unsubscribeFromTile(self, tile) {
-                tile.eventHub.unsubscribe(self, beforeMoveEvent);
+                tile.intentHub.unsubscribe(self, MoveIntent);
             }
 
             function subscribeToTile(self, tile) {
-                tile.eventHub.subscribe(self, beforeMoveEvent, beforeTileMovedTo);
+                tile.intentHub.subscribe(self, MoveIntent, beforeTileMovedTo);
             }
 
             function beforeTileMovedTo(event) {
@@ -45,7 +46,7 @@ define(function (require) {
                 if (self === event.entity)
                     return;
                 if (event.entity.getData('collidable'))
-                    event.blockedBy = self;
+                    return self;
             }
         }
     }

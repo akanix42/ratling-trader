@@ -9,7 +9,7 @@ define(function (require) {
 
         function move(self) {
             if (getTarget())
-                return self.raiseEvent('move', getStepTowardsTarget());
+                return self.eventHub.broadcast('move', getStepTowardsTarget());
 
             return false;
 

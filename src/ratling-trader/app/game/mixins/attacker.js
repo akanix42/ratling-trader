@@ -20,7 +20,7 @@ define(function (require) {
                     damage: 1
                 };
                 var attackEvent = attackEvent(self, target, attack);
-                target.raiseEvent(attackEvent);
+                target.eventHub.broadcast(attackEvent);
 
                 afterAttack(attackEvent);
                 return true;

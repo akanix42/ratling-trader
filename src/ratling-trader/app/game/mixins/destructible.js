@@ -34,7 +34,7 @@ define(function (require) {
 
                 attack.result = true;
                 attackResult.wasSuccessful = true;
-                //attack.source.raiseEvent(attackCompletedEvent('attackComplete', attackResult));
+                //attack.source.eventHub.broadcast(attackCompletedEvent('attackComplete', attackResult));
             }
 
         }

@@ -8,6 +8,7 @@ define(function () {
 
         function get() {
             var events = [],
+                intents = [],
                 commands = [],
                 initFn = null;
 
@@ -15,7 +16,9 @@ define(function () {
             return {
                 commands: commands,
                 events: events,
+                intents: intents,
 
+                addIntent: addIntent,
                 addEvent: addEvent,
                 addCommand: addCommand,
                 setInit: setInit,
@@ -34,6 +37,10 @@ define(function () {
 
             function addEvent(event, callback) {
                 events.push({fn: event, callback: callback});
+            }
+
+            function addIntent(intent, callback) {
+                intents.push({fn: intent, callback: callback});
             }
 
             function addCommand(command, callback) {

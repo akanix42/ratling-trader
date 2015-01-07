@@ -6,7 +6,7 @@ define(function (require) {
         return {execute: move};
 
         function move(self) {
-            return self.raiseEvent('move', getRandomDirection());
+            return self.eventHub.broadcast('move', getRandomDirection());
 
             function getRandomDirection() {
                 return {

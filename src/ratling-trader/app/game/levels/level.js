@@ -43,7 +43,7 @@ define(function (require) {
             creature.getPositionManager().setLevel(self);
             creature.getPositionManager().setTile(getRandomTile({architectures: ['stoneFloor']}));
 
-            creature.raiseEvent(afterPlaceEvent(creature, creature.getPositionManager().getTile()));
+            creature.eventHub.broadcast(afterPlaceEvent(creature, creature.getPositionManager().getTile()));
             return creature;
         }
 

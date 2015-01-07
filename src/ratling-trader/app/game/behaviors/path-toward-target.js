@@ -12,7 +12,7 @@ define(function (require) {
             if (getTarget()) {
                 var nextStep = getStepTowardsTarget();
                 if (nextStep)
-                    return self.raiseEvent('move', nextStep);
+                    return self.eventHub.broadcast('move', nextStep);
             }
 
             return false;

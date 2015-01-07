@@ -1,14 +1,14 @@
 define(function (require) {
-    var afterMoveEvent = require('game/events/after-move-event'),
-        attackCommand = require('game/commands/attack-command'),
-        beforeMoveEvent = require('game/events/before-move-event'),
-        moveCommand = require('game/commands/move-command');
+    var MoveEvent = require('game/events/after-move-event'),
+        AttackCommand = require('game/commands/attack-command'),
+        MoveIntent = require('game/intents/move-intent'),
+        MoveCommand = require('game/commands/move-command');
 
     return move;
 
     function move(mixinFactory, tileFactory) {
         var mixin = mixinFactory.get();
-        mixin.addCommand(moveCommand, move);
+        mixin.addCommand(MoveCommand, move);
         return mixin;
 
         function move(moveCommand) {
@@ -23,28 +23,28 @@ define(function (require) {
             var newTile = self.getPositionManager().getTile().getNeighbor(dX, dY);
             if (newTile === tileFactory.getNull())
                 return;
-            var beforeMove = beforeMoveEvent(self, newTile);
-            self.raiseEvent(beforeMove);
-            if (beforeMove.blockedBy) {
+            var moveIntent = MoveIntent(self, newTile);
+            var objections = self.intentHub.broadcast(moveIntent);
+            if (objections.length) {
                 //todo ui messages.add message(beforeMoveEvent)
             }
             else {
-                newTile.eventHub.raise(beforeMove);
-                if (!beforeMove.blockedBy) {
+                objections = newTile.intentHub.broadcast(moveIntent);
+                if (!objections.length) {
                     self.getPositionManager().setTile(newTile);
-                    var afterMove = afterMoveEvent(self, currentTile, newTile);
-                    self.raiseEvent(afterMove);
-                    newTile.eventHub.raise(afterMove);
+                    var afterMove = MoveEvent(self, currentTile, newTile);
+                    self.eventHub.broadcast(afterMove);
+                    newTile.eventHub.broadcast(afterMove);
                 }
                 else {
-                    self.raiseEvent(attackCommand(self, beforeMove.blockedBy));
+                    self.eventHub.broadcast(AttackCommand(self, objections[0]));
                 }
             }
             //if (attack())
             //    return;
             //
             //if (newTile.getCreature())
-            //    self.raiseEvent('attack')
+            //    self.eventHub.broadcast('attack')
             //else if (newTile.isWalkable())
             //    self.getPositionManager().setTile(newTile);
             //else if (newTile.isDiggable())
@@ -55,7 +55,7 @@ define(function (require) {
             //
             //function attack() {
             //    if (newTile.getCreature())
-            //        return self.raiseEvent('attack', newTile.getCreature());
+            //        return self.eventHub.broadcast('attack', newTile.getCreature());
             //    return false;
             //}
         }

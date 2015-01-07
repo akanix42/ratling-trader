@@ -6,13 +6,13 @@ define(function (require) {
     return TileFactory;
 
 
-    function TileFactory(entityFactory, tileEventHubFactory) {
+    function TileFactory(entityFactory, eventHubFactory, intentHubFactory) {
         var self = this;
         self.get = get;
         self.getNull = getNull;
 
         function get(initialArchitecture, data) {
-            return new Tile(initialArchitecture, data, entityFactory, tileEventHubFactory.get());
+            return new Tile(initialArchitecture, data, entityFactory, eventHubFactory.get(), intentHubFactory.get());
 
         }
 

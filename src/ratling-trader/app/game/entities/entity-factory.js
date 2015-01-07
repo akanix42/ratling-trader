@@ -6,7 +6,7 @@ define(function (require) {
 
     return EntityFactory;
 
-    function EntityFactory(logger, entityTemplatesLoader, loadedBehaviors, loadedMixins, entityAttributesFactory, entityPositionFactory) {
+    function EntityFactory(logger, entityTemplatesLoader, loadedBehaviors, loadedMixins, entityAttributesFactory, entityPositionFactory, eventHubFactory, intentHubFactory) {
         var self = this;
         self.get = get;
         self.getNull = getNull;
@@ -16,7 +16,7 @@ define(function (require) {
                 data = {type: data};
 
             data = extend(true, getDefaultData(), entityTemplatesLoader.get(data.type), data);
-            var entity = new Entity(data, entityAttributesFactory.get(), entityPositionFactory, loadedMixins, loadedBehaviors, logger);
+            var entity = new Entity(data, entityAttributesFactory.get(), entityPositionFactory, loadedMixins, loadedBehaviors, logger, eventHubFactory.get(), intentHubFactory.get());
             return entity;
         }
 

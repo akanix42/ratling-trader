@@ -107,9 +107,9 @@ define(function (require) {
 
             function movePlayerOrCursor(command, action) {
                 var wasSuccessful = player.perform(moveCommand({x: action.data.x || 0, y: action.data.y || 0}));
-                player.raiseEvent(performedCommandEvent(command, wasSuccessful));
+                player.eventHub.broadcast(performedCommandEvent(command, wasSuccessful));
 
-                //player.raiseEvent('performAction', 'move', action.data.x || 0, action.data.y || 0);
+                //player.eventHub.broadcast('performAction', 'move', action.data.x || 0, action.data.y || 0);
                 lockCursorToPlayer();
                 updateUI();
             }

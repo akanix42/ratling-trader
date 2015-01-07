@@ -8,7 +8,7 @@ define(function (require) {
 
     return Entity;
 
-    function Entity(data, entityAttributes, entityPositionFactory, loadedMixins, loadedBehaviors, logger) {
+    function Entity(data, entityAttributes, entityPositionFactory, loadedMixins, loadedBehaviors, logger, eventHub, intentHub) {
         var self = this,
             id = data.id || Uuid.v4(),
             currentState,
@@ -34,10 +34,12 @@ define(function (require) {
             entityBase.kill = kill;
             entityBase.act = act;
             entityBase.hasMixin = hasMixin;
-            entityBase.raiseEvent = raiseEvent;
+            //entityBase.eventHub.broadcast = eventHub.broadcast;
             entityBase.getAttributes = getAttributes;
             entityBase.getPositionManager = getPositionManager;
             entityBase.perform = perform;
+            entityBase.eventHub = eventHub;
+            entityBase.intentHub = intentHub;
             extend(self, entityBase);
         }
 
@@ -95,7 +97,8 @@ define(function (require) {
 
             mixin.init(self);
 
-            registerHandlers(events, mixin.events);
+            eventHub.subscribeAll(self, mixin.events);
+            intentHub.subscribeAll(self, mixin.intents);
             registerHandlers(commands, mixin.commands);
 
             function registerHandlers(registar, handlers) {
@@ -150,7 +153,7 @@ define(function (require) {
 
         function kill() {
             self.state = 'dead';
-            raiseEvent('killed');
+            eventHub.broadcast('killed');
             positionManager.setTile(null);
             positionManager.getLevel().removeEntity(self);
         }
@@ -207,15 +210,15 @@ define(function (require) {
 
             return result.metSuccess && !result.metFailure;
         }
-
-        function raiseEvent(event) {
-            var handlers = events[event.constructor];
-
-            return invokeHandlers(handlers, event);
-        }
+        //
+        //function eventHub.broadcast(event) {
+        //    var handlers = events[event.constructor];
+        //
+        //    return invokeHandlers(handlers, event);
+        //}
 
         //
-        //function raiseEvent(name) {
+        //function eventHub.broadcast(name) {
         //    var args = Array.prototype.slice.call(arguments, 1);
         //    var event = events[name];
         //    if (!event)
