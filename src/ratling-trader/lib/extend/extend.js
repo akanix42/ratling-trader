@@ -1,4 +1,12 @@
-define(function(require){
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+    } else {
+        // Browser globals
+        root.extend = factory();
+    }
+}(this, function () {
     return extend;
 
     function extend() {
@@ -27,9 +35,9 @@ define(function(require){
                     return jQuery.type(obj) === "function"
                 },
                 isArray: Array.isArray ||
-                    function (obj) {
-                        return jQuery.type(obj) === "array"
-                    },
+                function (obj) {
+                    return jQuery.type(obj) === "array"
+                },
                 isWindow: function (obj) {
                     return obj != null && obj == obj.window
                 },
@@ -92,4 +100,4 @@ define(function(require){
         }
         return target;
     }
-});
+}));
