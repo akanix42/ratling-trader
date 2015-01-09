@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "mocha": "~2.1.0",
-    "chai": "~1.10.0"
+    "chai": "~1.10.0",
+    "requirejs": "~2.1.15"
   }
 }

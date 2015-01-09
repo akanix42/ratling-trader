@@ -1,4 +1,4 @@
-require(['./rjs-config'], function () {
+require(['require-config'], function () {
     require(['./composition-root', 'when'], function (CompositionRoot, when) {
         var compositionRoot = new CompositionRoot();
         when(compositionRoot.compositionPromise)
