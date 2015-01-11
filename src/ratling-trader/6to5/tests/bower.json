@@ -1,0 +1,23 @@
+{
+  "name": "ratling-trader.tests",
+  "version": "0.0.0",
+  "main": "index.html",
+  "authors": [
+    "Nathan Reid"
+  ],
+  "license": "MIT",
+  "homepage": "nathantreid.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mocha": "~2.1.0",
+    "chai": "~1.10.0",
+    "requirejs": "~2.1.15"
+  }
+}

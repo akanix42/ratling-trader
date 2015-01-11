@@ -1,0 +1,78 @@
+[
+  {
+    "name": "player",
+    "type": "player",
+    "mixins": [
+      "mobile",
+      "destructible",
+      "player",
+      "attacker",
+      "collidable"
+    ],
+    "attributes": {
+      "strength": {
+        "base": 1
+      },
+      "health": {
+        "base": 10
+      }
+    }
+  },
+  {
+    "name": "fungus",
+    "type": "monster",
+    "states": {
+      "default": {
+        "behaviors": [
+          {
+            "name": "attack-enemy",
+            "probability": 0.6
+          },
+          {
+            "name": "clone-self"
+          }
+        ]
+      }
+    },
+    "mixins": [
+      "destructible",
+      "attacker"
+    ],
+    "attributes": {
+      "strength": {
+        "base": 2
+      },
+      "health": {
+        "base": 5
+      }
+    }
+  },
+  {
+    "name": "zombie",
+    "type": "monster",
+    "states": {
+      "default": {
+        "behaviors": [
+          {
+            "name": "attack-enemy"
+          },
+          {
+            "name": "path-toward-target"
+          },
+          {
+            "name": "move-randomly"
+          }
+        ]
+      }
+    },
+    "mixins": [
+      "attacker",
+      "mobile",
+      "destructible"
+    ],
+    "attributes": {
+      "strength": 1,
+      "health": 10
+    }
+  }
+]
