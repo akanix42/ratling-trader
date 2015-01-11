@@ -161,3 +161,4 @@ src/ratling-trader/.idea/workspace.xml
 node_modules/
 builder/.idea/workspace.xml
 src/ratling-trader.tests/src/
+src/ratling-trader/.idea/watcherTasks.xml

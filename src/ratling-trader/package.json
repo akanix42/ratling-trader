@@ -1,0 +1,27 @@
+{
+  "name": "ratling-trader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "empty-define.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "6to5": "^2.9.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-6to5": "^2.0.0",
+    "gulp-concat": "^2.4.3",
+    "gulp-plumber": "^0.6.6",
+    "gulp-traceur": "^0.15.0",
+    "gulp-uglify": "^1.0.2",
+    "gulp-watch": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true
+}

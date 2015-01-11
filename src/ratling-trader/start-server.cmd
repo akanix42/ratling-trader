@@ -1,1 +1,3 @@
-start node node-server.js 9999
+setlocal
+cd 6to5
+start node ..\node-server.js 63333
