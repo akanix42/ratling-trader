@@ -6,9 +6,9 @@
         deps: ['runner'],
         paths: {
             spec: '../tests/spec',
-            runner: '../tests/spec/runner'
+            runner: '../tests/runner'
         },
-        urlArgs: 'now=' + Date.now(),
+        urlArgs: 'now=' + Date.now()
 
     });
 })();
