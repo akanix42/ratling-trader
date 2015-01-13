@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="es6" pattern="(file[ratling-trader]:tests//*||file[ratling-trader]:app//*||file[ratling-trader]:*/||file[ratling-trader]:lib//*)&amp;&amp;!file[ratling-trader]:6to5//*&amp;&amp;!file[ratling-trader]:.idea//*&amp;&amp;!file[ratling-trader]:tests/bower_components//*" />
+</component>
