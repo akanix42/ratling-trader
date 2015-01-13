@@ -20,7 +20,8 @@ var otherGlobs = [
 ].concat(standardExcludes);
 
 var bowerGlob = [
-    '**/bower_components/**'
+    '**/bower_components/**',
+    '!6to5{,/**}'
 ];
 var traceurTasks = lazypipe()
     .pipe(plumber)
@@ -31,7 +32,7 @@ var traceurTasks = lazypipe()
 var sixTo5Tasks = lazypipe()
     .pipe(plumber)
     .pipe(changed, compilePath)
-    //.pipe(to5)
+    .pipe(to5)
     .pipe(gulp.dest, compilePath);
 
 var straightCopyTasks = lazypipe()
