@@ -1,23 +1,24 @@
+"use strict";
+
 define(function (require) {
-    var extend = require('lib/extend/extend'),
-        attribute = require('game/entities/attribute');
+  var extend = require("lib/extend/extend"),
+      attribute = require("game/entities/attribute");
 
-    return attributeFactory;
+  return attributeFactory;
 
-    function attributeFactory() {
-        var defaultData = {
-            base: 0,
-            maxBase: null,
-            bonus: 0,
-            current: null,
-            modifiers: {}
-        };
+  function attributeFactory() {
+    var defaultData = {
+      base: 0,
+      maxBase: null,
+      bonus: 0,
+      current: null,
+      modifiers: {}
+    };
 
-        return {get: get};
+    return { get: get };
 
-        function get(data) {
-            return attribute(extend({}, defaultData, data));
-        }
+    function get(data) {
+      return attribute(extend({}, defaultData, data));
     }
-
+  }
 });

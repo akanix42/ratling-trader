@@ -1,9 +1,11 @@
-define(function (require) {
-    var forceNew = require('force-new');
-    return forceNew.whenCalled(afterPlaceEvent);
+"use strict";
 
-    function afterPlaceEvent(entity, destination) {
-        this.entity = entity;
-        this.destination = destination;
-    }
+define(function (require) {
+  var forceNew = require("force-new");
+  return forceNew.whenCalled(afterPlaceEvent);
+
+  function afterPlaceEvent(entity, destination) {
+    this.entity = entity;
+    this.destination = destination;
+  }
 });

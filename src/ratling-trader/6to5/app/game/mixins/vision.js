@@ -1,14 +1,15 @@
+"use strict";
+
 define(function (require) {
-    return vision;
+  return vision;
 
-    function vision() {
-        return {
-            afterMove: afterMove
-        };
+  function vision() {
+    return {
+      afterMove: afterMove
+    };
 
-        function afterMove(event) {
-            var self = this;
-
-        }
+    function afterMove(event) {
+      var self = this;
     }
+  }
 });

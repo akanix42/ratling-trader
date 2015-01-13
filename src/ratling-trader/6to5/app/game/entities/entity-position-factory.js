@@ -1,15 +1,16 @@
+"use strict";
+
 define(function (require) {
-    var extend = require('lib/extend/extend'),
-        position = require('game/entities/entity-position');
+  var extend = require("lib/extend/extend"),
+      position = require("game/entities/entity-position");
 
-    return entityPositionFactory;
+  return entityPositionFactory;
 
-    function entityPositionFactory() {
-        return {get: get};
+  function entityPositionFactory() {
+    return { get: get };
 
-        function get(entity, level, tile) {
-            return position(entity, level, tile);
-        }
+    function get(entity, level, tile) {
+      return position(entity, level, tile);
     }
-
+  }
 });

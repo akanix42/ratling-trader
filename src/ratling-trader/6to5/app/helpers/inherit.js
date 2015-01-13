@@ -1,11 +1,13 @@
+"use strict";
+
 define(function (require) {
-    var extend = require('lib/extend/extend');
-    return inherit;
+  var extend = require("lib/extend/extend");
+  return inherit;
 
-    function inherit(base, self) {
-        var args = Array.prototype.slice.call(arguments, 2);
-        base.apply(self, args);
+  function inherit(base, self) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    base.apply(self, args);
 
-        self.base = extend({base: self.base}, self);
-    }
+    self.base = extend({ base: self.base }, self);
+  }
 });

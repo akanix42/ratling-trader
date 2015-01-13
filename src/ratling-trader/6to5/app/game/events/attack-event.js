@@ -1,11 +1,13 @@
+"use strict";
+
 define(function (require) {
-    var forceNew = require('force-new');
+  var forceNew = require("force-new");
 
-    return forceNew.whenCalled(attackEvent);
+  return forceNew.whenCalled(attackEvent);
 
-    function attackEvent(attacker, target, attack) {
-        this.attacker = attacker;
-        this.target = target;
-        this.attack = attack;
-    }
+  function attackEvent(attacker, target, attack) {
+    this.attacker = attacker;
+    this.target = target;
+    this.attack = attack;
+  }
 });

@@ -1,25 +1,25 @@
+"use strict";
+
 define(function () {
-    forceNew.whenCalled = whenCalled;
+  forceNew.whenCalled = whenCalled;
 
-    return forceNew;
+  return forceNew;
 
-    function forceNew(fn, args) {
+  function forceNew(fn, args) {
+    return new (Function.prototype.bind.apply(fn, args))();
+  }
 
-        return new (Function.prototype.bind.apply(fn, args));
-    }
+  function whenCalled(fn) {
+    var callForceNew = function () {
+      var args = new Array(arguments.length);
+      for (var i = 0; i < args.length; ++i) args[i] = arguments[i];
 
-    function whenCalled(fn) {
-        var callForceNew = function () {
-            var args = new Array(arguments.length);
-            for (var i = 0; i < args.length; ++i)
-                args[i] = arguments[i];
+      args.unshift(null);
 
-            args.unshift(null);
+      return forceNew.call(undefined, fn, args);
+    };
+    callForceNew.constructor = fn;
 
-            return forceNew.call(undefined, fn, args);
-        };
-        callForceNew.constructor = fn;
-
-        return callForceNew;
-    }
+    return callForceNew;
+  }
 });

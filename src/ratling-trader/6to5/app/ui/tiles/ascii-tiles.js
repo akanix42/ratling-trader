@@ -1,24 +1,23 @@
+"use strict";
+
 define(function (require) {
+  return AsciiTiles;
 
-    return AsciiTiles;
+  function AsciiTiles(asciiLoader) {
+    var self = this;
+    var tiles = asciiLoader.getAll();
 
-    function AsciiTiles(asciiLoader) {
-        var self = this;
-        var tiles = asciiLoader.getAll();
+    self.get = get;
 
-        self.get = get;
+    function get(tile) {
+      var entityTemplate = null;
 
-        function get(tile) {
-            var entityTemplate = null;
+      var entities = tile.getCreatures();
+      if (entities.length) entityTemplate = entities[entities.length - 1].getType();
 
-            var entities = tile.getCreatures();
-            if (entities.length)
-                entityTemplate = entities[entities.length - 1].getType();
+      if (!entityTemplate) entityTemplate = tile.getArchitecture().getType();
 
-            if (!entityTemplate)
-                entityTemplate = tile.getArchitecture().getType();
-
-            return tiles[entityTemplate] || tiles['unknown'];
-        }
+      return tiles[entityTemplate] || tiles.unknown;
     }
+  }
 });

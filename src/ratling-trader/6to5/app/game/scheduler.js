@@ -1,40 +1,41 @@
+"use strict";
+
 define(function () {
-    return Scheduler;
+  return Scheduler;
 
-    function Scheduler() {
-        var scheduler = new ROT.Scheduler.Simple(),
-            schedulingEngine = new ROT.Engine(scheduler);
+  function Scheduler() {
+    var scheduler = new ROT.Scheduler.Simple(),
+        schedulingEngine = new ROT.Engine(scheduler);
 
-        init();
+    init();
 
-        return {
-            addEntity: addEntity,
-            removeEntity: removeEntity,
+    return {
+      addEntity: addEntity,
+      removeEntity: removeEntity,
 
-            pause: pause,
-            resume: resume
-        };
+      pause: pause,
+      resume: resume
+    };
 
-        function init(){
-            schedulingEngine.start();
-            pause();
-        }
-
-        function addEntity(entity) {
-            scheduler.add(entity, true);
-        }
-
-        function removeEntity(entity) {
-            scheduler.remove(entity, true);
-        }
-
-        function pause() {
-            schedulingEngine.lock();
-        }
-
-        function resume() {
-            schedulingEngine.unlock();
-        }
-
+    function init() {
+      schedulingEngine.start();
+      pause();
     }
+
+    function addEntity(entity) {
+      scheduler.add(entity, true);
+    }
+
+    function removeEntity(entity) {
+      scheduler.remove(entity, true);
+    }
+
+    function pause() {
+      schedulingEngine.lock();
+    }
+
+    function resume() {
+      schedulingEngine.unlock();
+    }
+  }
 });
