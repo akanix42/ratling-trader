@@ -13,15 +13,21 @@ var standardExcludes = [
     '!**/bower_components{,/**}',
     '!**/node_modules{,/**}'
 ];
-var jsGlobs = ['**/*.js'].concat(standardExcludes);
+var es6 = [
+    'app/**/*.js',
+    'lib/**/*.js',
+    'tests/builders/**/*.js',
+    'tests/spec/**/*.js',
+    'tests/*.js',
+];
 var otherGlobs = [
-    '**',
-    '!**/*.js',
-].concat(standardExcludes);
+    '*.html',
+    'tests/*.html'
+];
 
 var bowerGlob = [
-    '**/bower_components/**',
-    '!6to5{,/**}'
+    'bower_components/**',
+    'tests/bower_components/**'
 ];
 var traceurTasks = lazypipe()
     .pipe(plumber)
@@ -41,12 +47,12 @@ var straightCopyTasks = lazypipe()
     .pipe(gulp.dest, compilePath);
 
 gulp.task('traceur', function () {
-    return gulp.src(jsGlobs)
+    return gulp.src(es6)
         .pipe(traceurTasks());
 });
 
 gulp.task('6to5', function () {
-    return gulp.src(jsGlobs)
+    return gulp.src(es6)
         .pipe(sixTo5Tasks());
 });
 
@@ -62,8 +68,8 @@ gulp.task('bower files', function () {
 
 gulp.task('watch js', function () {
 
-    return gulp.src(jsGlobs)
-        .pipe(watch(jsGlobs))
+    return gulp.src(es6)
+        .pipe(watch(es6))
         //.pipe(traceurTasks())
         .pipe(sixTo5Tasks());
 });
