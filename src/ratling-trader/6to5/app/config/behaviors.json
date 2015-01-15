@@ -1,8 +1,0 @@
-{
-  "attack-enemy": "app\\game\\behaviors\\attack-enemy.js",
-  "clone-self": "app\\game\\behaviors\\clone-self.js",
-  "move-away-from-target": "app\\game\\behaviors\\move-away-from-target.js",
-  "move-randomly": "app\\game\\behaviors\\move-randomly.js",
-  "move-toward-target": "app\\game\\behaviors\\move-toward-target.js",
-  "path-toward-target": "app\\game\\behaviors\\path-toward-target.js"
-}
