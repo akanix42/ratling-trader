@@ -29,6 +29,11 @@ var bowerGlob = [
     'bower_components/**',
     'tests/bower_components/**'
 ];
+var to5Options = {
+    whitelist: [
+        'arrowFunctions'
+    ]
+};
 var traceurTasks = lazypipe()
     .pipe(plumber)
     .pipe(changed, compilePath + '/traceur')
@@ -38,7 +43,7 @@ var traceurTasks = lazypipe()
 var sixTo5Tasks = lazypipe()
     .pipe(plumber)
     .pipe(changed, compilePath)
-    .pipe(to5)
+    .pipe(to5, to5Options)
     .pipe(gulp.dest, compilePath);
 
 var straightCopyTasks = lazypipe()
