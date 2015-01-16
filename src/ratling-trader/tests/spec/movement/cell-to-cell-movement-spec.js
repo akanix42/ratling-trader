@@ -12,7 +12,7 @@ define(function (require) {
             var moveCommand = new MoveCommand({x: -1, y: 1});
             cellToCellMovement.execute(testEntity, moveCommand);
 
-            testEntity.tile.position.should.equal({x: 4, y: 6});
+            testEntity.tile.position.should.be.like({x: 4, y: 6});
         });
         //
         //it('should respect collision', ()=> {

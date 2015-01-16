@@ -14,7 +14,7 @@ define(function () {
             return this._private.tile;
         },
         set tile(tile) {
-            tile.addEntity(this);
+            tile.entities.add(this);
             this._private.tile = tile;
         }
     };
