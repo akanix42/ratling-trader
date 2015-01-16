@@ -6,6 +6,7 @@
         deps: ['runner'],
         paths: {
             spec: '../tests/spec',
+            tests: '../tests',
             runner: '../tests/runner'
         },
         urlArgs: 'now=' + Date.now()

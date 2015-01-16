@@ -2,7 +2,7 @@
 define([
     // All your tests go here.
     //'spec/app.test'
-    'spec/movement/cell-to-cell-movement.js'
+    'spec/movement/cell-to-cell-movement-spec.js'
 ], function () {
     'use strict';
 
