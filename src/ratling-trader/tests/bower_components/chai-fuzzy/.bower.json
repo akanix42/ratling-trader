@@ -1,0 +1,14 @@
+{
+  "name": "chai-fuzzy",
+  "homepage": "https://github.com/elliotf/chai-fuzzy",
+  "_release": "bcd0813fdd",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "bcd0813fdd27548332343b94bc0b3276c14b6a5e"
+  },
+  "_source": "git://github.com/elliotf/chai-fuzzy.git",
+  "_target": "*",
+  "_originalSource": "chai-fuzzy",
+  "_direct": true
+}
