@@ -7,7 +7,7 @@ define(function (require) {
 
     CellToCellMovement.prototype.execute = function execute(entity, command) {
         var newTile = entity.tile.getNeighbor(command.direction);
-        var objections = newTile.intentHub.broadcast(new IntentToMove(newTile));
+        var objections = newTile.intentHub.broadcast(new IntentToMove(entity, newTile));
         if (objections.length)
             return false;
         entity.tile = newTile;

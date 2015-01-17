@@ -1,4 +1,4 @@
-(function(){
+(function () {
     'use strict';
     requirejs.config({
         //baseUrl: '../src'
@@ -9,7 +9,7 @@
             tests: '../tests',
             runner: '../tests/runner'
         },
-        urlArgs: 'now=' + Date.now()
+        urlArgs: location.search.match(/bust=false/) ? '' : 'now=' + Date.now()
 
     });
 })();

@@ -5,25 +5,25 @@ define(function (require) {
 
     IntentHub.prototype.broadcast = function broadcast(intent) {
         var intents = this._private.intents;
-        var subscriptions = intents[intent.constructor];
+        var subscriptions = intents[intent.constructor.name];
         if (subscriptions === undefined)
             return [];
 
         var objections = [];
         for (var i = 0; i < subscriptions.length; i++) {
             var subscription = subscriptions[i];
-            var objection = subscription.handler.call(subscription.entity, intent);
+            var objection = subscription.handler(subscription.entity, intent);
             if (objection !== undefined)
                 objections.push(objection);
         }
         return objections;
     };
 
-    IntentHub.prototype.subscribe = function subscribe(entity, intent, handler) {
+    IntentHub.prototype.subscribe = function subscribe(entity, intent) {
         var intents = this._private.intents;
-        if (!(intent.constructor in intents))
-            intents[intent.constructor] = [];
-        intents[intent.constructor].push({entity: entity, handler: handler});
+        if (!(intent.class.name in intents))
+            intents[intent.class.name] = [];
+        intents[intent.class.name].push({entity: entity, handler: intent.handler});
     };
 
     IntentHub.prototype.subscribeAll = function subscribe(entity, intents) {
@@ -37,7 +37,7 @@ define(function (require) {
 
     IntentHub.prototype.unsubscribe = function unsubscribe(entity, intent) {
         var intents = this._private.intents;
-        var subscriptions = intents[intent.constructor];
+        var subscriptions = intents[intent.constructor.name];
         if (subscriptions === undefined)
             return;
 
