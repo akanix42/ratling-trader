@@ -1,10 +1,10 @@
 define(function (require) {
     var NullTile = require('game/tiles/null-tile');
     var Tile = require('game/tiles/new-tile');
-    var IntentHub = require('game/intents/new-intent-hub');
 
-    function TileFactory() {
+    function TileFactory(intentHandlersFactory) {
         this._private = {
+            intentHandlersFactory: intentHandlersFactory,
             nullTile: new NullTile()
         };
     }
@@ -15,7 +15,7 @@ define(function (require) {
         },
 
         create: function (level, position) {
-            return new Tile(level, position, new IntentHub());
+            return new Tile(level, position, this._private.intentHandlersFactory.create());
         }
     };
 

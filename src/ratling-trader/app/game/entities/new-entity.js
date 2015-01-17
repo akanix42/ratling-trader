@@ -1,23 +1,11 @@
 define(function () {
 
 
-    function MixinMap(entity) {
-        this._private = {
-            entity: entity,
-            map: new Map()
-        }
-    }
-
-    MixinMap.prototype.add = function add(value) {
-        value.applyTo(this._private.entity);
-        this._private.map.set(value.constructor.name, value);
-    };
-
-    function Entity(tile) {
+    function Entity(tile, mixinMapFactory) {
         this._private = {
             attributes: new Map(),
             characteristics: new Set(),
-            mixins: new MixinMap(this),
+            mixins: mixinMapFactory.create(this),
             tile: tile
         };
     }

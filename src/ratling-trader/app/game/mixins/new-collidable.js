@@ -17,7 +17,7 @@ define(function (require) {
             entity.characteristics.add('collidable');
             for (var i = 0; i < this._private.intentHandlers.length; i++){
                 var intentHandler = this._private.intentHandlers[i];
-                entity.tile.intentHub.subscribe(entity, intentHandler);
+                entity.tile.intentHandlers.add(entity, intentHandler);
             }
         },
         intentToMoveHandler: function intentToMoveHandler(handlingEntity, intent) {

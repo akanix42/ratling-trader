@@ -1,12 +1,12 @@
 define(function (require) {
 
-    function Tile(level, position, intentHub) {
+    function Tile(level, position, intentHandlers) {
         this._private = {
             entities: new Set(),
             level: level,
             position: position,
 
-            intentHub: intentHub
+            intentHandlers: intentHandlers
         };
     }
 
@@ -14,8 +14,8 @@ define(function (require) {
         get entities() {
             return this._private.entities;
         },
-        get intentHub() {
-            return this._private.intentHub;
+        get intentHandlers() {
+            return this._private.intentHandlers;
         },
         get level() {
             return this._private.level;

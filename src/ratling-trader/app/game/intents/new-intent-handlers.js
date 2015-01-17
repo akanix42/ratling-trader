@@ -1,9 +1,9 @@
 define(function (require) {
-    function IntentHub() {
+    function IntentHandlers() {
         this._private = {intents: {}};
     }
 
-    IntentHub.prototype.broadcast = function broadcast(intent) {
+    IntentHandlers.prototype.notify = function notify(intent) {
         var intents = this._private.intents;
         var subscriptions = intents[intent.constructor.name];
         if (subscriptions === undefined)
@@ -19,23 +19,23 @@ define(function (require) {
         return objections;
     };
 
-    IntentHub.prototype.subscribe = function subscribe(entity, intent) {
+    IntentHandlers.prototype.add = function add(entity, intent) {
         var intents = this._private.intents;
         if (!(intent.class.name in intents))
             intents[intent.class.name] = [];
         intents[intent.class.name].push({entity: entity, handler: intent.handler});
     };
+    //
+    //IntentHandlers.prototype.subscribeAll = function subscribe(entity, intents) {
+    //    var self = this;
+    //
+    //    for (var i = 0, l = intents.length; i < l; i++) {
+    //        var intent = intents[i];
+    //        self.subscribe(entity, intent.fn, intent.callback);
+    //    }
+    //};
 
-    IntentHub.prototype.subscribeAll = function subscribe(entity, intents) {
-        var self = this;
-
-        for (var i = 0, l = intents.length; i < l; i++) {
-            var intent = intents[i];
-            self.subscribe(entity, intent.fn, intent.callback);
-        }
-    };
-
-    IntentHub.prototype.unsubscribe = function unsubscribe(entity, intent) {
+    IntentHandlers.prototype.remove = function remove(entity, intent) {
         var intents = this._private.intents;
         var subscriptions = intents[intent.constructor.name];
         if (subscriptions === undefined)
@@ -47,5 +47,13 @@ define(function (require) {
                 subscriptions.splice(entity, 1);
         }
     };
-    return IntentHub;
+
+    function IntentHandlersFactory() {
+
+    }
+
+    IntentHandlersFactory.prototype.create = function create() {
+        return new IntentHandlers();
+    };
+    return IntentHandlersFactory;
 });

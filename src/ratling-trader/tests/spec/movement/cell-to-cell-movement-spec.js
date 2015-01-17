@@ -5,7 +5,7 @@ define(function (require) {
     var MoveCommand = require('game/commands/move-command');
     var Collidable = require('game/mixins/new-collidable');
 
-    describe('cell-to-cell-movement', function () {
+    describe('moving from cell-to-cell', function () {
         it('should move an entity from one cell to the next', function test() {
             var originalPosition = {x: 5, y: 5};
             var testEntity = new EntityTestDataBuilder().atPosition(originalPosition);
@@ -16,7 +16,7 @@ define(function (require) {
             testEntity.tile.position.should.be.like({x: 4, y: 6});
         });
 
-        it('should not move a collidable entity onto another collidable entity', function test() {
+        it('should not allow collidable entity to move onto another collidable entity', function test() {
             var originalPosition = {x: 5, y: 5};
             var collidable = new Collidable();
             var testEntity = new EntityTestDataBuilder().atPosition(originalPosition);
