@@ -1,16 +1,21 @@
 define(function (require) {
 
-    function Tile(level, position) {
+    function Tile(level, position, intentHub) {
         this._private = {
             entities: new Set(),
             level: level,
-            position: position
+            position: position,
+
+            intentHub: intentHub
         };
     }
 
     Tile.prototype = {
         get entities() {
             return this._private.entities;
+        },
+        get intentHub() {
+            return this._private.intentHub;
         },
         get level() {
             return this._private.level;

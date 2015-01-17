@@ -19,6 +19,11 @@ define(function (require) {
 
         return entity;
     };
+    EntityTestDataBuilder.prototype.atTile = function atTile(tile) {
+        var entity = new Entity(tile);
+
+        return entity;
+    };
 
     return EntityTestDataBuilder;
 
