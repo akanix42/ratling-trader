@@ -8,7 +8,7 @@ define(function (require) {
     }
 
     LevelTestDataBuilder.prototype.create = function create() {
-        var size = {x: 20, y: 20};
+        var size = {width: 20, height: 20};
 
         return new Level(size, this.tileFactory);
     };
