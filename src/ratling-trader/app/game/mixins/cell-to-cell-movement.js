@@ -1,5 +1,5 @@
 define(function (require) {
-    var IntentToMove = require('game/intents/new-intent-to-move');
+    var IntentToMove = require('game/intents/intent-to-move');
 
     function CellToCellMovement() {
 

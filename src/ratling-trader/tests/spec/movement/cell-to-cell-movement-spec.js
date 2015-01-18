@@ -3,7 +3,7 @@ define(function (require) {
     var EntityTestDataBuilder = require('tests/builders/entity-test-data-builder');
     var CellToCellMovement = require('game/mixins/cell-to-cell-movement');
     var MoveCommand = require('game/commands/move-command');
-    var Collidable = require('game/mixins/new-collidable');
+    var Collidable = require('game/mixins/collidable');
 
     describe('moving from cell-to-cell', function () {
         it('should move an entity from one cell to the next', function test() {

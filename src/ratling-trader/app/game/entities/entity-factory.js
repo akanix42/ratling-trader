@@ -1,5 +1,5 @@
 define(function () {
-    var Entity = require('game/entities/new-entity');
+    var Entity = require('game/entities/entity');
 
     function EntityFactory(mixinMapFactory) {
         this._private = {

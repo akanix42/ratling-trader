@@ -1,5 +1,5 @@
 define(function (require) {
-    var Entity = require('game/entities/new-entity');
+    var Entity = require('game/entities/entity');
     var LevelTestDataBuilder = require('tests/builders/level-test-data-builder');
     var MixinMapFactory = require('game/mixins/mixin-map-factory');
 

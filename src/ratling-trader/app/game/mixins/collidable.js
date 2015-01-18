@@ -1,6 +1,6 @@
 define(function (require) {
     'use strict';
-    var IntentToMove = require('game/intents/new-intent-to-move');
+    var IntentToMove = require('game/intents/intent-to-move');
 
     function Collidable() {
         this._private = {

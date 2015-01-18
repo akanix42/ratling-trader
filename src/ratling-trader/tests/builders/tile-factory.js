@@ -1,6 +1,6 @@
 define(function (require) {
     var NullTile = require('game/tiles/null-tile');
-    var Tile = require('game/tiles/new-tile');
+    var Tile = require('game/tiles/tile');
 
     function TileFactory(intentHandlersFactory) {
         this._private = {
