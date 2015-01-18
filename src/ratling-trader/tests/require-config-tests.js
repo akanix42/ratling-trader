@@ -3,7 +3,7 @@
     requirejs.config({
         //baseUrl: '../src'
         baseUrl: '../app',
-        deps: ['runner'],
+        //deps: ['../tests/test-bootstrap'],
         paths: {
             spec: '../tests/spec',
             tests: '../tests',
@@ -11,5 +11,9 @@
         },
         urlArgs: location.search.match(/bust=false/) ? '' : 'now=' + Date.now()
 
+    });
+
+    require(['require-config-shared'], function () {
+        require(['runner']);
     });
 })();

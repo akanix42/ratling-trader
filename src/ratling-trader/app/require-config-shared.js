@@ -1,6 +1,4 @@
     require.config({
-        baseUrl: "app",
-        deps: ['main'],
         shim: {
             "rot": {
                 "exports": "ROT"
