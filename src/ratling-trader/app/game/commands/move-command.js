@@ -1,9 +1,7 @@
 define(function (require) {
-    var forceNew = require('force-new');
+    return MoveCommand;
 
-    return forceNew.whenCalled(moveCommand);
-
-    function moveCommand(direction) {
+    function MoveCommand(direction) {
         this.direction = direction;
     }
 });
