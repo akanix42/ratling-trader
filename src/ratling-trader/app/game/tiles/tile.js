@@ -1,13 +1,16 @@
 define(function (require) {
 
-    function Tile(level, position, intentHandlers) {
+    function Tile(level, position, intentHandlers, baseArchitecture) {
         this._private = {
+            baseArchitecture: baseArchitecture,
             entities: new Set(),
             level: level,
             position: position,
 
             intentHandlers: intentHandlers
         };
+
+        this.entities.add(baseArchitecture);
     }
 
     Tile.prototype = {

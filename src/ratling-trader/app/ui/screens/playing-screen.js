@@ -20,7 +20,7 @@ define(function (require) {
                 for (var y = 0; y < display.size.height; y++) {
                     var tile;
                     if (column === undefined || column[x])
-                        tile = this._private.asciiTileFactory.nullTile;
+                        tile = 'null';//this._private.asciiTileFactory.nullTile;
                     else tile = column[y];
                     var uiTile = this._private.asciiTileFactory.create(tile);
                     uiTile.draw(display, x, y);

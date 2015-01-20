@@ -1,7 +1,8 @@
 define(function () {
     function NullTile() {
         this._private = {
-            position: {x: -1, Y: -1}
+            position: {x: -1, Y: -1},
+            name: 'null'
         };
     }
 

@@ -28,6 +28,9 @@ define(function () {
         },
         startGame: function startGame() {
             this._private.gameBridge.startGame();
+        },
+        loadGame: function loadGame() {
+            this._private.gameBridge.restoreGame();
         }
 
     };

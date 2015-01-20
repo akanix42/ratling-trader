@@ -12,7 +12,7 @@ define(function (require) {
         create: function create(gameToUiBridge) {
             return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory);
         }
-    }
+    };
 
     return GameFactory;
 });

@@ -1,7 +1,10 @@
 define(function (require) {
-    function Game(gameToUiBridge, levelFactory, entityFactory) {
+    function Game(gameToUiBridge, levelFactory, entityFactory, gameData) {
         this._private = {};
-        var level = this._private.level = levelFactory.create();
+
+        var level = this._private.level = gameData
+            ? levelFactory.create(gameData.levels[gameData.currentLevel])
+            : levelFactory.create();
         this._private.player = entityFactory.create('player', level.getRandomTile());
         gameToUiBridge.readyForPlayerInput();
     }

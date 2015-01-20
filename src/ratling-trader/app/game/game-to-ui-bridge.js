@@ -1,7 +1,8 @@
 define(function () {
-    function GameToUiBridge(gameFactory) {
+    function GameToUiBridge(gameFactory, savedGameFactory) {
         this._private = {
             gameFactory: gameFactory,
+            savedGameFactory: savedGameFactory,
             gameBridge: null,
             game: null
         };
@@ -26,6 +27,10 @@ define(function () {
 
         readyForPlayerInput: function readyForPlayerInput() {
             this._private.uiBridge.readyForPlayerInput();
+        },
+
+        restoreGame: function restoreGame() {
+            this._private.game = this._private.savedGameFactory.create(this);
         }
     };
 

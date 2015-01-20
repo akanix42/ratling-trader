@@ -1,10 +1,10 @@
 define(function () {
 
-    function Ui(uiToGameBridge, screenStack, playingScreenFactory) {
+    function Ui(uiToGameBridge, screenStack, mainMenuScreenFactory) {
         this._private = {
             screens: screenStack,
             uiToGameBridge: uiToGameBridge,
-            playingScreenFactory: playingScreenFactory,
+            mainMenuScreenFactory: mainMenuScreenFactory,
         };
         uiToGameBridge.ui = this;
     }
@@ -17,7 +17,8 @@ define(function () {
             return this._private.uiToGameBridge;
         },
         init: function init(){
-            this.screens.push(this._private.playingScreenFactory.create());
+            //this.screens.push(this._private.playingScreenFactory.create());
+            this.screens.push(this._private.mainMenuScreenFactory.create(this));
         }
 
     };

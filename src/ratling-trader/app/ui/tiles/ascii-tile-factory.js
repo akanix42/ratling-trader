@@ -1,4 +1,5 @@
-define(function () {
+define(function (require) {
+    var asciiTiles = require('json!config/ascii.json');
 
     function AsciiTile(tile, foregroundColor, backgroundColor, character) {
         this._private = {
@@ -15,15 +16,29 @@ define(function () {
     };
 
     function AsciiTileFactory() {
+        var tiles = {};
+        this._private = {
+            tiles: tiles
+        };
 
+        loadTiles();
+
+        function loadTiles() {
+            for (var i = 0; i < asciiTiles.length; i++)
+                addAsciiTile(asciiTiles[i]);
+        }
+
+        function addAsciiTile(template) {
+            tiles[template.name] = new AsciiTile(template.character, template.color, null);
+        }
     }
 
     AsciiTileFactory.prototype = {
         get nullTile() {
-            return new AsciiTile(null, null, null, '?');
+            return this._private.tiles['null'];
         },
         create: function create(tile) {
-            return new AsciiTile(tile);
+            return this._private.tiles[tile] || this.nullTile;
         }
     };
 

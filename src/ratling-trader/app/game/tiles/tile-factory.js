@@ -14,8 +14,8 @@ define(function (require) {
             return this._private.nullTile;
         },
 
-        create: function (level, position) {
-            return new Tile(level, position, this._private.intentHandlersFactory.create());
+        create: function (level, position, baseArchitecture) {
+            return new Tile(level, position, this._private.intentHandlersFactory.create(), baseArchitecture);
         }
     };
 

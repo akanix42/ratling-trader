@@ -5,6 +5,7 @@ define(function (require) {
     var Ui = require('ui/ui');
     var PlayingScreen = require('ui/screens/playing-screen').constructs;
     var AsciiTileFactory = require('ui/tiles/ascii-tile-factory');
+    var TestDisplay = require('tests/helpers/test-display');
 
     'use strict';
     describe('ui - starting a new game', function () {
@@ -13,8 +14,6 @@ define(function (require) {
             var targetNumberOfDrawCalls = mockDisplay.size.width * mockDisplay.size.height;
             var numberOfDrawCalls = 0;
             var uiGameBridge = new MockUiGameBridge(new TileFactory(new IntentHandlersFactory()));
-
-
             var userInterface = new Ui(uiGameBridge, new ScreenStack(), {create: testPlayingScreenFactory});
 
             userInterface.init();
@@ -76,19 +75,3 @@ MockUiGameBridge.prototype = {
 
     }
 };
-
-function TestDisplay(drawCallback) {
-    this._private = {
-        drawCallback: drawCallback
-    };
-    this.size = {
-        width: 20,
-        height: 20
-    };
-}
-
-TestDisplay.prototype = {
-    draw: function draw() {
-        this._private.drawCallback();
-    }
-}

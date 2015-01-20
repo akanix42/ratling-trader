@@ -17,6 +17,7 @@ define(function (require) {
                 self.registerModule('ui/display', {name: 'display'}),
                 self.registerModule('ui/screen-stack'),
                 self.registerModule('ui/screens/playing-screen'),
+                self.registerModule('ui/screens/main-menu-screen'),
                 self.registerModule('ui/tiles/ascii-tile-factory'),
             ]);
         };
