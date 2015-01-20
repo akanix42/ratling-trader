@@ -2,8 +2,8 @@ define(function (require) {
     'use strict';
     var LevelTestDataBuilder = require('tests/builders/level-test-data-builder');
     var RandomMapGenerator = require('game/maps/random-map-generator');
-    var TileFactory = require('tests/builders/tile-factory');
-    var EntityFactory = require('tests/builders/tile-factory');
+    var TileFactory = require('game/tiles/tile-factory');
+    var EntityFactory = require('game/tiles/tile-factory');
     var MixinMapFactory = require('game/mixins/mixin-map-factory');
 
     describe('a randomly generated map', function () {

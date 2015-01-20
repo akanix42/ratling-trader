@@ -1,7 +1,7 @@
 define(function (require) {
     var Level = require('game/levels/level');
-    var TileFactory = require('tests/builders/tile-factory');
-    var IntentHandlersFactory = require('game/intents/intent-handlers');
+    var TileFactory = require('game/tiles/tile-factory');
+    var IntentHandlersFactory = require('game/intents/intent-handlers-factory');
 
     function LevelTestDataBuilder() {
         this.tileFactory = new TileFactory(new IntentHandlersFactory());

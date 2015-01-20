@@ -12,9 +12,8 @@
 <script data-main="app/require-config-app" src="bower_components/requirejs/require.js"></script>
 <script>
     var hasDomContentLoaded = false;
-    var onDomContentLoaded=null;
+    var onDomContentLoaded = null;
     document.addEventListener("DOMContentLoaded", function (event) {
-        console.log('loaded');
         hasDomContentLoaded = true;
         if (onDomContentLoaded)
             onDomContentLoaded();

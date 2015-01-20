@@ -4,6 +4,7 @@ define([
     //'spec/app.test'
     'spec/movement/cell-to-cell-movement-spec.js',
     'spec/maps/randomly-generated-maps-spec.js',
+    'spec/game/new-game-spec.js',
     'spec/ui/new-game-spec.js',
 ], function () {
     'use strict';

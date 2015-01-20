@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
     var Entity = require('game/entities/entity');
 
     function EntityFactory(mixinMapFactory) {
@@ -7,7 +7,7 @@ define(function () {
         };
     }
 
-    EntityFactory.prototype.create = function createEntity(tile) {
+    EntityFactory.prototype.create = function createEntity(type, tile) {
         var entity = new Entity(tile, this._private.mixinMapFactory);
         return entity;
     };
