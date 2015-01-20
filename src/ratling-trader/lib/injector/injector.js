@@ -1,38 +1,58 @@
 define(function (require) {
-    var extend = require('lib/extend/extend');
+    var extend = require('extend');
     return Injector;
 
     function Injector() {
         var self = this;
         this.fixDependencyCasing = allUpperCase;
 
-        function resolve(name, dependencyAbove, dependencyTree) {
+        function resolve(name, dependencyAbove, dependencyTree, registeredModules) {
             var originalName = name;
             name = self.fixDependencyCasing(name);
             if (!(name in self.dependencies)) {
-                debugger;
-                throw originalName + ' not registered';
+                //debugger;
+                var message = originalName + ' not registered';
+                console.error(message);
+                throw message;
             }
             if (dependencyAbove && name in dependencyTree)
                 throw dependencyAbove + ' has a circular dependency on ' + name;
             dependencyTree = extend({}, dependencyTree);
             dependencyTree[name] = '';
 
-            return self.dependencies[name].initializer.initialize(dependencyTree);
+            return registeredModules[name].initializer.initialize(dependencyTree, registeredModules);
         }
 
-        function inject(module) {
-            return new Initializer(self, '', module, false).initialize({});
+        function inject(module, substitutions) {
+            return new Initializer(self, '', module, false).initialize({}, registerSubstitutions(substitutions));
+        }
+
+        function register(registeredModules, name, item, isSingleton) {
+            registeredModules[self.fixDependencyCasing(name)] = {
+                item: item,
+                initializer: new Initializer(self, name, item, isSingleton)
+            };
+        }
+
+        function registerSubstitutions(substitutions) {
+            var registeredModules = self.dependencies;
+            if (substitutions !== undefined && substitutions.length) {
+                registeredModules = extend({}, self.dependencies);
+                var keys = Object.keys(substitutions);
+                for (var i = 0; i < keys.length; i++)
+                    register(registeredModules, keys[i], substitutions[keys[i]]);
+            }
+            return registeredModules;
         }
 
         var injector = {
 
             dependencies: {},
 
-            getDependencies: function (name, dependencies, dependencyTree) {
+            getDependencies: function (name, dependencies, dependencyTree, registeredModules) {
                 return dependencies.length === 1 && dependencies[0] === '' ? []
                     : dependencies.map(function (value) {
-                        return resolve(value, name, dependencyTree);
+                        return resolve(value, name, dependencyTree, registeredModules);
                     }
                 );
             },
@@ -40,11 +60,12 @@ define(function (require) {
             inject: inject,
 
             register: function (name, item, isSingleton) {
-                self.dependencies[self.fixDependencyCasing(name)] = {item: item, initializer: new Initializer(self, name, item, isSingleton)};
+                register(self.dependencies, name, item, isSingleton);
             },
 
-            resolve: function (name) {
-                return resolve(name, null, {});
+            resolve: function (name, substitutions) {
+                return resolve(name, null, {}, registerSubstitutions(substitutions));
+
             }
 
         };
@@ -83,8 +104,8 @@ define(function (require) {
                 return dependency.replace(/\s+/g, '');
             });
 
-            self.initialize = function (dependencyTree) {
-                var initializedItem = construct(item, injector.getDependencies(name, dependencies, dependencyTree));
+            self.initialize = function (dependencyTree, registeredModules) {
+                var initializedItem = construct(item, injector.getDependencies(name, dependencies, dependencyTree, registeredModules));
                 if (isSingleton) {
                     item = initializedItem;
                     createObjectInitializationSteps();
