@@ -7,21 +7,14 @@ define(function (require) {
         this.levelTestDataBuilder = new LevelTestDataBuilder(injector);
     }
 
-    //
-    //EntityTestDataBuilder.prototype.create = function create() {
-    //    var entity = new Entity(this.tileTestDataBuilder.createNullTile());
-    //
-    //    return entity;
-    //};
-
     EntityTestDataBuilder.prototype.atPosition = function atPosition(position) {
         var level = this.levelTestDataBuilder.create();
-        var entity = new Entity(level.getTileAt(position.x, position.y), new MixinMapFactory());
+        var entity = new Entity('test', level.getTileAt(position.x, position.y), new MixinMapFactory());
 
         return entity;
     };
     EntityTestDataBuilder.prototype.atTile = function atTile(tile) {
-        var entity = new Entity(tile, new MixinMapFactory());
+        var entity = new Entity('test', tile, new MixinMapFactory());
 
         return entity;
     };
