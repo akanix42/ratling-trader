@@ -80,9 +80,7 @@ define(function (require) {
             if (typeof command === 'function')
                 command();
             else {
-                var result = game.processCommand(command);
-                //                    if (!result.error)
-                // render();
+                game.processCommand(command);
             }
 
         }

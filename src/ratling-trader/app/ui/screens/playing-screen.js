@@ -2,11 +2,47 @@ define(function (require) {
     //var PlayingScreen = require('ui/screens/playing-screen');
 
 
-    function PlayingScreen(display, uiToGameBridge, asciiTileFactory) {
+    function getCommandMap() {
+        var commands = {keydown: {}, keyup: {}, keypress: {}};
+        var keydown = commands.keydown,
+            keyup = commands.keyup;
+        //keyup[ROT.VK_RETURN] = win;
+        //keyup[ROT.VK_ESCAPE] = lose;
+        keydown[ROT.VK_LEFT] = GameCommands.GoLeft;
+        keydown[ROT.VK_RIGHT] = GameCommands.GoRight;
+        keydown[ROT.VK_UP] = GameCommands.GoUp;
+        keydown[ROT.VK_DOWN] = GameCommands.GoDown;
+        keydown[ROT.VK_NUMPAD4] = GameCommands.GoLeft;
+        keydown[ROT.VK_NUMPAD7] = GameCommands.GoUpLeft;
+        keydown[ROT.VK_NUMPAD8] = GameCommands.GoUp;
+        keydown[ROT.VK_NUMPAD9] = GameCommands.GoUpRight;
+        keydown[ROT.VK_NUMPAD6] = GameCommands.GoRight;
+        keydown[ROT.VK_NUMPAD3] = GameCommands.GoDownRight;
+        keydown[ROT.VK_NUMPAD2] = GameCommands.GoDown;
+        keydown[ROT.VK_NUMPAD1] = GameCommands.GoDownLeft;
+        keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
+        return commands;
+
+
+        //function lose() {
+        //    this._private.ui.screens.push(this._private.losingScreenFactory.create());
+        //
+        //    screenManager.switchTo('losingScreen');
+        //}
+        //
+        //function win() {
+        //    screenManager.switchTo('winningScreen');
+        //}
+    }
+
+    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory) {
         this._private = {
             display: display,
+            ui: ui,
             uiToGameBridge: uiToGameBridge,
-            asciiTileFactory: asciiTileFactory
+            asciiTileFactory: asciiTileFactory,
+            //commandMap: getCommandMap()
+
         };
         uiToGameBridge.startGame();
     }
@@ -31,6 +67,15 @@ define(function (require) {
                     }
                     uiTile.draw(display, x, y);
                 }
+            }
+        },
+        handleInput: function handleInput(inputType, inputData) {
+            var command = this._private.commandMap[inputType][inputData.keyCode];
+
+            if (typeof command === 'function')
+                command();
+            else {
+                game.processCommand(command);
             }
         }
     };

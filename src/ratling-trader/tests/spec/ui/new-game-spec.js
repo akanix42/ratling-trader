@@ -1,8 +1,7 @@
 define(function (require) {
     var TestDisplay = require('tests/helpers/test-display');
-    var GameRoot = require('game/game-root');
-    var UiRoot = require('ui/ui-root');
     var when = require('when');
+    var iocLoader = require('ioc-loader');
 
     'use strict';
     describe('ui - starting a new game', function () {
@@ -11,28 +10,14 @@ define(function (require) {
             var targetNumberOfDrawCalls = mockDisplay.size.width * mockDisplay.size.height;
             var numberOfDrawCalls = 0;
             var drewPlayer = false;
-            var gameRoot = new GameRoot();
-            var uiRoot = new UiRoot();
-            var uiToGameBridge;
-            var gameToUiBridge;
-
-            when.all([uiRoot.init(), gameRoot.init()])
-                .then(function () {
-                    uiRoot._private.injector.register('display', new TestDisplay(drawCallback));
-
-                    var ui = uiRoot.injector.resolve('ui');
-
-                    uiToGameBridge = ui.uiBridge;
-                    gameToUiBridge = gameRoot.injector.resolve('GameToUiBridge');
-
-                    gameToUiBridge.uiBridge = uiToGameBridge;
-                    uiToGameBridge.gameBridge = gameToUiBridge;
-
-                    uiToGameBridge.initUi();
-                    ui.screens.currentScreen.newGame();
-
-                });
-
+            var roots={};
+            iocLoader.init(function (gameRoot, uiRoot) {
+                uiRoot.injector.register('display', new TestDisplay(drawCallback));
+                roots.gameRoot = gameRoot;
+                roots.uiRoot = uiRoot;
+            }).then(function (ui) {
+                ui.screens.currentScreen.newGame();
+            });
 
             function drawCallback(x, y, character) {
                 numberOfDrawCalls++;
