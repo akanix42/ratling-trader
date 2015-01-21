@@ -22,11 +22,13 @@ define(function (require) {
                 self.registerModule('game/game-to-ui-bridge'),
                 self.registerModule('game/game-factory'),
                 self.registerModule('game/saved-game-factory'),
+                self.registerModule('game/tiles/tile'),
                 self.registerModule('game/tiles/tile-factory'),
                 self.registerModule('game/entities/entity-factory'),
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),
+                self.registerModule('game/maps/random-map-generator'),
                 //self.registerModule(''),
             ]);
         };

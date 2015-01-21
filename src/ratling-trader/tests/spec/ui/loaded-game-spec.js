@@ -1,7 +1,6 @@
 define(function (require) {
     var ROT = require('rot');
-    var GameRoot = require('game/game-root');
-    var UiRoot = require('ui/ui-root');
+    var iocLoader = require('ioc-loader');
     var when = require('when');
     var TestDisplay = require('tests/helpers/test-display');
     var Game = require('game/game');
@@ -9,11 +8,8 @@ define(function (require) {
 
     describe('ui - a loaded game', function () {
         it('should draw each tile', function (done) {
-            var gameRoot = new GameRoot();
-            var uiRoot = new UiRoot();
-            var uiToGameBridge;
-            var gameToUiBridge;
-
+            var nextTileX = 0;
+            var nextTileY = 0;
             var currentLevel = {
                 size: {width: 2, height: 2},
                 tiles: [
@@ -34,25 +30,18 @@ define(function (require) {
 
             var targetNumberOfDrawCalls = currentLevel.size.width * currentLevel.size.height;
             var numberOfDrawCalls = 0;
-            when.all([uiRoot.init(), gameRoot.init()])
-                .then(function () {
-                    var SavedGameFactory = getSavedGameFactory(gameData);
-                    uiRoot._private.injector.register('display', new TestDisplay(drawCallback));
-                    gameRoot._private.injector.register('savedGameFactory', SavedGameFactory);
-                    var ui = uiRoot.injector.resolve('ui');
-                    uiToGameBridge = ui.uiBridge;
-                    gameToUiBridge = gameRoot.injector.resolve('GameToUiBridge');
 
-                    gameToUiBridge.uiBridge = uiToGameBridge;
-                    uiToGameBridge.gameBridge = gameToUiBridge;
-
-                    uiToGameBridge.initUi();
+            iocLoader
+                .init(registerInjectionSubstitutions)
+                .then(function (ui) {
                     ui.screens.currentScreen.loadGame();
-
                 });
 
-            var nextTileX = 0;
-            var nextTileY = 0;
+            function registerInjectionSubstitutions(gameRoot, uiRoot) {
+                var SavedGameFactory = getSavedGameFactory(gameData);
+                gameRoot._private.injector.register('savedGameFactory', SavedGameFactory);
+                uiRoot._private.injector.register('display', new TestDisplay(drawCallback));
+            }
 
             function drawCallback(x, y, character) {
                 if (nextTileX >= currentLevel.tiles.length)
@@ -65,7 +54,7 @@ define(function (require) {
                     }
                     numberOfDrawCalls++;
                 }
-                //console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
+                console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
                 if (numberOfDrawCalls === targetNumberOfDrawCalls)
                     done();
             }

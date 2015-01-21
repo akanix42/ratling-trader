@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="bower_components/mocha/mocha.css"/>
 </head>
 <body>
+<label><input type="checkbox" id="bust" style="margin:10px;padding: 10px;"/>Bust cache</label>
+
+<div>
+    <button id="runAll" style="margin:10px;padding: 10px;">Run all tests</button>
+</div>
+
 <div id="mocha" style="opacity: 0.85;"></div>
 
 <script src="bower_components/mocha/mocha.js"></script>
@@ -12,6 +18,28 @@
 <script src="bower_components/underscore/underscore.js"></script>
 <script src="bower_components/chai-fuzzy/index.js"></script>
 <script>
+    var bustInput = document.getElementById('bust');
+    bustInput.checked = isBusted();
+    bustInput.onchange = function (event) {
+        var search = location.search;
+        if (search.match(/((\?|&)bust.*?)(&|$)/))
+            search = search.replace(/((\?|&)bust.*?)(&|$)/, '$3');
+
+        if (!event.target.checked) {
+            search += search === '' ? '?' : '&';
+            search += 'bust=false';
+        }
+        location.search = search;
+    };
+    document.getElementById('runAll').onclick = function () {
+        location.search = isBusted() ? '' : 'bust=false';
+    };
+    function isBusted() {
+        var search = location.search;
+        if (search.match(/((\?|&)bust=false)/))
+            return false;
+        return true;
+    }
     window.mocha.setup(
             {
                 ui: 'bdd',

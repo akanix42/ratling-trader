@@ -8,7 +8,7 @@ define(function (require) {
     }
 
     EntityFactory.prototype.create = function createEntity(type, tile) {
-        var entity = new Entity(tile, this._private.mixinMapFactory);
+        var entity = new Entity(type, tile, this._private.mixinMapFactory);
         return entity;
     };
     return EntityFactory;

@@ -3,8 +3,8 @@ define(function (require) {
     var LevelTestDataBuilder = require('tests/builders/level-test-data-builder');
     var MixinMapFactory = require('game/mixins/mixin-map-factory');
 
-    function EntityTestDataBuilder() {
-        this.levelTestDataBuilder = new LevelTestDataBuilder();
+    function EntityTestDataBuilder(injector) {
+        this.levelTestDataBuilder = new LevelTestDataBuilder(injector);
     }
 
     //

@@ -1,13 +1,15 @@
 define(function () {
 
 
-    function Entity(tile, mixinMapFactory) {
+    function Entity(type, tile, mixinMapFactory) {
         this._private = {
+            type: type,
             attributes: new Map(),
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
-            tile: tile
+
         };
+        this.tile = tile;
     }
 
     Entity.prototype = {
@@ -26,6 +28,9 @@ define(function () {
         set tile(tile) {
             tile.entities.add(this);
             this._private.tile = tile;
+        },
+        get type() {
+            return this._private.type;
         }
 
     };

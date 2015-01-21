@@ -2,8 +2,9 @@ define(function (require) {
     var NullTile = require('game/tiles/null-tile');
     var Tile = require('game/tiles/tile');
 
-    function TileFactory(intentHandlersFactory) {
+    function TileFactory(intentHandlersFactory, entityFactory) {
         this._private = {
+            entityFactory: entityFactory,
             intentHandlersFactory: intentHandlersFactory,
             nullTile: new NullTile()
         };
@@ -15,7 +16,12 @@ define(function (require) {
         },
 
         create: function (level, position, baseArchitecture) {
-            return new Tile(level, position, this._private.intentHandlersFactory.create(), baseArchitecture);
+            var tileData = {
+                level: level,
+                position: position,
+                baseArchitecture: baseArchitecture
+            };
+            return new Tile(tileData, this._private.intentHandlersFactory.create(), this._private.entityFactory);
         }
     };
 

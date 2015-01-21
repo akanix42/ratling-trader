@@ -22,11 +22,11 @@ define(function (require) {
                     var uiTile;
                     if (column === undefined || !column[y]) {
                         tile = 'null';//this._private.asciiTileFactory.nullTile;
-                        uiTile = this._private.asciiTileFactory.create(tile);
+                        uiTile = this._private.asciiTileFactory.nullTile;
                     }
                     else {
                         tile = column[y];
-                        uiTile = this._private.asciiTileFactory.create(tile.entities.all()[0]);
+                        uiTile = this._private.asciiTileFactory.create(tile.entities.all()[0].type);
                     }
                     uiTile.draw(display, x, y);
                 }

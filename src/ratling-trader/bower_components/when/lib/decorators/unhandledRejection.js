@@ -13,7 +13,7 @@ define(function(require) {
 
 		if(typeof console !== 'undefined') {
 			logError = typeof console.error !== 'undefined'
-				? function (e) { console.error(e); }
+				? function (e) { console.error(e); throw e; }
 				: function (e) { console.log(e); };
 
 			logInfo = typeof console.info !== 'undefined'

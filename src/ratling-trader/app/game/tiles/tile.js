@@ -10,20 +10,20 @@ define(function (require) {
         this._private.entities.push(entity);
     };
 
-    TileEntities.prototype.all = function all(){
-      return this._private.entities.slice();
+    TileEntities.prototype.all = function all() {
+        return this._private.entities.slice();
     };
 
-    function Tile(level, position, intentHandlers, baseArchitecture) {
+    function Tile(tileData, intentHandlers, entityFactory) {
         this._private = {
-            baseArchitecture: baseArchitecture,
+            baseArchitecture: tileData.baseArchitecture,
             entities: new TileEntities(),
-            level: level,
-            position: position,
+            level: tileData.level,
+            position: tileData.position,
 
             intentHandlers: intentHandlers
         };
-        this.entities.add(baseArchitecture);
+        this.entities.add(entityFactory.create(tileData.baseArchitecture, this));
     }
 
     Tile.prototype = {
