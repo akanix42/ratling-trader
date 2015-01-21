@@ -5,7 +5,7 @@ define(function () {
             var column = new Array(size.height);
             map[x] = column;
             for (var y = 0; y < size.height; y++)
-                column[y] = tileFactory.create(this, {x: x, y: y});
+                column[y] = tileFactory.create(this, {x: x, y: y}, 'dirtFloor');
         }
 
         this._private = {

@@ -1,11 +1,8 @@
 define(function (require) {
-    var TileFactory = require('game/tiles/tile-factory');
-    var IntentHandlersFactory = require('game/intents/intent-handlers-factory');
-    var ScreenStack = require('ui/screen-stack');
-    var Ui = require('ui/ui');
-    var PlayingScreen = require('ui/screens/playing-screen').constructs;
-    var AsciiTileFactory = require('ui/tiles/ascii-tile-factory');
     var TestDisplay = require('tests/helpers/test-display');
+    var GameRoot = require('game/game-root');
+    var UiRoot = require('ui/ui-root');
+    var when = require('when');
 
     'use strict';
     describe('ui - starting a new game', function () {
@@ -13,65 +10,33 @@ define(function (require) {
             var mockDisplay = new TestDisplay(drawCallback);
             var targetNumberOfDrawCalls = mockDisplay.size.width * mockDisplay.size.height;
             var numberOfDrawCalls = 0;
-            var uiGameBridge = new MockUiGameBridge(new TileFactory(new IntentHandlersFactory()));
-            var userInterface = new Ui(uiGameBridge, new ScreenStack(), {create: testPlayingScreenFactory});
+            var gameRoot = new GameRoot();
+            var uiRoot = new UiRoot();
+            var uiToGameBridge;
+            var gameToUiBridge;
 
-            userInterface.init();
+            when.all([uiRoot.init(), gameRoot.init()])
+                .then(function () {
+                    uiRoot._private.injector.register('display', new TestDisplay(drawCallback));
 
+                    var ui = uiRoot.injector.resolve('ui');
+
+                    uiToGameBridge = ui.uiBridge;
+                    gameToUiBridge = gameRoot.injector.resolve('GameToUiBridge');
+
+                    gameToUiBridge.uiBridge = uiToGameBridge;
+                    uiToGameBridge.gameBridge = gameToUiBridge;
+
+                    uiToGameBridge.initUi();
+                    ui.screens.currentScreen.newGame();
+
+                });
             function drawCallback() {
                 numberOfDrawCalls++;
                 //console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
                 if (numberOfDrawCalls === targetNumberOfDrawCalls)
                     done();
             }
-
-            function testPlayingScreenFactory() {
-                return new PlayingScreen(mockDisplay, uiGameBridge, new AsciiTileFactory());
-            }
         });
     });
 });
-
-function MockUiGameBridge(tileFactory) {
-    var self = this;
-    this._private = {
-        size: {
-            width: 20,
-            height: 20
-        },
-        tileFactory: tileFactory,
-    };
-    this._private.tiles = getTiles();
-
-    function getTiles() {
-        var width = self._private.size.width,
-            height = self._private.size.height;
-        var map = new Array(width);
-        for (var x = 0; x < width; x++) {
-            var column = map[x] = new Array(height);
-            for (var y = 0; y < height; y++)
-                column[y] = tileFactory.nullTile;
-        }
-        return map;
-    }
-}
-
-MockUiGameBridge.prototype = {
-    get gameState() {
-        var self = this;
-        return {
-            level: {
-                tiles: {
-                    getColumn: function (x) {
-
-                        return self._private.tiles[x];
-                    }
-                }
-            }
-
-        }
-    },
-    startGame: function () {
-
-    }
-};

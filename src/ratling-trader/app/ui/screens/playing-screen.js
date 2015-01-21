@@ -19,10 +19,15 @@ define(function (require) {
                 var column = tiles[x];
                 for (var y = 0; y < display.size.height; y++) {
                     var tile;
-                    if (column === undefined || column[x])
+                    var uiTile;
+                    if (column === undefined || !column[y]) {
                         tile = 'null';//this._private.asciiTileFactory.nullTile;
-                    else tile = column[y];
-                    var uiTile = this._private.asciiTileFactory.create(tile);
+                        uiTile = this._private.asciiTileFactory.create(tile);
+                    }
+                    else {
+                        tile = column[y];
+                        uiTile = this._private.asciiTileFactory.create(tile.entities.all()[0]);
+                    }
                     uiTile.draw(display, x, y);
                 }
             }

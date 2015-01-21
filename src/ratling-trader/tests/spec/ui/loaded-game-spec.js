@@ -21,6 +21,10 @@ define(function (require) {
                     ['dirtFloor', 'dirtFloor'],
                 ]
             };
+            var asciiTiles = [
+                ['.', '.'],
+                ['.', '.'],
+            ];
             var gameData = {
                 levels: [
                     currentLevel
@@ -43,7 +47,6 @@ define(function (require) {
                     uiToGameBridge.gameBridge = gameToUiBridge;
 
                     uiToGameBridge.initUi();
-                    gameToUiBridge.restoreGame();
                     ui.screens.currentScreen.loadGame();
 
                 });
@@ -54,7 +57,7 @@ define(function (require) {
             function drawCallback(x, y, character) {
                 if (nextTileX >= currentLevel.tiles.length)
                     return;
-                if (character === currentLevel.tiles[nextTileX][nextTileY]) {
+                if (character === asciiTiles[nextTileX][nextTileY]) {
                     nextTileY++;
                     if (nextTileY >= currentLevel.tiles[nextTileX].length) {
                         nextTileX++;
@@ -62,7 +65,7 @@ define(function (require) {
                     }
                     numberOfDrawCalls++;
                 }
-                console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
+                //console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
                 if (numberOfDrawCalls === targetNumberOfDrawCalls)
                     done();
             }

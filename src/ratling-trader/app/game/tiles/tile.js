@@ -1,15 +1,28 @@
 define(function (require) {
 
+    function TileEntities() {
+        this._private = {
+            entities: []
+        };
+    }
+
+    TileEntities.prototype.add = function add(entity) {
+        this._private.entities.push(entity);
+    };
+
+    TileEntities.prototype.all = function all(){
+      return this._private.entities.slice();
+    };
+
     function Tile(level, position, intentHandlers, baseArchitecture) {
         this._private = {
             baseArchitecture: baseArchitecture,
-            entities: new Set(),
+            entities: new TileEntities(),
             level: level,
             position: position,
 
             intentHandlers: intentHandlers
         };
-
         this.entities.add(baseArchitecture);
     }
 

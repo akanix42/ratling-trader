@@ -21,7 +21,7 @@ define(function () {
         },
         readyForPlayerInput: function readyForPlayerInput() {
             this._private.inputDeferred.resolve();
-            console.log('ready for input');
+            //console.log('ready for input');
         },
         initUi: function initUi() {
             this._private.ui.init();

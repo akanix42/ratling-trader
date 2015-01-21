@@ -12,6 +12,10 @@ define(function () {
             this._private.uiToGameBridge.loadGame();
             this._private.ui.screens.push(this._private.playingScreenFactory.create());
         },
+        newGame: function () {
+            this._private.uiToGameBridge.startGame();
+            this._private.ui.screens.push(this._private.playingScreenFactory.create());
+        },
         render: function render() {
 
         }

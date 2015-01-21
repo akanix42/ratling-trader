@@ -1,9 +1,8 @@
 define(function (require) {
     var asciiTiles = require('json!config/ascii.json');
 
-    function AsciiTile(tile, foregroundColor, backgroundColor, character) {
+    function AsciiTile(character, foregroundColor, backgroundColor) {
         this._private = {
-            tile: tile,
             foregroundColor: foregroundColor || 'white',
             backgroundColor: backgroundColor || 'black',
             character: character || '?'

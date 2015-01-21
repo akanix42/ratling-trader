@@ -11,13 +11,17 @@ define(function (require) {
 
     when.all([uiRoot.init(), gameRoot.init()])
         .then(function () {
-            uiToGameBridge = uiRoot.injector.resolve('ui').uiBridge;
+            var ui = uiRoot.injector.resolve('ui');
+
+            uiToGameBridge = ui.uiBridge;
             gameToUiBridge = gameRoot.injector.resolve('GameToUiBridge');
 
             gameToUiBridge.uiBridge = uiToGameBridge;
             uiToGameBridge.gameBridge = gameToUiBridge;
 
             uiToGameBridge.initUi();
+            ui.screens.currentScreen.newGame();
+
             //gameToUiBridge.startGame();
         });
 });
