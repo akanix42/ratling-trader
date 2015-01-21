@@ -26,7 +26,8 @@ define(function (require) {
                     }
                     else {
                         tile = column[y];
-                        uiTile = this._private.asciiTileFactory.create(tile.entities.all()[0].type);
+                        var entities = tile.entities.all();
+                        uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
                     }
                     uiTile.draw(display, x, y);
                 }

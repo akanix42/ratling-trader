@@ -6,10 +6,11 @@ define(function (require) {
 
     'use strict';
     describe('ui - starting a new game', function () {
-        it('should display the playing screen and render the first level', function (done) {
+        it('should display the playing screen and render the first level, including the player', function (done) {
             var mockDisplay = new TestDisplay(drawCallback);
             var targetNumberOfDrawCalls = mockDisplay.size.width * mockDisplay.size.height;
             var numberOfDrawCalls = 0;
+            var drewPlayer = false;
             var gameRoot = new GameRoot();
             var uiRoot = new UiRoot();
             var uiToGameBridge;
@@ -31,10 +32,14 @@ define(function (require) {
                     ui.screens.currentScreen.newGame();
 
                 });
-            function drawCallback() {
+
+
+            function drawCallback(x, y, character) {
                 numberOfDrawCalls++;
+                if (character === '@')
+                    drewPlayer = true;
                 //console.log(numberOfDrawCalls + ' / ' + targetNumberOfDrawCalls);
-                if (numberOfDrawCalls === targetNumberOfDrawCalls)
+                if (numberOfDrawCalls === targetNumberOfDrawCalls && drewPlayer)
                     done();
             }
         });
