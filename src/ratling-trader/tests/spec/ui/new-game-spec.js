@@ -1,6 +1,5 @@
 define(function (require) {
     var TestDisplay = require('tests/helpers/test-display');
-    var when = require('when');
     var iocLoader = require('ioc-loader');
 
     'use strict';
@@ -10,7 +9,7 @@ define(function (require) {
             var targetNumberOfDrawCalls = mockDisplay.size.width * mockDisplay.size.height;
             var numberOfDrawCalls = 0;
             var drewPlayer = false;
-            var roots={};
+            var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
                 uiRoot.injector.register('display', new TestDisplay(drawCallback));
                 roots.gameRoot = gameRoot;

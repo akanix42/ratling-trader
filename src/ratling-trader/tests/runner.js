@@ -6,7 +6,8 @@ define([
     'spec/maps/randomly-generated-maps-spec.js',
     'spec/game/new-game-spec.js',
     'spec/ui/new-game-spec.js',
-    'spec/ui/loaded-game-spec.js',
+    'spec/ui/loaded-game-spec',
+    'spec/ui/game-interaction-spec',
 ], function () {
     'use strict';
 
