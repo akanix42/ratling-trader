@@ -4,7 +4,8 @@ define(function () {
     function UiToGameBridge() {
         this._private = {
             gameBridge: null,
-            inputDeferred: when.defer()
+            inputDeferred: null,
+            inputQueue: []
         };
         this._private.ui = null;
     }
@@ -19,9 +20,24 @@ define(function () {
         set ui(ui) {
             this._private.ui = ui;
         },
+        queueInput: function queueInput(input) {
+            if (this._private.inputDeferred) {
+                this._private.inputDeferred.resolve(input);
+                this._private.inputDeferred = null;
+            }
+            else {
+                this._private.inputQueue.push(input);
+            }
+        },
         readyForPlayerInput: function readyForPlayerInput() {
-            this._private.inputDeferred.resolve();
-            //console.log('ready for input');
+            var deferred = when.defer();
+
+            if (this._private.inputQueue.length)
+                deferred.resolve(this._private.inputQueue.shift());
+            else
+                this._private.inputDeferred = deferred;
+
+            return deferred.promise;
         },
         initUi: function initUi() {
             this._private.ui.init();

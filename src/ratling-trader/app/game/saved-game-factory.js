@@ -1,4 +1,6 @@
 define(function () {
+    var Game = require('game/game');
+
     function SavedGameFactory(levelFactory, entityFactory) {
         this._private = {
             levelFactory: levelFactory,

@@ -75,7 +75,8 @@ define(function (require) {
             if (typeof command === 'function')
                 command();
             else {
-                game.processCommand(command);
+                this._private.uiToGameBridge.queueInput(command);
+                //game.processCommand(command);
             }
         }
     };
