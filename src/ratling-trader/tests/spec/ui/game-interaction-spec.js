@@ -8,17 +8,17 @@ define(function (require) {
         it('should move the player in response to the arrow keys', function (done) {
             var mockDisplay = new TestDisplay(drawCallback);
             var positions = [
-                {x: 5, y: 5, key: ROT.VK_LEFT},
-                {x: 4, y: 5, key: ROT.VK_RIGHT},
-                {x: 4, y: 4, key: ROT.VK_UP},
-                {x: 5, y: 4, key: ROT.VK_DOWN},
-                {x: 5, y: 5},
+                {x: 1, y: 1, key: ROT.VK_LEFT},
+                {x: 0, y: 1, key: ROT.VK_RIGHT},
+                {x: 0, y: 0, key: ROT.VK_UP},
+                {x: 1, y: 0, key: ROT.VK_DOWN},
+                {x: 1, y: 1},
             ];
 
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
-                var originalSavedGameFactory = uiroot.injector.resolve('savedGameFactory');
-                uiRoot.injector.register('savedGameFactory', getTestSavedGameFactory());
+                var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
+                gameRoot.injector.register('savedGameFactory', getTestSavedGameFactory(originalSavedGameFactory, getTestGameData()));
                 uiRoot.injector.register('display', new TestDisplay(drawCallback));
                 roots.gameRoot = gameRoot;
                 roots.uiRoot = uiRoot;
@@ -36,6 +36,42 @@ define(function (require) {
             });
 
             function drawCallback(x, y, character) {
+            }
+
+            function getTestGameData() {
+                var data = {
+                    currentLevel: 0,
+                    levels: [getLevel()]
+                };
+                return data;
+
+
+                function getLevel() {
+                    var level = {
+                        tiles: [
+                            [getTile(), getTile()],
+                            [getTile(), getTile([getPlayer()])]
+                        ]
+                    };
+                    level.size = {
+                        width: level.tiles.length,
+                        length: level.tiles[0].length
+                    };
+                    return level;
+
+                    function getPlayer() {
+                        return {
+                            type: 'player'
+                        };
+                    }
+
+                    function getTile(entities) {
+                        return {
+                            baseArchitecture: {type: 'dirtFloor'},
+                            entities: entities
+                        };
+                    }
+                }
             }
 
             function getTestSavedGameFactory(originalSavedGameFactory, testGameData) {
