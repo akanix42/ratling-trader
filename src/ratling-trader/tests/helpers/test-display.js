@@ -12,7 +12,8 @@ define(function () {
 
     TestDisplay.prototype = {
         draw: function draw() {
-            this._private.drawCallback.apply(this, arguments);
+            if (this._private.drawCallback)
+                this._private.drawCallback.apply(this, arguments);
         }
     };
 
