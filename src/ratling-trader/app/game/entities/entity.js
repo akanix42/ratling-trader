@@ -1,15 +1,14 @@
 define(function () {
 
 
-    function Entity(type, tile, mixinMapFactory) {
+    function Entity(data, mixinMapFactory) {
         this._private = {
-            type: type,
+            type: data.type,
             attributes: new Map(),
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
-
         };
-        this.tile = tile;
+        this.tile = data.tile;
     }
 
     Entity.prototype = {

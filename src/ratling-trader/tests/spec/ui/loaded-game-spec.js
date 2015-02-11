@@ -77,5 +77,69 @@ define(function (require) {
             }
 
         });
+        it('should restore the player\'s location', function (done) {
+            var playerEntity = {
+                type: 'player',
+
+            };
+            var tiles = [
+                [
+                    {
+                        baseArchitecture: 'dirtFloor',
+                        entities: [playerEntity]
+                    }
+                ],
+            ];
+            var currentLevel = {
+                size: {width: tiles.length, height: tiles[0].length},
+                tiles: tiles
+            };
+
+            var gameData = {
+                levels: [
+                    currentLevel
+                ],
+                currentLevel: 0,
+            };
+
+            iocLoader
+                .init(registerInjectionSubstitutions)
+                .then(function (ui) {
+                    return ui.screens.currentScreen.loadGame()
+                        .then(function () {
+                            return ui;
+                        });
+                })
+                .then(function (ui) {
+                    var position = ui.uiBridge._private.gameBridge._private.game.player.tile.position;
+                    position.x.should.equal(0);
+                    position.x.should.equal(1);
+                });
+
+            function registerInjectionSubstitutions(gameRoot, uiRoot) {
+                var SavedGameFactory = getSavedGameFactory(gameData);
+                gameRoot._private.injector.register('savedGameFactory', SavedGameFactory);
+                uiRoot._private.injector.register('display', new TestDisplay());
+            }
+
+            function getSavedGameFactory(gameData) {
+
+                function SavedGameFactory(levelFactory, entityFactory) {
+                    this._private = {
+                        gameData: gameData,
+                        levelFactory: levelFactory,
+                        entityFactory: entityFactory
+                    };
+                }
+
+                SavedGameFactory.prototype.create = function create(gameToUiBridge) {
+                    return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData);
+                };
+
+                return SavedGameFactory;
+            }
+
+        });
+
     });
 });

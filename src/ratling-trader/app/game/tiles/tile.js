@@ -23,7 +23,7 @@ define(function (require) {
 
             intentHandlers: intentHandlers
         };
-        this.entities.add(entityFactory.create(tileData.baseArchitecture, this));
+        this.entities.add(entityFactory.create({type:tileData.baseArchitecture, tile: this}));
     }
 
     Tile.prototype = {

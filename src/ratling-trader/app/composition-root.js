@@ -16,6 +16,10 @@ define(function (require) {
         }
     };
 
+    CompositionRoot.prototype.registerObject = function registerModule(name, object) {
+        return this.registerModule(null, {isSingleton: true, fn: object, name: name});
+    };
+
     CompositionRoot.prototype.registerModule = function registerModule(path, options) {
         var self = this;
         var defaultOptions = {name: null, fn: null, isSingleton: false};

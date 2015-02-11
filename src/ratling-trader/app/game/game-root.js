@@ -29,7 +29,9 @@ define(function (require) {
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),
                 self.registerModule('game/maps/random-map-generator'),
-                //self.registerModule(''),
+                self.registerObject('nullTile', function (tileFactory) {
+                    return tileFactory.nullTile;
+                }),
             ]);
         };
         return GameRoot;
