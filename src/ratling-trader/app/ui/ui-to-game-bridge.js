@@ -46,7 +46,7 @@ define(function () {
             this._private.gameBridge.startGame();
         },
         loadGame: function loadGame() {
-            this._private.gameBridge.restoreGame();
+            return this._private.gameBridge.restoreGame();
         }
 
     };

@@ -1,4 +1,6 @@
-define(function () {
+define(function (require) {
+    var when = require('when');
+
     function MainMenuScreen(ui, uiToGameBridge, playingScreenFactory) {
         this._private = {
             ui: ui,
@@ -9,8 +11,11 @@ define(function () {
 
     MainMenuScreen.prototype = {
         loadGame: function () {
-            this._private.uiToGameBridge.loadGame();
-            this._private.ui.screens.push(this._private.playingScreenFactory.create());
+            var self = this;
+            return when(self._private.uiToGameBridge.loadGame())
+                .then(function () {
+                    self._private.ui.screens.push(self._private.playingScreenFactory.create());
+                });
         },
         newGame: function () {
             this._private.uiToGameBridge.startGame();

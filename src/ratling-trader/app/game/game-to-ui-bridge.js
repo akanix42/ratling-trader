@@ -1,4 +1,5 @@
-define(function () {
+define(function (require) {
+    var when = require('when');
     function GameToUiBridge(gameFactory, savedGameFactory) {
         this._private = {
             gameFactory: gameFactory,
@@ -30,7 +31,11 @@ define(function () {
         },
 
         restoreGame: function restoreGame() {
+            var deferred = when.defer();
+
             this._private.game = this._private.savedGameFactory.create(this);
+            deferred.resolve();
+            return deferred.promise;
         }
     };
 
