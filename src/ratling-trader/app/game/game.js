@@ -1,12 +1,22 @@
 define(function (require) {
-    function Game(gameToUiBridge, levelFactory, entityFactory, tileFactory, gameData) {
-        this._private = {};
+    var PlayerInitializedEvent = require('game/events/player-initialized-event');
 
-        var level = this._private.level = gameData
+    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub) {
+        var self = this;
+        self._private = {
+            player: null
+        };
+
+        gameEventHub.subscribe(null, {
+            class: PlayerInitializedEvent, handler: function (player) {
+                self._private.player = player;
+                gameToUiBridge.readyForPlayerInput();
+            }
+        });
+        var level = self._private.level = gameData
             ? levelFactory.create(gameData.levels[gameData.currentLevel])
             : levelFactory.create();
-        this._private.player = entityFactory.create(gameData.player);
-        gameToUiBridge.readyForPlayerInput();
+        //this._private.player = entityFactory.create(gameData.player);
     }
 
     Game.prototype = {

@@ -8,6 +8,7 @@ define(function (require) {
 
     describe('ui - a loaded game', function () {
         it('should draw each tile', function (done) {
+           return;
             var nextTileX = 0;
             var nextTileY = 0;
             var currentLevel = {
@@ -124,16 +125,17 @@ define(function (require) {
 
             function getSavedGameFactory(gameData) {
 
-                function SavedGameFactory(levelFactory, entityFactory) {
+                function SavedGameFactory(levelFactory, entityFactory, gameEventHub) {
                     this._private = {
                         gameData: gameData,
                         levelFactory: levelFactory,
-                        entityFactory: entityFactory
+                        entityFactory: entityFactory,
+                        gameEventHub:gameEventHub
                     };
                 }
 
                 SavedGameFactory.prototype.create = function create(gameToUiBridge) {
-                    return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData);
+                    return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData, this._private.gameEventHub);
                 };
 
                 return SavedGameFactory;

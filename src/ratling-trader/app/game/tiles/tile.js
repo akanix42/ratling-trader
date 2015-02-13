@@ -1,18 +1,5 @@
 define(function (require) {
-
-    function TileEntities() {
-        this._private = {
-            entities: []
-        };
-    }
-
-    TileEntities.prototype.add = function add(entity) {
-        this._private.entities.push(entity);
-    };
-
-    TileEntities.prototype.all = function all() {
-        return this._private.entities.slice();
-    };
+    var TileEntities = require('game/tiles/tile-entities');
 
     function Tile(tileData, intentHandlers, entityFactory) {
         this._private = {
@@ -23,7 +10,7 @@ define(function (require) {
 
             intentHandlers: intentHandlers
         };
-        this.entities.add(entityFactory.create({type:tileData.baseArchitecture, tile: this}));
+        this.entities.add(entityFactory.create({type: tileData.baseArchitecture, tile: this}));
     }
 
     Tile.prototype = {

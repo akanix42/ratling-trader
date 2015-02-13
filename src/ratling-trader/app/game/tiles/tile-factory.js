@@ -1,12 +1,11 @@
 define(function (require) {
-    var NullTile = require('game/tiles/null-tile');
     var Tile = require('game/tiles/tile');
 
-    function TileFactory(intentHandlersFactory, entityFactory) {
+    function TileFactory(intentHandlersFactory, entityFactory, nullTile) {
         this._private = {
             entityFactory: entityFactory,
             intentHandlersFactory: intentHandlersFactory,
-            nullTile: new NullTile()
+            nullTile: nullTile
         };
     }
 

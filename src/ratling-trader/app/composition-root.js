@@ -16,7 +16,7 @@ define(function (require) {
         }
     };
 
-    CompositionRoot.prototype.registerObject = function registerModule(name, object) {
+    CompositionRoot.prototype.registerObject = function registerObject(name, object) {
         return this.registerModule(null, {isSingleton: true, fn: object, name: name});
     };
 
@@ -34,9 +34,10 @@ define(function (require) {
             });
 
 
-        function loadModule(fn) {
+        function loadModule() {
             var deferred = when.defer();
-            if (fn === undefined)
+            var fn = options.fn;
+            if (!fn)
                 require([path], function (fn) {
                     deferred.resolve(fn);
                 });

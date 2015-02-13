@@ -6,6 +6,8 @@ define(function (require) {
         var Logger = require('logger');
         //var Stopwatch = require('helpers/stopwatch');
 
+        var NullTile = require('game/tiles/null-tile');
+
         // Game
         var Game = require('game/game');
 
@@ -28,9 +30,14 @@ define(function (require) {
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),
+                self.registerModule('game/events/event-handlers-factory'),
                 self.registerModule('game/maps/random-map-generator'),
-                self.registerObject('nullTile', function (tileFactory) {
-                    return tileFactory.nullTile;
+
+                self.registerObject('nullTile', function () {
+                    return new NullTile();
+                }),
+                self.registerObject('gameEventHub', function (eventHandlersFactory) {
+                    return eventHandlersFactory.create();
                 }),
             ]);
         };

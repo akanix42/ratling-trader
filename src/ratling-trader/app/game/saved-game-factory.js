@@ -9,7 +9,7 @@ define(function () {
     }
 
     SavedGameFactory.prototype.create = function create(gameToUiBridge, gameData) {
-        return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData);
+        return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData, gameEventHub);
     };
 
     return SavedGameFactory;
