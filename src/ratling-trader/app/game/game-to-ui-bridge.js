@@ -1,11 +1,14 @@
 define(function (require) {
     var when = require('when');
-    function GameToUiBridge(gameFactory, savedGameFactory) {
+    var GameInitializedEvent = require('game/events/game-initialized-event');
+
+    function GameToUiBridge(gameFactory, savedGameFactory, gameEventHub) {
         this._private = {
             gameFactory: gameFactory,
             savedGameFactory: savedGameFactory,
             gameBridge: null,
-            game: null
+            game: null,
+            gameEventHub: gameEventHub
         };
     }
 
@@ -32,9 +35,14 @@ define(function (require) {
 
         restoreGame: function restoreGame() {
             var deferred = when.defer();
+            this._private.gameEventHub.subscribe(null, {
+                class: GameInitializedEvent,
+                handler: function () {
+                    deferred.resolve();
+                }
+            });
 
             this._private.game = this._private.savedGameFactory.create(this);
-            deferred.resolve();
             return deferred.promise;
         }
     };
