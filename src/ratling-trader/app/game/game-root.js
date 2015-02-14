@@ -32,6 +32,7 @@ define(function (require) {
                 self.registerModule('game/intents/intent-handlers-factory'),
                 self.registerModule('game/events/event-handlers-factory'),
                 self.registerModule('game/maps/random-map-generator'),
+                self.registerModule('game/loaders/mixin-modules-loader', {isSingleton: true}),
 
                 self.registerObject('nullTile', function () {
                     return new NullTile();
@@ -39,6 +40,7 @@ define(function (require) {
                 self.registerObject('gameEventHub', function (eventHandlersFactory) {
                     return eventHandlersFactory.create();
                 }),
+
             ]);
         };
         return GameRoot;

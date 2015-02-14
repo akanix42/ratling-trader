@@ -9,6 +9,9 @@ define(function () {
             mixins: mixinMapFactory.create(this),
         };
         this.tile = data.tile;
+        initMixins(data.mixins, this.mixins);
+
+
     }
 
     Entity.prototype = {
@@ -36,4 +39,9 @@ define(function () {
 
 
     return Entity;
+
+    function initMixins(mixins, mixinMap) {
+        for (var i = 0; i < mixins.length; i++)
+            mixinMap.add(mixins[i]);
+    }
 });
