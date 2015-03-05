@@ -20,6 +20,15 @@ define(function (require) {
         return this.registerModule(null, {isSingleton: true, fn: object, name: name});
     };
 
+    CompositionRoot.prototype.loadAsyncSingleton = function loadAsyncSingleton(name) {
+        var self = this;
+        var module = self.injector.resolve(name);
+        return when(module.promise)
+            .then(function (loadedModule) {
+                return self.registerObject(name, loadedModule);
+            });
+    };
+
     CompositionRoot.prototype.registerModule = function registerModule(path, options) {
         var self = this;
         var defaultOptions = {name: null, fn: null, isSingleton: false};
@@ -31,6 +40,8 @@ define(function (require) {
                     options.name = loadedModule.name;
 
                 self._private.injector.register(options.name, loadedModule, options.isSingleton);
+
+                return options.name;
             });
 
 

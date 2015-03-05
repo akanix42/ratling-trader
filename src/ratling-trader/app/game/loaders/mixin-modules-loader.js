@@ -1,16 +1,20 @@
 define(function (require) {
     var loadModules = require('helpers/module-loader'),
-        mixins = require('json!config/mixins.json');
+        mixins = require('json!config/mixins.json'),
+        when = require('when');
 
-    function LoadedMixins(injector){
-        var loader = loadModules(mixins);
+    function LoadedMixins(injector) {
+        var deferred = when.defer();
+        this.promise = deferred.promise;
 
-        injectModules(loader);
+        loadModules(mixins).then(function (loader) {
+            injectModules(loader);
 
-        return loader;
+            deferred.resolve(loader);
+        });
+
 
         function injectModules(loader) {
-            debugger;
             var modules = loader.getModules();
             var moduleKeys = Object.keys(modules);
             for (var i = 0; i < moduleKeys.length; i++) {

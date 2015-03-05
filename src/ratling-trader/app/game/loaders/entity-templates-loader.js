@@ -2,13 +2,13 @@ define(function (require) {
     var architectures = require('json!config/architectures.json'),
         items = require('json!config/items.json'),
         monsters = require('json!config/monsters.json'),
-        extend = require('lib/extend/extend');
+        extend = require('extend');
 
     return EntityTemplatesLoader;
 
-    function EntityTemplatesLoader(logger) {
+    function EntityTemplatesLoader() {
         var templates = {};
-
+        var logger = rat.logger;
         logger.group(EntityTemplatesLoader.name);
         logger.logInfo('loading entities');
 

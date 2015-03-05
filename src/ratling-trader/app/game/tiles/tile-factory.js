@@ -14,12 +14,7 @@ define(function (require) {
             return this._private.nullTile;
         },
 
-        create: function (level, position, baseArchitecture) {
-            var tileData = {
-                level: level,
-                position: position,
-                baseArchitecture: baseArchitecture
-            };
+        create: function (tileData) {
             return new Tile(tileData, this._private.intentHandlersFactory.create(), this._private.entityFactory);
         }
     };

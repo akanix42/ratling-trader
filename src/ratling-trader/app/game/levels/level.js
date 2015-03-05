@@ -1,11 +1,19 @@
 define(function () {
-    function Level(size, tileFactory) {
+    function Level(data, tileFactory) {
+        var size = {
+            width: data.tiles.length,
+            height: data.tiles[0].length
+        };
         var map = new Array(size.width);
         for (var x = 0; x < size.width; x++) {
             var column = new Array(size.height);
             map[x] = column;
-            for (var y = 0; y < size.height; y++)
-                column[y] = tileFactory.create(this, {x: x, y: y}, 'dirtFloor');
+            for (var y = 0; y < size.height; y++){
+                var tileData = data.tiles[x][y];
+                tileData.level = this;
+                tileData.position ={x: x, y: y};
+                column[y] = tileFactory.create(tileData);
+            }
         }
 
         this._private = {

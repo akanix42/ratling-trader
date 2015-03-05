@@ -2,7 +2,8 @@ define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
     function Tile(tileData, intentHandlers, entityFactory) {
-        this._private = {
+        var self = this;
+        self._private = {
             baseArchitecture: tileData.baseArchitecture,
             entities: new TileEntities(),
             level: tileData.level,
@@ -10,7 +11,18 @@ define(function (require) {
 
             intentHandlers: intentHandlers
         };
-        this.entities.add(entityFactory.create({type: tileData.baseArchitecture, tile: this}));
+        addEntities();
+
+        function addEntities() {
+            var _ = self._private;
+            _.entities.add(entityFactory.create({type: tileData.baseArchitecture, tile: self}));
+            if (!tileData.entities) return;
+            for (var i = 0; i < tileData.entities.length; i++) {
+                var entityData = tileData.entities[i];
+                entityData.tile = self;
+                _.entities.add(entityFactory.create(entityData));
+            }
+        }
     }
 
     Tile.prototype = {

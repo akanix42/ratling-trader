@@ -2,10 +2,9 @@ define(function () {
     var AbstractMixin = require('game/mixins/abstract-mixin');
     var PlayerInitializedEvent = require('game/events/player-initialized-event');
 
-    function PlayerMixin(game, gameEventHub) {
+    function PlayerMixin(gameEventHub) {
         AbstractMixin.apply(this);
 
-        this._private.game = game;
         this._private.gameEventHub = gameEventHub;
     }
 

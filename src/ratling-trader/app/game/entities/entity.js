@@ -41,6 +41,8 @@ define(function () {
     return Entity;
 
     function initMixins(mixins, mixinMap) {
+        if (!mixins)
+            return;
         for (var i = 0; i < mixins.length; i++)
             mixinMap.add(mixins[i]);
     }

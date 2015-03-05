@@ -33,6 +33,7 @@ define(function (require) {
                 self.registerModule('game/events/event-handlers-factory'),
                 self.registerModule('game/maps/random-map-generator'),
                 self.registerModule('game/loaders/mixin-modules-loader', {isSingleton: true}),
+                self.registerModule('game/loaders/entity-templates-loader', {isSingleton: true}),
 
                 self.registerObject('nullTile', function () {
                     return new NullTile();
@@ -41,7 +42,12 @@ define(function (require) {
                     return eventHandlersFactory.create();
                 }),
 
-            ]);
+            ]).then(function () {
+                return when.all([
+                    self.loadAsyncSingleton('loadedMixins'),
+                    //self.loadAsyncSingleton('entityTemplatesLoader'),
+                ]);
+            });
         };
         return GameRoot;
     }
