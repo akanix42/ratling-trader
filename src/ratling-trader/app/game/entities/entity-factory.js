@@ -19,7 +19,7 @@ define(function (require) {
     return EntityFactory;
 
     function normalizeData(data, template) {
-        return extend({}, data, template, this._private.defaultEntityData);
+        return extend({}, this._private.defaultEntityData, template, data);
     }
 
     function getDefaultEntityData(nullTile) {

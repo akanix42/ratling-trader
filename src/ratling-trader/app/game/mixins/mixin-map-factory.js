@@ -16,8 +16,8 @@ define(function () {
             return;
         }
         rat.logger.logInfo(value + ' mixin loaded.');
-        value.applyTo(this._private.entity);
-        this._private.map.set(value.constructor.name, value);
+        mixin.applyTo(this._private.entity);
+        this._private.map.set(mixin.constructor.name, mixin);
     };
 
 

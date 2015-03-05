@@ -87,8 +87,11 @@ define(function (require) {
                 [
                     {
                         baseArchitecture: 'dirtFloor',
+                    },
+                    {
+                        baseArchitecture: 'dirtFloor',
                         entities: [playerEntity]
-                    }
+                    },
                 ],
             ];
             var currentLevel = {
@@ -114,7 +117,8 @@ define(function (require) {
                 .then(function (ui) {
                     var position = ui.uiBridge._private.gameBridge._private.game.player.tile.position;
                     position.x.should.equal(0);
-                    position.x.should.equal(1);
+                    position.y.should.equal(1);
+                    done();
                 });
 
             function registerInjectionSubstitutions(gameRoot, uiRoot) {

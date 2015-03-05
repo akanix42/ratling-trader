@@ -13,24 +13,28 @@ define(function (require) {
             return restoreLevel();
         else
             return createNewLevel();
+
         function restoreLevel() {
             return new Level(levelData, self._private.tileFactory);
         }
+
+
+        function createNewLevel() {
+            var data = {size: {width: 20, height: 20}};
+            var size = data.size;
+            var map = new Array(size.width);
+            for (var x = 0; x < size.width; x++) {
+                var column = new Array(size.height);
+                map[x] = column;
+                for (var y = 0; y < size.height; y++)
+                    column[y] = {type: 'dirtFloor'};
+            }
+            data.tiles = map;
+            return new Level(data, self._private.tileFactory);
+
+        }
     };
 
-    function createNewLevel() {
-        var data = {size: {width: 20, height: 20}};
-        var map = new Array(size.width);
-        for (var x = 0; x < size.width; x++) {
-            var column = new Array(size.height);
-            map[x] = column;
-            for (var y = 0; y < size.height; y++)
-                column[y] = {type: 'dirtFloor'};
-        }
-        data.tiles = map;
-        return new Level(data, this._private.tileFactory);
-
-    }
 
     return LevelFactory;
 });

@@ -44,7 +44,7 @@ define(function (require) {
             //commandMap: getCommandMap()
 
         };
-        uiToGameBridge.startGame();
+        //uiToGameBridge.startGame();
     }
 
     PlayingScreen.prototype = {
