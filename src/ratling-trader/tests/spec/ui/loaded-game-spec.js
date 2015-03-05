@@ -4,6 +4,7 @@ define(function (require) {
     var when = require('when');
     var TestDisplay = require('tests/helpers/test-display');
     var Game = require('game/game');
+
     'use strict';
 
     describe('ui - a loaded game', function () {

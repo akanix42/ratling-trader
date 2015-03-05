@@ -18,8 +18,10 @@ define(function (require) {
                 });
         },
         newGame: function () {
-            this._private.uiToGameBridge.startGame();
-            this._private.ui.screens.push(this._private.playingScreenFactory.create());
+            return when(self._private.uiToGameBridge.startGame())
+                .then(function () {
+                    self._private.ui.screens.push(self._private.playingScreenFactory.create());
+                });
         },
         render: function render() {
 

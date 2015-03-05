@@ -7,7 +7,7 @@ define(function (require) {
     var iocLoader = require('ioc-loader');
 
     describe('moving from cell-to-cell', function () {
-        it('should move an entity from one cell to the next', function test() {
+        it('should move an entity from one cell to the next', function test(done) {
             var originalPosition = {x: 5, y: 5};
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
@@ -20,10 +20,11 @@ define(function (require) {
                 cellToCellMovement.execute(testEntity, moveCommand);
 
                 testEntity.tile.position.should.be.like({x: 4, y: 6});
+                done();
             });
         });
 
-        it('should not allow collidable entity to move onto another collidable entity', function test() {
+        it('should not allow collidable entity to move onto another collidable entity', function test(done) {
             var originalPosition = {x: 5, y: 5};
             var originalPosition = {x: 5, y: 5};
             var roots = {};
@@ -43,6 +44,7 @@ define(function (require) {
                 cellToCellMovement.execute(testEntity, moveCommand);
 
                 testEntity.tile.position.should.be.like(originalPosition);
+                done();
             });
         });
         //

@@ -2,6 +2,7 @@ define(function (require) {
     var when = require('when');
     var GameTestDataBuilder = require('tests/builders/game-test-data-builder');
     var iocLoader = require('ioc-loader');
+    var GameInitializedEvent = require('game/events/game-initialized-event');
 
 
     'use strict';
@@ -14,17 +15,28 @@ define(function (require) {
             }).then(function () {
                 var deferred = when.defer();
                 var gameToUiBridge = new MockGameToUiBridge(function receiveReadyForPlayerInputNotification() {
-                    deferred.resolve();
+                    //deferred.resolve();
+                });
+                var gameEventHub = roots.gameRoot.injector.resolve('gameEventHub');
+                gameEventHub.subscribe(null, {
+                    class: GameInitializedEvent,
+                    handler: function () {
+                        deferred.resolve(game);
+                    }
                 });
 
                 var game = new GameTestDataBuilder(roots.gameRoot.injector).withBridge(gameToUiBridge);
-                game.player.should.be.ok();
-                game.level.should.be.ok();
-                game.player.tile.level.should.equal(game.level);
-                when(deferred.promise)
-                    .then(done);
+                return deferred.promise;
+                //when(deferred.promise)
+                //    .then(done);
 
-            });
+            })
+                .then(function (game) {
+                    game.player.should.be.ok();
+                    game.level.should.be.ok();
+                    game.player.tile.level.should.equal(game.level);
+                    done();
+                });
 
         });
     });

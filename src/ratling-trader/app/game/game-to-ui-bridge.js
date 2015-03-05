@@ -26,7 +26,16 @@ define(function (require) {
         },
 
         startGame: function startGame() {
+            var deferred = when.defer();
+            this._private.gameEventHub.subscribe(null, {
+                class: GameInitializedEvent,
+                handler: function () {
+                    deferred.resolve();
+                }
+            });
+
             this._private.game = this._private.gameFactory.create(this);
+            return deferred.promise;
         },
 
         readyForPlayerInput: function readyForPlayerInput() {

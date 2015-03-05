@@ -9,12 +9,12 @@ define(function (require) {
 
     EntityTestDataBuilder.prototype.atPosition = function atPosition(position) {
         var level = this.levelTestDataBuilder.create();
-        var entity = new Entity('test', level.getTileAt(position.x, position.y), new MixinMapFactory());
+        var entity = new Entity({type: 'test', tile: level.getTileAt(position.x, position.y)}, new MixinMapFactory());
 
         return entity;
     };
     EntityTestDataBuilder.prototype.atTile = function atTile(tile) {
-        var entity = new Entity('test', tile, new MixinMapFactory());
+        var entity = new Entity({type: 'test', tile: tile}, new MixinMapFactory());
 
         return entity;
     };

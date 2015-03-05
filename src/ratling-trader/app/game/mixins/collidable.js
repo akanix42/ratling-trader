@@ -15,7 +15,10 @@ define(function (require) {
         if (intent.entity.characteristics.has('collidable'))
             return self;
     };
-
+    Collidable.prototype.applyTo = function applyTo(entity) {
+        entity.characteristics.add('collidable');
+        AbstractMixin.prototype.applyTo.call(this, entity);
+    };
     return Collidable;
 
 });
