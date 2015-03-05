@@ -3,12 +3,13 @@ define(function (require) {
 
     function LevelTestDataBuilder(injector) {
         this.tileFactory = injector.resolve('tileFactory');
+        this.levelFactory = injector.resolve('levelFactory');
     }
 
     LevelTestDataBuilder.prototype.create = function create() {
         var size = {width: 20, height: 20};
 
-        return new Level(size, this.tileFactory);
+        return this.levelFactory.create({size:size});
     };
 
     return LevelTestDataBuilder;

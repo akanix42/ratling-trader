@@ -9,7 +9,7 @@ define(function (require) {
 
     LevelFactory.prototype.create = function create(levelData) {
         var self = this;
-        if (levelData)
+        if (levelData && levelData.hasBeenCreated)
             return restoreLevel();
         else
             return createNewLevel();
@@ -20,7 +20,7 @@ define(function (require) {
 
 
         function createNewLevel() {
-            var data = {size: {width: 20, height: 20}};
+            var data = (levelData && levelData.size) ? levelData : {size: {width: 20, height: 20}};
             var size = data.size;
             var map = new Array(size.width);
             for (var x = 0; x < size.width; x++) {

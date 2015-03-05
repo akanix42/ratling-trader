@@ -96,7 +96,8 @@ define(function (require) {
             ];
             var currentLevel = {
                 size: {width: tiles.length, height: tiles[0].length},
-                tiles: tiles
+                tiles: tiles,
+                hasBeenCreated: true
             };
 
             var gameData = {
