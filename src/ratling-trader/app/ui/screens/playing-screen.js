@@ -1,5 +1,6 @@
 define(function (require) {
     //var PlayingScreen = require('ui/screens/playing-screen');
+    var GameCommands = require('enums/commands');
 
 
     function getCommandMap() {
@@ -41,7 +42,7 @@ define(function (require) {
             ui: ui,
             uiToGameBridge: uiToGameBridge,
             asciiTileFactory: asciiTileFactory,
-            //commandMap: getCommandMap()
+            commandMap: getCommandMap()
 
         };
         //uiToGameBridge.startGame();
@@ -70,7 +71,7 @@ define(function (require) {
             }
         },
         handleInput: function handleInput(inputType, inputData) {
-            var command = this._private.commandMap[inputType][inputData.keyCode];
+            var command = this._private.commandMap[inputType][inputData];
 
             if (typeof command === 'function')
                 command();

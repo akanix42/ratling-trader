@@ -32,14 +32,13 @@ define(function (require) {
                 roots.gameRoot = gameRoot;
                 roots.uiRoot = uiRoot;
             }).then(function () {
-                var collidable = new Collidable();
                 var testEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(originalPosition);
-                testEntity.mixins.add(collidable);
+                testEntity.mixins.add('collidable');
                 var moveCommand = new MoveCommand({x: -1, y: 1});
                 var cellToCellMovement = new CellToCellMovement();
 
                 var otherEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(testEntity.tile.getNeighbor(moveCommand.direction));
-                otherEntity.mixins.add(collidable);
+                otherEntity.mixins.add('collidable');
 
                 cellToCellMovement.execute(testEntity, moveCommand);
 

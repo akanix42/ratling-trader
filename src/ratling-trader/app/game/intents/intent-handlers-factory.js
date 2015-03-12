@@ -37,7 +37,8 @@ define(function (require) {
 
     IntentHandlers.prototype.remove = function remove(entity, intent) {
         var intents = this._private.intents;
-        var subscriptions = intents[intent.constructor.name];
+
+        var subscriptions = intents[intent.name];
         if (subscriptions === undefined)
             return;
 

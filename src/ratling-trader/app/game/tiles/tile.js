@@ -1,7 +1,7 @@
 define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
-    function Tile(tileData, intentHandlers, entityFactory) {
+    function Tile(tileData, intentHandlers, eventHandlers, entityFactory) {
         var self = this;
         self._private = {
             baseArchitecture: tileData.baseArchitecture,
@@ -9,7 +9,8 @@ define(function (require) {
             level: tileData.level,
             position: tileData.position,
 
-            intentHandlers: intentHandlers
+            intentHandlers: intentHandlers,
+            eventHandlers: eventHandlers
         };
         addEntities();
 
@@ -32,6 +33,9 @@ define(function (require) {
         get intentHandlers() {
             return this._private.intentHandlers;
         },
+        get eventHandlers() {
+            return this._private.eventHandlers;
+        },
         get level() {
             return this._private.level;
         },
@@ -39,7 +43,7 @@ define(function (require) {
             return this._private.position;
         },
         getNeighbor: function getNeighbor(direction) {
-            return this.level.getTileAt(this.position.x + direction.x, this.position.y + direction.y);
+            return this.level.getTileAt(this.position.x + (direction.x || 0), this.position.y + (direction.y || 0));
         },
 
     };

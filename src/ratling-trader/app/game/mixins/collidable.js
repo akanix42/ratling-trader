@@ -1,12 +1,14 @@
 define(function (require) {
     'use strict';
-    var IntentToMove = require('game/intents/intent-to-move'),
-        AbstractMixin = require('game/mixins/abstract-mixin');
+    var IntentToMove = require('game/intents/intent-to-move');
+    var AbstractMixin = require('game/mixins/abstract-mixin');
+    var EntityMovedEvent = require('game/events/entity-moved');
 
     function Collidable() {
         AbstractMixin.apply(this);
 
         this.addIntentHandler(IntentToMove, this.intentToMoveHandler);
+        this.addEntityEventHandler(EntityMovedEvent, this.onEntityMoved.bind(this));
     }
 
     Collidable.prototype = Object.create(AbstractMixin.prototype);
@@ -19,6 +21,15 @@ define(function (require) {
         entity.characteristics.add('collidable');
         AbstractMixin.prototype.applyTo.call(this, entity);
     };
+
+
+    Collidable.prototype.onEntityMoved = function onEntityMoved(handlingEntity, event) {
+        if (handlingEntity !== event.entity) return;
+
+        event.oldTile.intentHandlers.remove(handlingEntity, IntentToMove);
+        event.newTile.intentHandlers.add(handlingEntity, {class: IntentToMove, handler: onEntityMoved.bind(this)});
+    };
+
     return Collidable;
 
 });

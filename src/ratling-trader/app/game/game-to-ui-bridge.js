@@ -39,7 +39,8 @@ define(function (require) {
         },
 
         readyForPlayerInput: function readyForPlayerInput() {
-            this._private.uiBridge.readyForPlayerInput();
+            console.log('rfp');
+            return this._private.uiBridge.readyForPlayerInput();
         },
 
         restoreGame: function restoreGame() {

@@ -1,17 +1,17 @@
 define(function () {
 
 
-    function Entity(data, mixinMapFactory) {
+    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers) {
         this._private = {
             type: data.type,
             attributes: new Map(),
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
+            commandHandlers: commandHandlers,
+            eventHandlers: eventHandlers
         };
         this.tile = data.tile;
         initMixins(data.mixins, this.mixins);
-
-
     }
 
     Entity.prototype = {
@@ -20,6 +20,12 @@ define(function () {
         },
         get characteristics() {
             return this._private.characteristics;
+        },
+        get commandHandlers() {
+            return this._private.commandHandlers;
+        },
+        get eventHandlers() {
+            return this._private.eventHandlers;
         },
         get mixins() {
             return this._private.mixins;

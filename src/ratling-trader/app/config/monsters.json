@@ -3,7 +3,7 @@
     "name": "player",
     "type": "player",
     "mixins": [
-      "mobile",
+      "cell-to-cell-movement",
       "destructible",
       "player",
       "attacker",

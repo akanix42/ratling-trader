@@ -1,22 +1,28 @@
 define(function () {
     var when = require('when');
+    var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
 
-    function UiToGameBridge() {
+    function UiToGameBridge(eventHandlersFactory) {
         this._private = {
             gameBridge: null,
             inputDeferred: null,
-            inputQueue: []
+            inputQueue: [],
+            eventHandlers: eventHandlersFactory.create()
         };
         this._private.ui = null;
     }
 
     UiToGameBridge.prototype = {
+        get eventHandlers() {
+            return this._private.eventHandlers;
+        },
         get gameState() {
             return this._private.gameBridge.gameState;
         },
         set gameBridge(gameBridge) {
             this._private.gameBridge = gameBridge;
         },
+
         set ui(ui) {
             this._private.ui = ui;
         },
@@ -32,10 +38,14 @@ define(function () {
         readyForPlayerInput: function readyForPlayerInput() {
             var deferred = when.defer();
 
-            if (this._private.inputQueue.length)
+            if (this._private.inputQueue.length) {
+                debugger;
                 deferred.resolve(this._private.inputQueue.shift());
-            else
+            }
+            else {
                 this._private.inputDeferred = deferred;
+                this._private.eventHandlers.notify(new ReadyForPlayerInputEvent());
+            }
 
             return deferred.promise;
         },
