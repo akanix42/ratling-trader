@@ -8,6 +8,7 @@ define(function () {
 
     TileEntities.prototype.add = function add(entity) {
         this._private.entities.push(entity);
+        return true;
     };
 
     TileEntities.prototype.all = function all() {

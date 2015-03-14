@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
     var AbstractMixin = require('game/mixins/abstract-mixin');
     var PlayerInitializedEvent = require('game/events/player-initialized-event');
 

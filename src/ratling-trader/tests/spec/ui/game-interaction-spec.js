@@ -34,10 +34,8 @@ define(function (require) {
                         });
 
                         testPosition();
-                        
+
                         function testPosition() {
-
-
                             console.log('positionIndex: ' + positionIndex);
                             var expectedPosition = positions[[positionIndex++]];
                             var playerPosition = ui.uiBridge._private.gameBridge._private.game.player.tile.position;
@@ -49,7 +47,7 @@ define(function (require) {
                             if (positionIndex === positions.length)
                                 done();
                             else
-                                ui.screens.currentScreen.handleInput('keydown', expectedPosition.key);
+                                ui.screens.currentScreen.handleInput('keydown', {keyCode: expectedPosition.key});
                         }
                     });
 

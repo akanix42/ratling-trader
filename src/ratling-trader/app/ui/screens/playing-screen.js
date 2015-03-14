@@ -1,6 +1,7 @@
 define(function (require) {
     //var PlayingScreen = require('ui/screens/playing-screen');
     var GameCommands = require('enums/commands');
+    var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
 
 
     function getCommandMap() {
@@ -45,6 +46,11 @@ define(function (require) {
             commandMap: getCommandMap()
 
         };
+        uiToGameBridge.eventHandlers.subscribe(null, {
+            class: ReadyForPlayerInputEvent,
+            handler: this.render.bind(this)
+        });
+
         //uiToGameBridge.startGame();
     }
 
@@ -71,7 +77,8 @@ define(function (require) {
             }
         },
         handleInput: function handleInput(inputType, inputData) {
-            var command = this._private.commandMap[inputType][inputData];
+            var command = this._private.commandMap[inputType][inputData.keyCode];
+            if (!command) return;
 
             if (typeof command === 'function')
                 command();

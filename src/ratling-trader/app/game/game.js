@@ -31,7 +31,7 @@ define(function (require) {
         },
         handleInput: function handleInput(input) {
             var command = gameActions[input];
-            console.log('gh');
+            if (!command) return;
 
             when(this._private.player.commandHandlers.notify(command))
                 .then(this._private.gameToUiBridge.readyForPlayerInput.bind(this._private.gameToUiBridge))

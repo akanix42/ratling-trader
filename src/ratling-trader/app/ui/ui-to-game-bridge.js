@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
     var when = require('when');
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
 

@@ -8,6 +8,7 @@ define([
     'spec/ui/new-game-spec.js',
     'spec/ui/loaded-game-spec',
     'spec/ui/game-interaction-spec',
+    'promise!spec/models/tile-spec',
 ], function () {
     'use strict';
 

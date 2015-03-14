@@ -15,6 +15,8 @@ define(function (require) {
     CellToCellMovement.prototype.execute = function execute(entity, command) {
         var oldTile = entity.tile;
         var newTile = entity.tile.getNeighbor(command.direction);
+        if (newTile.name === "null") return newTile;
+
         var objections = newTile.intentHandlers.notify(new IntentToMove(entity, newTile));
         if (objections.length)
             return false;

@@ -7,6 +7,23 @@ define(function () {
             mainMenuScreenFactory: mainMenuScreenFactory,
         };
         uiToGameBridge.ui = this;
+        bindInputEvents();
+
+        function bindInputEvents() {
+            bindInputEvent('keydown');
+            bindInputEvent('keyup');
+            bindInputEvent('keypress');
+
+            function bindInputEvent(event) {
+                window.addEventListener(event, function (e) {
+                    if (e.keyCode === ROT.VK_F5)
+                        return;
+                    e.preventDefault();
+                    screenStack.currentScreen.handleInput(event, e);
+                });
+            }
+        }
+
     }
 
     Ui.prototype = {

@@ -26,7 +26,6 @@ define(function (require) {
 
         it('should not allow collidable entity to move onto another collidable entity', function test(done) {
             var originalPosition = {x: 5, y: 5};
-            var originalPosition = {x: 5, y: 5};
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
                 roots.gameRoot = gameRoot;
@@ -39,6 +38,24 @@ define(function (require) {
 
                 var otherEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(testEntity.tile.getNeighbor(moveCommand.direction));
                 otherEntity.mixins.add('collidable');
+
+                cellToCellMovement.execute(testEntity, moveCommand);
+
+                testEntity.tile.position.should.be.like(originalPosition);
+                done();
+            });
+        });
+
+        it('should not allow an entity to move onto a NullTile', function test(done) {
+            var originalPosition = {x: 0, y: 0};
+            var roots = {};
+            iocLoader.init(function (gameRoot, uiRoot) {
+                roots.gameRoot = gameRoot;
+                roots.uiRoot = uiRoot;
+            }).then(function () {
+                var testEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(originalPosition);
+                var moveCommand = new MoveCommand({x: -1, y: 1});
+                var cellToCellMovement = new CellToCellMovement();
 
                 cellToCellMovement.execute(testEntity, moveCommand);
 

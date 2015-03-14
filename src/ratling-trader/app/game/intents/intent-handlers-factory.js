@@ -56,5 +56,6 @@ define(function (require) {
     IntentHandlersFactory.prototype.create = function create() {
         return new IntentHandlers();
     };
+
     return IntentHandlersFactory;
 });

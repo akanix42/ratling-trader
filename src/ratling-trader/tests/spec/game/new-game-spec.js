@@ -14,9 +14,7 @@ define(function (require) {
                 roots.uiRoot = uiRoot;
             }).then(function () {
                 var deferred = when.defer();
-                var gameToUiBridge = new MockGameToUiBridge(function receiveReadyForPlayerInputNotification() {
-                    //deferred.resolve();
-                });
+                var gameToUiBridge = new MockGameToUiBridge();
                 var gameEventHub = roots.gameRoot.injector.resolve('gameEventHub');
                 gameEventHub.subscribe(null, {
                     class: GameInitializedEvent,
@@ -25,7 +23,7 @@ define(function (require) {
                     }
                 });
 
-                var game = new GameTestDataBuilder(roots.gameRoot.injector).withBridge(gameToUiBridge);
+                var game = new GameTestDataBuilder(roots.gameRoot.injector).create();
                 return deferred.promise;
                 //when(deferred.promise)
                 //    .then(done);

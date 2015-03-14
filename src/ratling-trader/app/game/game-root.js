@@ -21,7 +21,7 @@ define(function (require) {
             var self = this;
             rat.logger = self._private.injector.inject(Logger);
             return when.all([
-                self.registerModule('game/game-to-ui-bridge'),
+                self.registerModule('game/game-to-ui-bridge', {isSingleton: true}),
                 self.registerModule('game/game-factory'),
                 self.registerModule('game/saved-game-factory'),
                 self.registerModule('game/tiles/tile'),
@@ -34,11 +34,13 @@ define(function (require) {
                 self.registerModule('game/events/event-handlers-factory'),
                 self.registerModule('game/maps/random-map-generator'),
                 self.registerModule('game/loaders/mixin-modules-loader', {isSingleton: true}),
+                self.registerModule('game/intents/null-intent-handlers-factory', {isSingleton: true}),
                 self.registerModule('game/loaders/entity-templates-loader', {isSingleton: true}),
 
                 self.registerObject('nullTile', function () {
-                    return new NullTile();
+                    return self._private.injector.inject(NullTile);
                 }),
+
                 self.registerObject('gameEventHub', function (eventHandlersFactory) {
                     return eventHandlersFactory.create();
                 }),
