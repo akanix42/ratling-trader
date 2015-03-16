@@ -12,7 +12,7 @@ define(function (require) {
         var objections = [];
         for (var i = 0; i < subscriptions.length; i++) {
             var subscription = subscriptions[i];
-            var objection = subscription.handler(subscription.entity, intent);
+            var objection = subscription.handler(intent, subscription.entity);
             if (objection !== undefined)
                 objections.push(objection);
         }

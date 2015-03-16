@@ -22,7 +22,7 @@ define(function (require) {
             return tiles;
 
             function updateMapTile(x, y, type) {
-                tiles[x][y] = tileFactory.create(level, {position: {x: x, y: y}}, getBaseArchitecture(type));
+                tiles[x][y] = tileFactory.create({level: level, position: {x: x, y: y}, baseArchitecture: getBaseArchitecture(type)});
 
                 function getBaseArchitecture(type) {
                     if (type === 1)

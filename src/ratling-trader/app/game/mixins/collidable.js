@@ -13,21 +13,21 @@ define(function (require) {
 
     Collidable.prototype = Object.create(AbstractMixin.prototype);
 
-    Collidable.prototype.intentToMoveHandler = function intentToMoveHandler(handlingEntity, intent) {
+    Collidable.prototype.intentToMoveHandler = function intentToMoveHandler(intent) {
         if (intent.entity.characteristics.has('collidable'))
             return self;
     };
+
     Collidable.prototype.applyTo = function applyTo(entity) {
         entity.characteristics.add('collidable');
         AbstractMixin.prototype.applyTo.call(this, entity);
     };
 
-
-    Collidable.prototype.onEntityMoved = function onEntityMoved(handlingEntity, event) {
+    Collidable.prototype.onEntityMoved = function onEntityMoved(event, handlingEntity) {
         if (handlingEntity !== event.entity) return;
 
         event.oldTile.intentHandlers.remove(handlingEntity, IntentToMove);
-        event.newTile.intentHandlers.add(handlingEntity, {class: IntentToMove, handler: onEntityMoved.bind(this)});
+        event.newTile.intentHandlers.add(handlingEntity, {class: IntentToMove, handler: Collidable.prototype.intentToMoveHandler.bind(this)});
     };
 
     return Collidable;

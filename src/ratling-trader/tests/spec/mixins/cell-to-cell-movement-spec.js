@@ -17,9 +17,12 @@ define(function (require) {
                 var testEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(originalPosition);
                 var cellToCellMovement = new CellToCellMovement();
                 var moveCommand = new MoveCommand({x: -1, y: 1});
-                cellToCellMovement.execute(testEntity, moveCommand);
+                var originalTile = testEntity.tile;
+                originalTile.entities.all().should.include(testEntity, "because the entity has not yet moved from this tile");
 
-                testEntity.tile.position.should.be.like({x: 4, y: 6});
+                cellToCellMovement.execute(moveCommand, testEntity);
+                testEntity.tile.position.should.be.like({x: 4, y: 6}, "because this is the new position");
+                originalTile.entities.all().should.not.include(testEntity, "because the entity has moved to another tile");
                 done();
             });
         });
@@ -39,7 +42,7 @@ define(function (require) {
                 var otherEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(testEntity.tile.getNeighbor(moveCommand.direction));
                 otherEntity.mixins.add('collidable');
 
-                cellToCellMovement.execute(testEntity, moveCommand);
+                cellToCellMovement.execute(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
                 done();
@@ -57,7 +60,7 @@ define(function (require) {
                 var moveCommand = new MoveCommand({x: -1, y: 1});
                 var cellToCellMovement = new CellToCellMovement();
 
-                cellToCellMovement.execute(testEntity, moveCommand);
+                cellToCellMovement.execute(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
                 done();

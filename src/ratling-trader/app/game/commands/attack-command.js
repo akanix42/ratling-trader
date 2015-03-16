@@ -1,10 +1,7 @@
-define(function (require) {
-    var forceNew = require('force-new');
+define(function () {
+    return AttackCommand;
 
-    return forceNew.whenCalled(attackCommand);
-
-    function attackCommand(attacker, target) {
-        this.attacker = attacker,
-            this.target = target;
+    function AttackCommand(target) {
+        this.target = target;
     }
 });

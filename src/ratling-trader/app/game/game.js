@@ -45,7 +45,7 @@ define(function (require) {
 
     function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
         gameEventHub.subscribe(null, {
-            class: PlayerInitializedEvent, handler: function (sourceEntity, event) {
+            class: PlayerInitializedEvent, handler: function (event) {
                 game._private.player = event.player;
                 gameToUiBridge.readyForPlayerInput().then(game.handleInput.bind(game));
                 deferredsMap.get(PlayerInitializedEvent.name).resolve();

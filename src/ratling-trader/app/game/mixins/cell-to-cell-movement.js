@@ -12,7 +12,7 @@ define(function (require) {
 
     CellToCellMovement.prototype = Object.create(AbstractMixin.prototype);
 
-    CellToCellMovement.prototype.execute = function execute(entity, command) {
+    CellToCellMovement.prototype.execute = function execute(command, entity) {
         var oldTile = entity.tile;
         var newTile = entity.tile.getNeighbor(command.direction);
         if (newTile.name === "null") return newTile;
@@ -21,9 +21,6 @@ define(function (require) {
         if (objections.length)
             return false;
         entity.tile = newTile;
-        var event = new EntityMovedEvent(entity, oldTile, newTile);
-        entity.eventHandlers.notify(event);
-        newTile.eventHandlers.notify(event);
     };
 
     return CellToCellMovement;

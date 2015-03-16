@@ -11,7 +11,7 @@ define(function (require) {
 
         for (var i = 0; i < subscriptions.length; i++) {
             var subscription = subscriptions[i];
-            subscription.handler(subscription.entity, event);
+            subscription.handler(event, subscription.entity);
         }
     };
 

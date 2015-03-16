@@ -1,18 +1,19 @@
 define(function (require) {
     var Level = require('game/levels/level');
 
-    function LevelFactory(tileFactory) {
+    function LevelFactory(tileFactory, entityFactory) {
         this._private = {
-            tileFactory: tileFactory
+            tileFactory: tileFactory,
+            entityFactory: entityFactory,
         };
     }
 
     LevelFactory.prototype.create = function create(levelData) {
         var self = this;
         if (levelData && levelData.hasBeenCreated)
-            return restoreLevel();
+            return restoreLevel.call(this);
         else
-            return createNewLevel();
+            return createNewLevel.call(this);
 
         function restoreLevel() {
             return new Level(levelData, self._private.tileFactory);
@@ -23,15 +24,35 @@ define(function (require) {
             var data = (levelData && levelData.size) ? levelData : {size: {width: 20, height: 20}};
             var size = data.size;
             var map = new Array(size.width);
+            var allTiles = [];
             for (var x = 0; x < size.width; x++) {
                 var column = new Array(size.height);
                 map[x] = column;
-                for (var y = 0; y < size.height; y++)
-                    column[y] = {type: 'dirtFloor'};
+                for (var y = 0; y < size.height; y++) {
+                    column[y] = {baseArchitecture: 'dirtFloor', entities: []};
+                    allTiles.push(column[y]);
+                }
             }
+            data.allTiles = allTiles;
             data.tiles = map;
-            return new Level(data, self._private.tileFactory);
+            settleLevel.call(this, data);
 
+            return new Level(data, self._private.tileFactory);
+        }
+
+        function settleLevel(level) {
+            var monsterDensity = 0.5;
+            var tiles = level.allTiles.slice();
+            var numberOfMonstersToCreate = monsterDensity * tiles.length;
+            for (var i = 0; i < numberOfMonstersToCreate; i++) {
+                var nextTileIndex = ROT.RNG.getUniformInt(0, tiles.length - 1);
+                var tile = tiles.splice(nextTileIndex, 1)[0];
+                tile.entities.push(getMonster.call(this));
+            }
+        }
+
+        function getMonster() {
+            return this._private.entityFactory.create({type: 'zombie'});
         }
     };
 

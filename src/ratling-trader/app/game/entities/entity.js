@@ -1,4 +1,5 @@
-define(function () {
+define(function (require) {
+    var EntityMovedEvent = require('game/events/entity-moved');
 
 
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers) {
@@ -33,9 +34,18 @@ define(function () {
         get tile() {
             return this._private.tile;
         },
-        set tile(tile) {
-            tile.entities.add(this);
-            this._private.tile = tile;
+        set tile(newTile) {
+            var oldTile = this.tile;
+            newTile.entities.add(this);
+
+            if (this.tile)
+                this.tile.entities.remove(this);
+
+            this._private.tile = newTile;
+
+            var event = new EntityMovedEvent(this, oldTile, newTile);
+            this.eventHandlers.notify(event);
+            newTile.eventHandlers.notify(event);
         },
         get type() {
             return this._private.type;
