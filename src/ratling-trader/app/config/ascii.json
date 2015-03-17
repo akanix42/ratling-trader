@@ -46,6 +46,6 @@
   {
     "name": "zombie",
     "character": "z",
-    "color": "brown"
+    "color": "rgb(127,127,0)"
   }
 ]
