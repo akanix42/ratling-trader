@@ -23,12 +23,14 @@ define(function (require) {
                 var attackerMixin = new Attacker();
                 var attackCommand = new AttackCommand(defender);
                 attacker.mixins.add('attacker');
+
+                var start = new Date();
                 attackerMixin.execute(attacker, attackCommand);
 
                 function attackIntentHandler(intent, handlingEntity) {
                     intent.attacker.should.equal(attacker);
                     intent.target.should.equal(defender);
-                    done();
+                    done(start);
                 }
             });
         });
@@ -47,13 +49,16 @@ define(function (require) {
                 var attackerMixin = new Attacker();
                 var attackCommand = new AttackCommand(defender);
                 attacker.mixins.add('attacker');
+
+                var start = new Date();
+
                 attackerMixin.execute(attacker, attackCommand);
 
                 function attackEventHandler(event, handlingEntity) {
                     event.attacker.should.equal(attacker);
                     event.target.should.equal(defender);
                     event.attack.should.be.ok();
-                    done();
+                    done(start);
                 }
             });
         });

@@ -3,10 +3,9 @@ define(function (require) {
     var EntityTestDataBuilder = require('tests/builders/entity-test-data-builder');
     var CellToCellMovement = require('game/mixins/cell-to-cell-movement');
     var MoveCommand = require('game/commands/move-command');
-    var Collidable = require('game/mixins/collidable');
     var iocLoader = require('ioc-loader');
 
-    describe('moving from cell-to-cell', function () {
+    describe('mixins - cell-to-cell movement', function () {
         it('should move an entity from one cell to the next', function test(done) {
             var originalPosition = {x: 5, y: 5};
             var roots = {};
@@ -18,12 +17,14 @@ define(function (require) {
                 var cellToCellMovement = new CellToCellMovement();
                 var moveCommand = new MoveCommand({x: -1, y: 1});
                 var originalTile = testEntity.tile;
+                var start = new Date();
+
                 originalTile.entities.all().should.include(testEntity, "because the entity has not yet moved from this tile");
 
                 cellToCellMovement.execute(moveCommand, testEntity);
                 testEntity.tile.position.should.be.like({x: 4, y: 6}, "because this is the new position");
                 originalTile.entities.all().should.not.include(testEntity, "because the entity has moved to another tile");
-                done();
+                done(start);
             });
         });
 
@@ -42,10 +43,12 @@ define(function (require) {
                 var otherEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(testEntity.tile.getNeighbor(moveCommand.direction));
                 otherEntity.mixins.add('collidable');
 
+                var start = new Date();
+
                 cellToCellMovement.execute(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
-                done();
+                done(start);
             });
         });
 
@@ -59,11 +62,12 @@ define(function (require) {
                 var testEntity = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(originalPosition);
                 var moveCommand = new MoveCommand({x: -1, y: 1});
                 var cellToCellMovement = new CellToCellMovement();
+                var start = new Date();
 
                 cellToCellMovement.execute(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
-                done();
+                done(start);
             });
         });
         //

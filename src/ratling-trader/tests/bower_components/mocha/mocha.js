@@ -4441,7 +4441,14 @@ Runnable.prototype.run = function(fn){
   }
 
   // finished
-  function done(err) {
+  function done(err, adjustedStart) {
+    if (err && err instanceof Date)
+    {
+      adjustedStart = err;
+      err=undefined;
+    }
+    if (adjustedStart)
+      start = adjustedStart;
     var ms = self.timeout();
     if (self.timedOut) return;
     if (finished) return multiple(err || self._trace);
@@ -4460,8 +4467,10 @@ Runnable.prototype.run = function(fn){
     this.resetTimeout();
 
     try {
-      this.fn.call(ctx, function(err){
-        if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
+      this.fn.call(ctx, function (err, adjustedStart) {
+        if (err instanceof Error || toString.call(err) === "[object Error]") return done(err, adjustedStart);
+        if (err instanceof Date)
+          return done(err);
         if (null != err) {
           if (Object.prototype.toString.call(err) === '[object Object]') {
             return done(new Error('done() invoked with non-Error: ' + JSON.stringify(err)));
