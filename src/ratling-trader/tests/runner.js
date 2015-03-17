@@ -11,6 +11,8 @@ define([
             'spec/mixins/cell-to-cell-movement-spec.js',
         ],
         models: [
+            'spec/models/entity-attribute-spec',
+            'spec/models/entity-spec',
             'promise!spec/models/tile-spec',
         ],
         maps: [

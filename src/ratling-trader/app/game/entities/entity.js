@@ -2,17 +2,31 @@ define(function (require) {
     var EntityMovedEvent = require('game/events/entity-moved');
 
 
-    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers) {
+    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory) {
         this._private = {
             type: data.type,
             attributes: new Map(),
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
             commandHandlers: commandHandlers,
-            eventHandlers: eventHandlers
+            eventHandlers: eventHandlers,
+            entityAttributeFactory: entityAttributeFactory
         };
         this.tile = data.tile;
+        initAttributes(this, data);
         initMixins(data.mixins, this.mixins);
+
+
+    }
+
+    function initAttributes(entity, data) {
+        if (!data.attributes)
+            return;
+
+        for (var i = 0; i < data.attributes.length; i++) {
+            var attribute = data.attributes[i];
+            entity.attributes.set(attribute.name, entity._private.entityAttributeFactory.create(attribute));
+        }
     }
 
     Entity.prototype = {
