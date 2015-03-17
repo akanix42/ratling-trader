@@ -6,9 +6,12 @@ define(function (require) {
         var self = this;
         this.fixDependencyCasing = allUpperCase;
 
-        function resolve(name, dependencyAbove, dependencyTree, registeredModules) {
+        function resolve(name, dependencyAbove, dependencyTree, registeredModules, substitutions) {
             var originalName = name;
             name = self.fixDependencyCasing(name);
+            if (substitutions !== undefined && name in substitutions)
+                return substitutions[name];
+
             if (!(name in self.dependencies)) {
                 //debugger;
                 var message = originalName + ' not registered';
@@ -24,7 +27,7 @@ define(function (require) {
         }
 
         function inject(module, substitutions) {
-            return new Initializer(self, '', module, false).initialize({}, registerSubstitutions(substitutions));
+            return new Initializer(self, '', module, false).initialize({}, self.dependencies, registerSubstitutions(substitutions));
         }
 
         function register(registeredModules, name, item, isSingleton) {
@@ -34,25 +37,25 @@ define(function (require) {
             };
         }
 
-        function registerSubstitutions(substitutions) {
-            var registeredModules = self.dependencies;
-            if (substitutions !== undefined && substitutions.length) {
-                registeredModules = extend({}, self.dependencies);
-                var keys = Object.keys(substitutions);
-                for (var i = 0; i < keys.length; i++)
-                    register(registeredModules, keys[i], substitutions[keys[i]]);
-            }
-            return registeredModules;
+        function registerSubstitutions(subs) {
+            var substitutions = {};
+            if (subs === undefined)
+                return {};
+
+            var keys = Object.keys(subs);
+            for (var i = 0; i < keys.length; i++)
+                substitutions[self.fixDependencyCasing(keys[i])] = subs[keys[i]];
+            return substitutions;
         }
 
         var injector = {
 
             dependencies: {},
 
-            getDependencies: function (name, dependencies, dependencyTree, registeredModules) {
+            getDependencies: function (name, dependencies, dependencyTree, registeredModules, substitutions) {
                 return dependencies.length === 1 && dependencies[0] === '' ? []
                     : dependencies.map(function (value) {
-                        return resolve(value, name, dependencyTree, registeredModules);
+                        return resolve(value, name, dependencyTree, registeredModules, substitutions);
                     }
                 );
             },
@@ -64,7 +67,7 @@ define(function (require) {
             },
 
             resolve: function (name, substitutions) {
-                return resolve(name, null, {}, registerSubstitutions(substitutions));
+                return resolve(name, null, {}, self.dependencies, registerSubstitutions(substitutions));
 
             }
 
@@ -104,8 +107,8 @@ define(function (require) {
                 return dependency.replace(/\s+/g, '');
             });
 
-            self.initialize = function (dependencyTree, registeredModules) {
-                var initializedItem = construct(item, injector.getDependencies(name, dependencies, dependencyTree, registeredModules));
+            self.initialize = function (dependencyTree, registeredModules, substitutions) {
+                var initializedItem = construct(item, injector.getDependencies(name, dependencies, dependencyTree, registeredModules, substitutions));
                 if (isSingleton) {
                     item = initializedItem;
                     createObjectInitializationSteps();
