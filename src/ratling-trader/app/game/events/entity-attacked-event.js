@@ -1,7 +1,7 @@
 define(function (require) {
-    return EntityMovedEvent;
+    return EntityAttackedEvent;
 
-    function EntityMovedEvent(attacker, target, attack) {
+    function EntityAttackedEvent(attacker, target, attack) {
         this.attacker = attacker;
         this.target = target;
         this.attack = attack;

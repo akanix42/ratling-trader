@@ -8,10 +8,18 @@ define(function (require) {
         this.levelTestDataBuilder = new LevelTestDataBuilder(injector);
     }
 
+    EntityTestDataBuilder.prototype.create = function create() {
+        return this.atPosition({x: 0, y: 0});
+    };
+
     EntityTestDataBuilder.prototype.atPosition = function atPosition(position) {
         var level = this.levelTestDataBuilder.create();
         var entityFactory = this.injector.resolve('entityFactory');
-        var entity = entityFactory.create({type: 'test', tile: level.getTileAt(position.x, position.y)});
+        var entity = entityFactory.create({
+            type: 'test',
+            attributes: [{name: 'health', base: 1}],
+            tile: level.getTileAt(position.x, position.y)
+        });
 
         return entity;
     };

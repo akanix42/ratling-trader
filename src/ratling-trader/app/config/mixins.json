@@ -1,7 +1,9 @@
 {
   "abstract-mixin": "app\\game\\mixins\\abstract-mixin.js",
+  "attacker": "app\\game\\mixins\\attacker.js",
   "cell-to-cell-movement": "app\\game\\mixins\\cell-to-cell-movement.js",
   "collidable": "app\\game\\mixins\\collidable.js",
+  "destructible": "app\\game\\mixins\\destructible.js",
   "mixin-map-factory": "app\\game\\mixins\\mixin-map-factory.js",
   "player": "app\\game\\mixins\\player.js"
 }
