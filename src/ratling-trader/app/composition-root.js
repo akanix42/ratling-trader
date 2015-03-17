@@ -39,10 +39,24 @@ define(function (require) {
                 if (!options.name)
                     options.name = loadedModule.name;
 
-                self._private.injector.register(options.name, loadedModule, options.isSingleton);
+                if (!options.factoryOnly)
+                    self._private.injector.register(options.name, loadedModule, options.isSingleton);
 
+                if (options.factory) {
+                    if (options.factory === true)
+                        options.factory = defaultFactory(loadedModule);
+                    self._private.injector.register(options.name + 'Factory', {create: options.factory.bind({loadedModule: loadedModule})}, options.isSingleton);
+                }
                 return options.name;
             });
+
+        function defaultFactory(loadedModule) {
+            function create() {
+                return self._private.injector.inject(loadedModule);
+            }
+
+            return create;
+        }
 
 
         function loadModule() {
@@ -58,6 +72,7 @@ define(function (require) {
         }
 
     };
+
 
     return CompositionRoot;
 });
