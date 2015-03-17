@@ -52,7 +52,6 @@ define(function (require) {
                 var attribute = new EntityAttribute({base: 1, modifiers: [{name: 'a', value: 4}]});
 
                 attribute.current.should.equal(5);
-                attribute.bonus.should.equal(6);
             });
         });
     });
