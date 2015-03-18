@@ -47,5 +47,10 @@
     "name": "zombie",
     "character": "z",
     "color": "rgb(127,127,0)"
+  },
+  {
+    "name": "zombie-corpse",
+    "character": "%",
+    "color": "rgb(127,127,0)"
   }
 ]

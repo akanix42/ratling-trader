@@ -63,6 +63,10 @@ define(function (require) {
         },
         get type() {
             return this._private.type;
+        },
+        destroy: function destroy(){
+            if (this.tile)
+                this.tile.entities.remove(this);
         }
 
     };

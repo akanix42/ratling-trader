@@ -50,6 +50,7 @@
   {
     "name": "zombie",
     "type": "monster",
+    "corpse": "zombie-corpse",
     "states": {
       "default": {
         "behaviors": [
@@ -72,6 +73,16 @@
     ],
     "attributes": {
       "strength": 1,
+      "health": 10
+    }
+  },
+  {
+    "name": "zombie-corpse",
+    "type": "monster",
+    "mixins": [
+      "destructible"
+    ],
+    "attributes": {
       "health": 10
     }
   }
