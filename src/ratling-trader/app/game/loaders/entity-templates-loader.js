@@ -10,13 +10,13 @@ define(function (require) {
         var templates = {};
         var logger = rat.logger;
         logger.group(EntityTemplatesLoader.name);
-        logger.logInfo('loading entities');
+        logger.info('loading entities');
 
         loadArchitectures();
         loadCreatures();
         loadItems();
 
-        logger.logInfo('loaded entities');
+        logger.info('loaded entities');
         logger.groupEnd();
 
         return {
@@ -33,7 +33,8 @@ define(function (require) {
         function addArchitecture(template) {
             var defaultData = {
                 type: 'architecture',
-                isWalkable: false
+                isWalkable: false,
+                space: 'floor'
             };
 
             addEntityTemplate(extend({}, defaultData, template));
@@ -43,7 +44,8 @@ define(function (require) {
             var defaultData = {
                 "health": {
                     "base": 10
-                }
+                },
+                space: 'air'
             };
 
             templates[template.name] = extend({}, defaultData, template);
@@ -56,7 +58,8 @@ define(function (require) {
 
         function loadItems() {
             var defaultData = {
-                type: 'item'
+                type: 'item',
+                space: 'floor'
             };
             for (var i = 0; i < items.length; i++)
                 addEntityTemplate(extend({}, defaultData, items[i]));

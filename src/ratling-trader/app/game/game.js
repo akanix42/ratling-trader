@@ -4,7 +4,7 @@ define(function (require) {
     var when = require('when');
     var GameCommands = require('enums/commands');
     var MoveCommand = require('game/commands/move-command');
-    var gameActions = getActions();
+    //var gameActions = getActions();
 
     function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub) {
         var self = this;
@@ -30,7 +30,7 @@ define(function (require) {
             return this._private.player;
         },
         handleInput: function handleInput(input) {
-            var command = gameActions[input];
+            var command = input;//gameActions[input];
             if (!command) return;
 
             when(this._private.player.commandHandlers.notify(command))
@@ -63,19 +63,19 @@ define(function (require) {
         updateUI();
     }
 
-    function getActions() {
-        var actions = {};
-        actions[GameCommands.GoLeft] = new MoveCommand({x: -1});
-        actions[GameCommands.GoRight] = new MoveCommand({x: 1});
-        actions[GameCommands.GoUp] = new MoveCommand({y: -1});
-        actions[GameCommands.GoDown] = new MoveCommand({y: 1});
-        actions[GameCommands.GoUpLeft] = new MoveCommand({x: -1, y: -1});
-        actions[GameCommands.GoUpRight] = new MoveCommand({x: 1, y: -1});
-        actions[GameCommands.GoDownRight] = new MoveCommand({x: 1, y: 1});
-        actions[GameCommands.GoDownLeft] = new MoveCommand({x: -1, y: 1});
-        actions[GameCommands.WaitInPlace] = new MoveCommand({x: 0, y: 0});
-        return actions;
-    }
+    //function getActions() {
+    //    var actions = {};
+    //    actions[GameCommands.GoLeft] = new MoveCommand({x: -1});
+    //    actions[GameCommands.GoRight] = new MoveCommand({x: 1});
+    //    actions[GameCommands.GoUp] = new MoveCommand({y: -1});
+    //    actions[GameCommands.GoDown] = new MoveCommand({y: 1});
+    //    actions[GameCommands.GoUpLeft] = new MoveCommand({x: -1, y: -1});
+    //    actions[GameCommands.GoUpRight] = new MoveCommand({x: 1, y: -1});
+    //    actions[GameCommands.GoDownRight] = new MoveCommand({x: 1, y: 1});
+    //    actions[GameCommands.GoDownLeft] = new MoveCommand({x: -1, y: 1});
+    //    actions[GameCommands.WaitInPlace] = new MoveCommand({x: 0, y: 0});
+    //    return actions;
+    //}
 
     function notifyWhenInitialized(game, gameEventHub) {
         var deferreds = [];

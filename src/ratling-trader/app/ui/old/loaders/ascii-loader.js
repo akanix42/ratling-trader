@@ -8,10 +8,10 @@ define(function (require) {
         var tiles = {};
 
         logger.group(AsciiLoader.name);
-        logger.logInfo('loading ascii tiles');
+        logger.info('loading ascii tiles');
 
         loadTiles();
-        logger.logInfo('loaded ascii tiles');
+        logger.info('loaded ascii tiles');
         logger.groupEnd();
 
         return {

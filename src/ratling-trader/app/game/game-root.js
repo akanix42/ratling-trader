@@ -3,7 +3,7 @@ define(function (require) {
         var when = require('when');
         var CompositionRoot = require('composition-root');
         var rat = require('game/global');
-        var Logger = require('logger');
+        var Logger = require('memory-logger');
         //var Stopwatch = require('helpers/stopwatch');
 
         var NullTile = require('game/tiles/null-tile');
@@ -37,6 +37,7 @@ define(function (require) {
                 self.registerModule('game/intents/intent-handlers-factory'),
                 self.registerModule('game/commands/command-handlers-factory'),
                 self.registerModule('game/events/event-handlers-factory'),
+                self.registerModule('game/event-recorder', {isSingleton: true}),
                 self.registerModule('game/maps/random-map-generator'),
                 self.registerModule('game/loaders/mixin-modules-loader', {isSingleton: true}),
                 self.registerModule('game/intents/null-intent-handlers-factory', {isSingleton: true}),

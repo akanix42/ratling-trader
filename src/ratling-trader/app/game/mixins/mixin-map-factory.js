@@ -12,10 +12,10 @@ define(function () {
     MixinMap.prototype.add = function add(value) {
         var mixin = this._private.loadedMixins.get(value);
         if (!mixin) {
-            rat.logger.logWarning(value + ' is not a valid mixin.');
+            rat.logger.warn(value + ' is not a valid mixin.');
             return;
         }
-        rat.logger.logInfo(value + ' mixin loaded.');
+        //rat.logger.info(value + ' mixin loaded.');
         mixin.applyTo(this._private.entity);
         this._private.map.set(mixin.constructor.name, mixin);
     };

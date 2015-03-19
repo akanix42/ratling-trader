@@ -13,19 +13,20 @@ define(function (require) {
 
     Attacker.prototype = Object.create(AbstractMixin.prototype);
 
-    Attacker.prototype.execute = function execute(attacker, command) {
-        var target = command.target;
+    Attacker.prototype.execute = function execute(command, attacker) {
+        var airSpace = attacker.tile.level.getTileAt(command.target.x, command.target.y).entities.airSpace;
+        var target = airSpace[airSpace.length - 1];
         var objections = target.tile.intentHandlers.notify(new IntentToAttack(attacker, target));
         if (objections.length)
             return false;
 
-        if (isInRange(attacker, command.target)) {
+        if (isInRange(attacker, target)) {
             window.rat.logger.log('attack!');
             var attack = {
                 damage: 1
             };
             var attackEvent = new EntityAttackedEvent(attacker, target, attack);
-            target.tile.eventHandlers.notify(attackEvent);
+            target.eventHandlers.notify(attackEvent);
             //target.eventHandlers.notify(attackEvent);
 
             return true;

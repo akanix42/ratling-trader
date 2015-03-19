@@ -2,6 +2,9 @@ define(function (require) {
     var Entity = require('game/entities/entity'),
         extend = require('extend');
 
+    window.zombies = [];
+    window.zombiesWithHandlers = [];
+    window.zombiesWithMixins = [];
     function EntityFactory(injector, mixinMapFactory, entityTemplatesLoader, nullTile, commandHandlersFactory, eventHandlersFactory) {
         this._private = {
             mixinMapFactory: mixinMapFactory,
@@ -20,6 +23,17 @@ define(function (require) {
             commandHandlers: this._private.commandHandlersFactory.create(),
             eventHandlers: this._private.eventHandlersFactory.create()
         });
+        if (entity.type === 'zombie') {
+            window.zombies.push(entity);
+            if (Object.keys(entity.eventHandlers._private.events).length)
+                window.zombiesWithHandlers.push(entity);
+            if (data.mixins && data.mixins.length)
+                window.zombiesWithMixins.push(entity);
+            //else {
+            //    debugger;
+            //}
+
+        }
         //new Entity(data, this._private.mixinMapFactory,
         //    this._private.commandHandlersFactory.create(),
         //    this._private.eventHandlersFactory.create());
@@ -39,4 +53,5 @@ define(function (require) {
 
         return data;
     }
+
 });

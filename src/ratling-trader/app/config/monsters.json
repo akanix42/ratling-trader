@@ -72,18 +72,8 @@
       "destructible"
     ],
     "attributes": {
-      "strength": 1,
-      "health": 10
-    }
-  },
-  {
-    "name": "zombie-corpse",
-    "type": "monster",
-    "mixins": [
-      "destructible"
-    ],
-    "attributes": {
-      "health": 10
+      "strength": {"base": 1},
+      "health": {"base": 1}
     }
   }
 ]

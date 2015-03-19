@@ -6,7 +6,7 @@ define(function (require) {
     loadRoots().then(function (loadedRoots) {
         var roots = loadedRoots;
         var tileFactory = roots.gameRoot.injector.resolve('tileFactory');
-        var tile = tileFactory.create({});
+        var tile = tileFactory.create({baseArchitecture: {type: 'dirtFloor'}});
         var nullTile = tile = roots.gameRoot.injector.resolve('nullTile');
 
         setUpTileTests(tile);

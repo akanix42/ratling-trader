@@ -32,7 +32,7 @@ define(function (require) {
                 if (stack[i].name === name)
                     return stack.splice(i, stack.length - i)[i];
 
-            logger.logError(stringformat('No screen called {name} was found in the stack.', new {name: name}));
+            logger.error(stringformat('No screen called {name} was found in the stack.', new {name: name}));
             return null;
         }
 

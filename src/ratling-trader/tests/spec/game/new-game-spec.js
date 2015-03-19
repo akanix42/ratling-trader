@@ -6,9 +6,10 @@ define(function (require) {
 
 
     'use strict';
-    describe('starting a new game', function () {
+    describe('game - starting a new game', function () {
         it('should create the player character and place him on the first level', function (done) {
             var roots = {};
+            var start;
             iocLoader.init(function (gameRoot, uiRoot) {
                 roots.gameRoot = gameRoot;
                 roots.uiRoot = uiRoot;
@@ -22,6 +23,7 @@ define(function (require) {
                         deferred.resolve(game);
                     }
                 });
+                start = new Date();
 
                 var game = new GameTestDataBuilder(roots.gameRoot.injector).create();
                 return deferred.promise;
@@ -33,7 +35,7 @@ define(function (require) {
                     game.player.should.be.ok();
                     game.level.should.be.ok();
                     game.player.tile.level.should.equal(game.level);
-                    done();
+                    done(start);
                 });
 
         });

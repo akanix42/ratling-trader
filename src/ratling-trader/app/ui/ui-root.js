@@ -20,6 +20,8 @@ define(function (require) {
                 self.registerModule('ui/screens/main-menu-screen'),
                 self.registerModule('ui/tiles/ascii-tile-factory'),
                 self.registerModule('game/events/event-handlers-factory'),
+                self.registerModule('game/event-recorder', {isSingleton: true}),
+
 
             ]);
         };

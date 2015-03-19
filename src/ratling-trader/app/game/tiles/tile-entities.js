@@ -2,15 +2,31 @@ define(function () {
 
     function TileEntities() {
         this._private = {
-            entities: []
+            entities: [],
+            airSpaceEntities: [],
+            floorSpaceEntities: [],
+            entitySpacesMap: new Map()
         };
     }
 
+    TileEntities.prototype = {
+        get airSpace() {
+            return this._private.airSpaceEntities.slice();
+        },
+        get floorSpace() {
+            return this._private.floorSpaceEntities.slice();
+        }
+    };
     TileEntities.prototype.add = function add(entity) {
-        var indexOfEntity = findEntity.call(this, entity);
-        if (indexOfEntity === undefined)
+        var indexOfEntity = findEntity(entity, this._private.entities);
+
+        if (indexOfEntity === undefined) {
             this._private.entities.push(entity);
 
+            var space =this._private[entity.space + 'SpaceEntities'];
+            space.push(entity);
+            this._private.entitySpacesMap.set(entity, space);
+        }
         return true;
     };
 
@@ -19,16 +35,19 @@ define(function () {
     };
 
     TileEntities.prototype.remove = function remove(entity) {
-        var indexOfEntity = findEntity.call(this, entity);
-        if (indexOfEntity === undefined)
-            return;
+        removeArrayElementAt(findEntity(entity, this._private.entities), this._private.entities);
 
-        this._private.entities.splice(indexOfEntity, 1);
-
+        var space = this._private.entitySpacesMap.get(entity);
+        removeArrayElementAt(findEntity(entity, space), space);
     };
 
-    function findEntity(entity) {
-        var entities = this._private.entities;
+    function removeArrayElementAt(index, array) {
+        if (index === undefined)
+            return;
+        array.splice(index, 1);
+    }
+
+    function findEntity(entity, entities) {
         for (var i = 0; i < entities.length; i++) {
             var arrayEntity = entities[i];
             if (arrayEntity === entity)

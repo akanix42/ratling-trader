@@ -29,7 +29,7 @@ define(function (require) {
                 var column = new Array(size.height);
                 map[x] = column;
                 for (var y = 0; y < size.height; y++) {
-                    column[y] = {baseArchitecture: 'dirtFloor', entities: []};
+                    column[y] = {baseArchitecture: {type:'dirtFloor'}, entities: []};
                     allTiles.push(column[y]);
                 }
             }
@@ -52,7 +52,7 @@ define(function (require) {
         }
 
         function getMonster() {
-            return this._private.entityFactory.create({type: 'zombie'});
+            return {type: 'zombie'};
         }
     };
 

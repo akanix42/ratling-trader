@@ -1,10 +1,11 @@
 define(function (require) {
 
     return {
-        Log: 0,
-        Error: 1,
-        Warn: 2,
-        Info: 3
+        none: -1,
+        log: 0,
+        error: 1,
+        warn: 2,
+        info: 3
     };
 
 });

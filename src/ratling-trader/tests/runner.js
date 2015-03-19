@@ -21,6 +21,7 @@ define([
         ],
         game: [
             'spec/game/new-game-spec.js',
+            'spec/game/event-recorder-spec.js',
         ],
         ui: [
             'spec/ui/new-game-spec.js',

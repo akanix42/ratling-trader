@@ -1,3 +1,4 @@
+
 define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
@@ -16,7 +17,8 @@ define(function (require) {
 
         function addEntities() {
             var _ = self._private;
-            _.entities.add(entityFactory.create({type: tileData.baseArchitecture, tile: self}));
+            tileData.tile = self;
+            _.entities.add(entityFactory.create(tileData.baseArchitecture));
             if (!tileData.entities) return;
             for (var i = 0; i < tileData.entities.length; i++) {
                 var entityData = tileData.entities[i];

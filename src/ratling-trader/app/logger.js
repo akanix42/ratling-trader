@@ -10,9 +10,9 @@ define(function (require) {
         self.isEnabled = false;
 
         self.log = new LogWriter(console.log, LogLevel.Log, self).log;
-        self.logWarning = new LogWriter(console.warn, LogLevel.Warn, self).log;
-        self.logError = new LogWriter(console.error, LogLevel.Error, self).log;
-        self.logInfo = new LogWriter(console.info, LogLevel.Info, self).log;
+        self.warn = new LogWriter(console.warn, LogLevel.Warn, self).log;
+        self.error = new LogWriter(console.error, LogLevel.Error, self).log;
+        self.info = new LogWriter(console.info, LogLevel.Info, self).log;
 
         self.group = consoleApply(console.group);
         self.groupEnd = consoleApply(console.groupEnd);

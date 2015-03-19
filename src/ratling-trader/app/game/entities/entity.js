@@ -2,15 +2,18 @@ define(function (require) {
     var EntityMovedEvent = require('game/events/entity-moved');
 
 
-    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory) {
+    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, nullTile) {
         this._private = {
             type: data.type,
+            space: data.space,
+            data: data,
             attributes: new Map(),
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
             commandHandlers: commandHandlers,
             eventHandlers: eventHandlers,
-            entityAttributeFactory: entityAttributeFactory
+            entityAttributeFactory: entityAttributeFactory,
+            nullTile:nullTile
         };
         this.tile = data.tile;
         initAttributes(this, data);
@@ -23,9 +26,11 @@ define(function (require) {
         if (!data.attributes)
             return;
 
-        for (var i = 0; i < data.attributes.length; i++) {
-            var attribute = data.attributes[i];
-            entity.attributes.set(attribute.name, entity._private.entityAttributeFactory.create(attribute));
+        var keys = Object.keys(data.attributes);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            var attribute = data.attributes[key];
+            entity.attributes.set(key, entity._private.entityAttributeFactory.create(attribute));
         }
     }
 
@@ -39,11 +44,17 @@ define(function (require) {
         get commandHandlers() {
             return this._private.commandHandlers;
         },
+        get corpse(){
+          return this._private.data.corpse;
+        },
         get eventHandlers() {
             return this._private.eventHandlers;
         },
         get mixins() {
             return this._private.mixins;
+        },
+        get space(){
+            return this._private.space;
         },
         get tile() {
             return this._private.tile;
@@ -65,8 +76,12 @@ define(function (require) {
             return this._private.type;
         },
         destroy: function destroy(){
-            if (this.tile)
-                this.tile.entities.remove(this);
+            this.tile = this._private.nullTile;
+
+            //
+            //this.commandHandlers.destroy();
+            //this.eventHandlers.destroy();
+            //this.intentHandlers.destroy();
         }
 
     };

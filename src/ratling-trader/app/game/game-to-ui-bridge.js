@@ -17,7 +17,8 @@ define(function (require) {
             return {
                 level: {
                     tiles: this._private.game.level.tiles
-                }
+                },
+                player: this._private.game.player
             };
         },
         set uiBridge(uiBridge) {
@@ -39,7 +40,6 @@ define(function (require) {
         },
 
         readyForPlayerInput: function readyForPlayerInput() {
-            console.log('rfp');
             return this._private.uiBridge.readyForPlayerInput();
         },
 

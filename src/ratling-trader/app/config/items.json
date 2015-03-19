@@ -1,8 +1,18 @@
 [
-    {
-        "name": "apple"
-    },
-    {
-        "name": "rock"
+  {
+    "name": "apple"
+  },
+  {
+    "name": "rock"
+  },
+  {
+    "name": "zombie-corpse",
+    "type": "monster",
+    "mixins": [
+      "destructible"
+    ],
+    "attributes": {
+      "health": 10
     }
+  }
 ]

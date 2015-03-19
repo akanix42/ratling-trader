@@ -1,9 +1,13 @@
 define(function (require) {
-    function EventHandlers() {
-        this._private = {events: {}};
+    function EventHandlers(eventRecorder) {
+        this._private = {
+            events: {},
+            eventRecorder: eventRecorder
+        };
     }
 
     EventHandlers.prototype.notify = function notify(event) {
+        this._private.eventRecorder.record(event);
         var events = this._private.events;
         var subscriptions = events[event.constructor.name];
         if (subscriptions === undefined)
@@ -44,12 +48,12 @@ define(function (require) {
         }
     };
 
-    function EventHandlersFactory() {
-
+    function EventHandlersFactory(injector) {
+        this._private = {injector: injector};
     }
 
     EventHandlersFactory.prototype.create = function create() {
-        return new EventHandlers();
+        return this._private.injector.inject(EventHandlers);
     };
     return EventHandlersFactory;
 });

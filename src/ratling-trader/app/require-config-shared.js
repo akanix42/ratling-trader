@@ -15,6 +15,7 @@
             "rot": "../bower_components/rot.js/rot",
             "injector": "../lib/injector/injector",
             "extend": "../lib/extend/extend",
+            "array-extensions": "../lib/array-extensions/array-extensions",
             "lib": "../lib",
             "uuid": "../bower_components/node-uuid/uuid",
             "stringformat": "../bower_components/stringformat.js/index",

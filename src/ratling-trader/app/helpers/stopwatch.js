@@ -19,7 +19,7 @@ define(function (require) {
             return function () {
                 execute(context, fn, arguments, function (stopwatch) {
                     if (loggingString)
-                        logger.logInfo(stringformat(loggingString, {elapsed: stopwatch.getElapsedMilliseconds}));
+                        logger.info(stringformat(loggingString, {elapsed: stopwatch.getElapsedMilliseconds}));
                 });
             }
         }
