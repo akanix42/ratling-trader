@@ -10,7 +10,7 @@ define(function () {
             if (width % 2 !== 0)
                 width = 2 * Math.round((width - 1) / 2);
             self._private.size = {width: width, height: height};
-            var display = new ROT.Display({width: width, height: height, fontSize: 20});
+            var display = new ROT.Display({width: width, height: height, fontSize: 20, fontFamily: 'Arial'});
             ROT.Display.Rect.cache = true;
             var container = display.getContainer();
 

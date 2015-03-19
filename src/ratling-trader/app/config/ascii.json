@@ -16,7 +16,7 @@
   },
   {
     "name": "dirtFloor",
-    "character": ".",
+    "character": "·",
     "color": "goldenrod"
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "name": "stoneFloor",
-    "character": "."
+    "character": "·"
   },
   {
     "name": "stoneWall",
