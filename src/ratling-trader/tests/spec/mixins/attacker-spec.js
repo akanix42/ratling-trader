@@ -17,15 +17,16 @@ define(function (require) {
                 roots.uiRoot = uiRoot;
             }).then(function () {
                 var attacker = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(attackerPosition);
-                var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(defenderPosition);
+                var level = attacker.tile.level;
+                var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(level.getTileAt(defenderPosition.x, defenderPosition.y));
                 defender.tile.intentHandlers.add(null, {class: IntentToAttack, handler: attackIntentHandler});
 
                 var attackerMixin = new Attacker();
-                var attackCommand = new AttackCommand(defender);
+                var attackCommand = new AttackCommand(defender.tile.position);
                 attacker.mixins.add('attacker');
 
                 var start = new Date();
-                attackerMixin.execute(attacker, attackCommand);
+                attackerMixin.execute(attackCommand, attacker);
 
                 function attackIntentHandler(intent, handlingEntity) {
                     intent.attacker.should.equal(attacker);
@@ -34,7 +35,7 @@ define(function (require) {
                 }
             });
         });
-        it('should notify the target entity\'s tile of the attack', function test(done) {
+        it('should notify the target entity of the attack', function test(done) {
             var attackerPosition = {x: 5, y: 5};
             var defenderPosition = {x: 4, y: 5};
             var roots = {};
@@ -43,16 +44,17 @@ define(function (require) {
                 roots.uiRoot = uiRoot;
             }).then(function () {
                 var attacker = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(attackerPosition);
-                var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atPosition(defenderPosition);
-                defender.tile.eventHandlers.subscribe(null, {class: EntityAttackedEvent, handler: attackEventHandler});
+                var level = attacker.tile.level;
+                var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(level.getTileAt(defenderPosition.x, defenderPosition.y));
+                defender.eventHandlers.subscribe(null, {class: EntityAttackedEvent, handler: attackEventHandler});
 
                 var attackerMixin = new Attacker();
-                var attackCommand = new AttackCommand(defender);
+                var attackCommand = new AttackCommand(defender.tile.position);
                 attacker.mixins.add('attacker');
 
                 var start = new Date();
 
-                attackerMixin.execute(attacker, attackCommand);
+                attackerMixin.execute(attackCommand, attacker);
 
                 function attackEventHandler(event, handlingEntity) {
                     event.attacker.should.equal(attacker);

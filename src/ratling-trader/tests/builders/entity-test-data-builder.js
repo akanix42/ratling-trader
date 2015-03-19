@@ -17,15 +17,16 @@ define(function (require) {
         var entityFactory = this.injector.resolve('entityFactory');
         var entity = entityFactory.create({
             type: 'test',
-            attributes: [{name: 'health', base: 1}],
-            tile: level.getTileAt(position.x, position.y)
+            attributes: {health: {base: 1}},
+            tile: level.getTileAt(position.x, position.y),
+            space: 'air'
         });
 
         return entity;
     };
     EntityTestDataBuilder.prototype.atTile = function atTile(tile) {
         var entityFactory = this.injector.resolve('entityFactory');
-        var entity = entityFactory.create({type: 'test', tile: tile});
+        var entity = entityFactory.create({type: 'test', tile: tile, space: 'air'});
 
         return entity;
     };

@@ -23,9 +23,11 @@ define(function () {
         if (indexOfEntity === undefined) {
             this._private.entities.push(entity);
 
-            var space =this._private[entity.space + 'SpaceEntities'];
-            space.push(entity);
-            this._private.entitySpacesMap.set(entity, space);
+            if (entity.space) {
+                var space = this._private[entity.space + 'SpaceEntities'];
+                space.push(entity);
+                this._private.entitySpacesMap.set(entity, space);
+            }
         }
         return true;
     };
@@ -38,7 +40,8 @@ define(function () {
         removeArrayElementAt(findEntity(entity, this._private.entities), this._private.entities);
 
         var space = this._private.entitySpacesMap.get(entity);
-        removeArrayElementAt(findEntity(entity, space), space);
+        if (space)
+            removeArrayElementAt(findEntity(entity, space), space);
     };
 
     function removeArrayElementAt(index, array) {

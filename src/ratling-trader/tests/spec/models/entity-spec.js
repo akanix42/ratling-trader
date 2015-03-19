@@ -10,7 +10,7 @@ define(function (require) {
                 roots.uiRoot = uiRoot;
             }).then(function (ui) {
                 var entityFactory = roots.gameRoot.injector.resolve('entityFactory');
-                var entity = entityFactory.create({attributes: [{name: 'a', base: 1}]});
+                var entity = entityFactory.create({attributes: {a:{ base: 1}}});
 
                 entity.attributes.get('a').base.should.equal(1);
                 done();

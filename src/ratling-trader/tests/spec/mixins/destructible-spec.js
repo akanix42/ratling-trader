@@ -84,7 +84,7 @@ define(function (require) {
                 var destructible = new EntityTestDataBuilder(roots.gameRoot.injector).create();
                 var tile = destructible.tile;
                 destructible.attributes.get('health').current.should.equal(1);
-                destructible.corpse = 'zombie-corpse';
+                destructible._private.data.corpse = 'zombie-corpse';
 
                 destructible.mixins.add('destructible');
                 destructible.tile.eventHandlers.subscribe(null, {class: EntityDestroyedEvent, handler: eventHandler});

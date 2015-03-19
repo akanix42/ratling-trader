@@ -31,7 +31,8 @@ define(function (require) {
 
     function getDefaultEntityData(nullTile) {
         var data = {
-            tile: nullTile
+            tile: nullTile,
+            space: 'floor'
         };
 
         return data;

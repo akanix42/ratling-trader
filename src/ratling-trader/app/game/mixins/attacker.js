@@ -16,6 +16,8 @@ define(function (require) {
     Attacker.prototype.execute = function execute(command, attacker) {
         var airSpace = attacker.tile.level.getTileAt(command.target.x, command.target.y).entities.airSpace;
         var target = airSpace[airSpace.length - 1];
+        if (!target)
+            return false;
         var objections = target.tile.intentHandlers.notify(new IntentToAttack(attacker, target));
         if (objections.length)
             return false;
