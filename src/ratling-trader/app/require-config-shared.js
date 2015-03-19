@@ -16,7 +16,6 @@
             "injector": "../lib/injector/injector",
             "extend": "../lib/extend/extend",
             "array-extensions": "../lib/array-extensions/array-extensions",
-            "lib": "../lib",
             "uuid": "../bower_components/node-uuid/uuid",
             "stringformat": "../bower_components/stringformat.js/index",
             "moment": "../bower_components/moment/moment"
