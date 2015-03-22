@@ -15,6 +15,9 @@
       },
       "health": {
         "base": 10
+      },
+      "sight-range": {
+        "base": 5
       }
     }
   },

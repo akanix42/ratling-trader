@@ -8,10 +8,10 @@ define(function () {
         for (var x = 0; x < size.width; x++) {
             var column = new Array(size.height);
             map[x] = column;
-            for (var y = 0; y < size.height; y++){
+            for (var y = 0; y < size.height; y++) {
                 var tileData = data.tiles[x][y];
                 tileData.level = this;
-                tileData.position ={x: x, y: y};
+                tileData.position = {x: x, y: y};
                 column[y] = tileFactory.create(tileData);
             }
         }
@@ -19,7 +19,9 @@ define(function () {
         this._private = {
             map: map,
             size: size,
-            nullTile: tileFactory.nullTile
+            nullTile: tileFactory.nullTile,
+            fov: new ROT.FOV.PreciseShadowcasting(this.checkIfLightPasses.bind(this))
+
         };
 
     }
@@ -28,20 +30,44 @@ define(function () {
         get tiles() {
             return this._private.map.slice();
         },
-        getTileAt: function getTileAt(x, y) {
-            if (x < 0 || y < 0 || x >= this.size.width || y >= this.size.height)
-                return this._private.nullTile;
-            return this._private.map[x][y];
-        },
         get size() {
             return this._private.size;
+        },
+        calculateFov: function calculateFov(x, y, radius) {
+            var tilesInFov = {};
+            var self = this;
+
+            this._private.fov.compute(x, y, radius, function recordVisibleTile(x, y, distance, visibility) {
+                if (visibility === 0 || x < 0 || y < 0 || x >= self.size.width || y >= self.size.height)
+                    return;
+                tilesInFov[x + ',' + y] = {x: x, y: y};
+            });
+
+            return tilesInFov;
+        },
+
+        checkIfLightPasses: function checkIfLightPasses(x, y) {
+            if (x < 0 || y < 0 || x >= this._private.map.length)
+                return false;
+            var column = this._private.map[x];
+            if (y >= column.length)
+                return false;
+            return column[y].entities.architecture.passesLight;
         },
         getRandomTile: function getRandomTile() {
             var x = ROT.RNG.getUniformInt(0, this.size.width - 1);
             var y = ROT.RNG.getUniformInt(0, this.size.height - 1);
             return this._private.map[x][y];
-        }
+        },
+        getTileAt: function getTileAt(x, y) {
+            if (x < 0 || y < 0 || x >= this.size.width || y >= this.size.height)
+                return this._private.nullTile;
+            return this._private.map[x][y];
+        },
     };
 
     return Level;
-});
+
+
+})
+;

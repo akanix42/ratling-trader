@@ -25,6 +25,8 @@ define(function (require) {
         keydown[ROT.VK_NUMPAD2] = handleMovementCommand.bind(this, GameCommands.GoDown);
         keydown[ROT.VK_NUMPAD1] = handleMovementCommand.bind(this, GameCommands.GoDownLeft);
         keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
+        keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
+
         return commands;
 
 
@@ -47,15 +49,27 @@ define(function (require) {
         return target ? new AttackCommand(target.tile.position) : moveCommand;
     }
 
+    function toggleRenderMode() {
+
+        if (this._private.renderMode === 'fov')
+            this._private.renderMode = 'all';
+        else
+            this._private.renderMode = 'fov'
+
+        this.render();
+    }
+
     function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory) {
         this._private = {
             display: display,
             ui: ui,
             uiToGameBridge: uiToGameBridge,
             asciiTileFactory: asciiTileFactory,
-            commandMap: getCommandMap.call(this)
+            commandMap: getCommandMap.call(this),
+            renderMode: 'fov'
 
         };
+        window.display = display;
         uiToGameBridge.eventHandlers.subscribe(null, {
             class: ReadyForPlayerInputEvent,
             handler: this.render.bind(this)
@@ -64,25 +78,10 @@ define(function (require) {
 
     PlayingScreen.prototype = {
         render: function render() {
-            var display = this._private.display;
-            var tiles = this._private.uiToGameBridge.gameState.level.tiles;
-            for (var x = 0; x < display.size.width; x++) {
-                var column = tiles[x];
-                for (var y = 0; y < display.size.height; y++) {
-                    var tile;
-                    var uiTile;
-                    if (column === undefined || !column[y]) {
-                        tile = 'null';//this._private.asciiTileFactory.nullTile;
-                        uiTile = this._private.asciiTileFactory.nullTile;
-                    }
-                    else {
-                        tile = column[y];
-                        var entities = tile.entities.all();
-                        uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
-                    }
-                    uiTile.draw(display, x, y);
-                }
-            }
+            if (this._private.renderMode === 'fov')
+                renderFov.call(this);
+            else
+                renderLevel.call(this);
         },
         handleInput: function handleInput(inputType, inputData) {
             var command = this._private.commandMap[inputType][inputData.keyCode];
@@ -110,4 +109,61 @@ define(function (require) {
     PlayingScreenFactory.constructs = PlayingScreen;
 
     return PlayingScreenFactory;
+
+    function renderLevel() {
+        var display = this._private.display;
+        var tiles = this._private.uiToGameBridge.gameState.level.tiles;
+        for (var x = 0; x < display.size.width; x++) {
+            var column = tiles[x];
+            for (var y = 0; y < display.size.height; y++) {
+                var tile;
+                var uiTile;
+                if (column === undefined || !column[y]) {
+                    tile = 'null';//this._private.asciiTileFactory.nullTile;
+                    uiTile = this._private.asciiTileFactory.nullTile;
+                }
+                else {
+                    tile = column[y];
+                    var entities = tile.entities.all();
+                    uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
+                }
+                uiTile.draw(display, x, y);
+            }
+        }
+    }
+
+    function renderFov() {
+        var display = this._private.display;
+        var tiles = this._private.uiToGameBridge.gameState.level.tiles;
+        var fov = this._private.uiToGameBridge.gameState.player._private.tilesInFov;
+        var fovKeys = Object.keys(fov);
+        for (var i = 0; i < fovKeys.length; i++) {
+            var tilePosition = fov[fovKeys[i]];
+            var tile = tiles[tilePosition.x][tilePosition.y];
+            var entities = tile.entities.all();
+            uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
+            uiTile.draw(display, tilePosition.x, tilePosition.y);
+        }
+        var previousFov = this._private.previousFov;
+        if (previousFov) {
+            var pFovKeys = Object.keys(previousFov);
+            for (var i = 0; i < pFovKeys.length; i++) {
+                var key = pFovKeys[i];
+                if (fov[key]) continue;
+
+                var tilePosition = previousFov[key];
+                var tile = tiles[tilePosition.x][tilePosition.y];
+                var entities = tile.entities;
+                var entity = entities.floorSpace.last() || entities.architecture;
+                uiTile = this._private.asciiTileFactory.create(entity.type);
+                uiTile.draw(display, tilePosition.x, tilePosition.y, 'rgba(156,152,155,0.5)');
+                //display.draw(tilePosition.x, tilePosition.y, ' ', 'rgba(156,152,155,0.5)', 'rgba(156,152,155,0.4)');
+            }
+        }
+        this._private.previousFov = fov;
+    }
+
+    function renderTiles(tiles) {
+
+    }
 });

@@ -9,9 +9,9 @@ define(function (require) {
         };
     }
 
-    AsciiTile.prototype.draw = function draw(display, x, y) {
+    AsciiTile.prototype.draw = function draw(display, x, y, overlay) {
         var tile = this._private.tile;
-        display.draw(x, y, this._private.character, this._private.foregroundColor, this._private.backgroundColor);
+        display.draw(x, y, this._private.character, this._private.foregroundColor, this._private.backgroundColor, overlay);
     };
 
     function AsciiTileFactory() {

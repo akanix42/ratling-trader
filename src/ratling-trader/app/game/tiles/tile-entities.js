@@ -5,6 +5,7 @@ define(function () {
             entities: [],
             airSpaceEntities: [],
             floorSpaceEntities: [],
+            architecture: null,
             entitySpacesMap: new Map()
         };
     }
@@ -13,6 +14,9 @@ define(function () {
         get airSpace() {
             return this._private.airSpaceEntities.slice();
         },
+        get architecture() {
+            return this._private.architecture;
+        },
         get floorSpace() {
             return this._private.floorSpaceEntities.slice();
         }
@@ -20,14 +24,19 @@ define(function () {
     TileEntities.prototype.add = function add(entity) {
         var indexOfEntity = findEntity(entity, this._private.entities);
 
-        if (indexOfEntity === undefined) {
-            this._private.entities.push(entity);
+        if (indexOfEntity !== undefined)
+            return true;
 
-            if (entity.space) {
-                var space = this._private[entity.space + 'SpaceEntities'];
-                space.push(entity);
-                this._private.entitySpacesMap.set(entity, space);
-            }
+        this._private.entities.push(entity);
+        if (entity.space === 'architecture') {
+            if (this._private.architecture)
+                this._private.architecture.tile = null;
+            this._private.architecture = entity;
+        }
+        else if (entity.space) {
+            var space = this._private[entity.space + 'SpaceEntities'];
+            space.push(entity);
+            this._private.entitySpacesMap.set(entity, space);
         }
         return true;
     };

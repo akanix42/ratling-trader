@@ -13,12 +13,13 @@ define(function (require) {
             commandHandlers: commandHandlers,
             eventHandlers: eventHandlers,
             entityAttributeFactory: entityAttributeFactory,
-            nullTile:nullTile
+            nullTile: nullTile,
+            tilesInFov:null
         };
         this.tile = data.tile;
         initAttributes(this, data);
         initMixins(data.mixins, this.mixins);
-
+        this.calculateFov();
 
     }
 
@@ -44,8 +45,8 @@ define(function (require) {
         get commandHandlers() {
             return this._private.commandHandlers;
         },
-        get corpse(){
-          return this._private.data.corpse;
+        get corpse() {
+            return this._private.data.corpse;
         },
         get eventHandlers() {
             return this._private.eventHandlers;
@@ -53,7 +54,10 @@ define(function (require) {
         get mixins() {
             return this._private.mixins;
         },
-        get space(){
+        get passesLight() {
+            return this._private.data.passesLight || true;
+        },
+        get space() {
             return this._private.space;
         },
         get tile() {
@@ -61,6 +65,8 @@ define(function (require) {
         },
         set tile(newTile) {
             var oldTile = this.tile;
+            if (newTile === null)
+                newTile = this._private.nullTile;
             newTile.entities.add(this);
 
             if (this.tile)
@@ -71,11 +77,21 @@ define(function (require) {
             var event = new EntityMovedEvent(this, oldTile, newTile);
             this.eventHandlers.notify(event);
             newTile.eventHandlers.notify(event);
+            this.calculateFov();
         },
         get type() {
             return this._private.type;
         },
-        destroy: function destroy(){
+
+        calculateFov: function calculateFov() {
+            var sightRange = this.attributes.get('sight-range');
+            if (!sightRange || !sightRange.base)
+                return;
+
+            this._private.tilesInFov = this.tile.level.calculateFov(this.tile.position.x,
+                this.tile.position.y, this.attributes.get('sight-range').current);
+        },
+        destroy: function destroy() {
             this.tile = this._private.nullTile;
 
             //

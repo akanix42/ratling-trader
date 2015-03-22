@@ -34,7 +34,8 @@ define(function (require) {
             var defaultData = {
                 type: 'architecture',
                 isWalkable: false,
-                space: 'floor'
+                space: 'architecture',
+                passesLight: true
             };
 
             addEntityTemplate(extend({}, defaultData, template));

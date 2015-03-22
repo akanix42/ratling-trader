@@ -7,7 +7,7 @@ define(function (require) {
         var roots = loadedRoots;
         var tileFactory = roots.gameRoot.injector.resolve('tileFactory');
         var tile = tileFactory.create({baseArchitecture: {type: 'dirtFloor'}});
-        var nullTile = tile = roots.gameRoot.injector.resolve('nullTile');
+        var nullTile = roots.gameRoot.injector.resolve('nullTile');
 
         setUpTileTests(tile);
         setUpNullTileTests(nullTile);
@@ -22,7 +22,6 @@ define(function (require) {
         }).then(function (ui) {
             return roots;
         });
-
     }
 
     function setUpTileTests(tile) {
@@ -43,24 +42,6 @@ define(function (require) {
     function testTile(tile) {
         testTileEntities(tile.entities);
         testIntentHandlers(tile.intentHandlers);
-        //get entities() {
-        //    return this._private.entities;
-        //},
-        //get intentHandlers() {
-        //    return this._private.intentHandlers;
-        //},
-        //get eventHandlers() {
-        //    return this._private.eventHandlers;
-        //},
-        //get level() {
-        //    return this._private.level;
-        //},
-        //get position() {
-        //    return this._private.position;
-        //},
-        //getNeighbor: function getNeighbor(direction) {
-        //    return this.level.getTileAt(this.position.x + (direction.x || 0), this.position.y + (direction.y || 0));
-        //},
 
         function testTileEntities(entities) {
             describe('.entities', function () {
@@ -71,6 +52,10 @@ define(function (require) {
                 });
                 it('all() - should return an array', function () {
                     Array.isArray(entities.all()).should.be.true();
+                });
+
+                it('architecture - should return the current architecture', function () {
+                    (entities.architecture !== undefined).should.be.true();
                 });
             });
         }
@@ -94,39 +79,7 @@ define(function (require) {
     }
 
     function testNullTile(tile) {
-        //testNullTileEntities(tile.entities);
         testNullIntentHandlers(tile.intentHandlers);
-        //get entities() {
-        //    return this._private.entities;
-        //},
-        //get intentHandlers() {
-        //    return this._private.intentHandlers;
-        //},
-        //get eventHandlers() {
-        //    return this._private.eventHandlers;
-        //},
-        //get level() {
-        //    return this._private.level;
-        //},
-        //get position() {
-        //    return this._private.position;
-        //},
-        //getNeighbor: function getNeighbor(direction) {
-        //    return this.level.getTileAt(this.position.x + (direction.x || 0), this.position.y + (direction.y || 0));
-        //},
-
-        function testTileEntities(entities) {
-            describe('.entities', function () {
-                it('add() - should return a boolean', function () {
-                    entities.add({}).should.satisfy(function (x) {
-                        return x === true || x === false;
-                    });
-                });
-                it('all() - should return an array', function () {
-                    Array.isArray(entities.all()).should.be.true();
-                });
-            });
-        }
 
         function testNullIntentHandlers(intentHandlers) {
             describe('.intentHandlers', function () {

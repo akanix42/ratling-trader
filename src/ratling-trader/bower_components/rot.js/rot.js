@@ -1,7 +1,3 @@
-/*
-	This is rot.js, the ROguelike Toolkit in JavaScript.
-	Version 0.5~dev, generated on Sat Apr 26 10:24:50 PDT 2014.
-*/
 /**
  * @namespace Top-level ROT namespace
  */
@@ -355,6 +351,7 @@ var ROT = {
 	/** Linux support for this keycode was added in Gecko 4.0.	 */
 	VK_SLEEP: 95 
 };
+
 /**
  * @namespace
  * Contains text tokenization and breaking routines
@@ -464,7 +461,7 @@ ROT.Text = {
 
 				/* if there are spaces at the end, we must remove them (we do not want the line too long) */
 				var arr = token.value.split("");
-				while (arr[arr.length-1] == " ") { arr.pop(); }
+				while (arr.length && arr[arr.length-1] == " ") { arr.pop(); }
 				token.value = arr.join("");
 			}
 
@@ -516,7 +513,7 @@ ROT.Text = {
 				case ROT.Text.TYPE_NEWLINE: 
 					if (lastTextToken) { /* remove trailing space */
 						var arr = lastTextToken.value.split("");
-						while (arr[arr.length-1] == " ") { arr.pop(); }
+						while (arr.length && arr[arr.length-1] == " ") { arr.pop(); }
 						lastTextToken.value = arr.join("");
 					}
 					lastTextToken = null;
@@ -549,6 +546,7 @@ ROT.Text = {
 		return tokens[tokenIndex].value.substring(0, breakIndex);
 	}
 }
+
 /**
  * @returns {any} Randomly picked item, null when length=0
  */
@@ -569,6 +567,7 @@ Array.prototype.randomize = function() {
 	}
 	return result;
 }
+
 /**
  * Always positive modulus
  * @param {int} n Modulus
@@ -577,6 +576,7 @@ Array.prototype.randomize = function() {
 Number.prototype.mod = function(n) {
 	return ((this%n)+n)%n;
 }
+
 /**
  * @returns {string} First letter capitalized
  */
@@ -658,6 +658,7 @@ String.prototype.format = function() {
 	return String.format.apply(String, args);
 }
 
+
 if (!Object.create) {  
 	/**
 	 * ES5 Object.create
@@ -668,6 +669,7 @@ if (!Object.create) {
 		return new tmp();
 	};  
 }  
+
 /**
  * Sets prototype of this function to an instance of parent function
  * @param {function} parent
@@ -677,21 +679,25 @@ Function.prototype.extend = function(parent) {
 	this.prototype.constructor = this;
 	return this;
 }
-window.requestAnimationFrame =
-	window.requestAnimationFrame
-	|| window.mozRequestAnimationFrame
-	|| window.webkitRequestAnimationFrame
-	|| window.oRequestAnimationFrame
-	|| window.msRequestAnimationFrame
-	|| function(cb) { return setTimeout(cb, 1000/60); };
 
-window.cancelAnimationFrame =
-	window.cancelAnimationFrame
-	|| window.mozCancelAnimationFrame
-	|| window.webkitCancelAnimationFrame
-	|| window.oCancelAnimationFrame
-	|| window.msCancelAnimationFrame
-	|| function(id) { return clearTimeout(id); };
+if (typeof window != "undefined") {
+	window.requestAnimationFrame =
+		window.requestAnimationFrame
+		|| window.mozRequestAnimationFrame
+		|| window.webkitRequestAnimationFrame
+		|| window.oRequestAnimationFrame
+		|| window.msRequestAnimationFrame
+		|| function(cb) { return setTimeout(cb, 1000/60); };
+
+	window.cancelAnimationFrame =
+		window.cancelAnimationFrame
+		|| window.mozCancelAnimationFrame
+		|| window.webkitCancelAnimationFrame
+		|| window.oCancelAnimationFrame
+		|| window.msCancelAnimationFrame
+		|| function(id) { return clearTimeout(id); };
+}
+
 /**
  * @class Visual map display
  * @param {object} [options]
@@ -705,10 +711,12 @@ window.cancelAnimationFrame =
  * @param {float} [options.spacing=1]
  * @param {float} [options.border=0]
  * @param {string} [options.layout="rect"]
+ * @param {bool} [options.forceSquareRatio=false]
  * @param {int} [options.tileWidth=32]
  * @param {int} [options.tileHeight=32]
  * @param {object} [options.tileMap={}]
  * @param {image} [options.tileSet=null]
+ * @param {image} [options.tileColorize=false]
  */
 ROT.Display = function(options) {
 	var canvas = document.createElement("canvas");
@@ -721,10 +729,12 @@ ROT.Display = function(options) {
 	var defaultOptions = {
 		width: ROT.DEFAULT_WIDTH,
 		height: ROT.DEFAULT_HEIGHT,
+		transpose: false,
 		layout: "rect",
 		fontSize: 15,
 		spacing: 1,
 		border: 0,
+		forceSquareRatio: false,
 		fontFamily: "monospace",
 		fontStyle: "",
 		fg: "#ccc",
@@ -732,7 +742,9 @@ ROT.Display = function(options) {
 		tileWidth: 32,
 		tileHeight: 32,
 		tileMap: {},
-		tileSet: null
+		tileSet: null,
+		tileColorize: false,
+		termColor: "xterm"
 	};
 	for (var p in options) { defaultOptions[p] = options[p]; }
 	this.setOptions(defaultOptions);
@@ -848,10 +860,10 @@ ROT.Display.prototype.eventToPosition = function(e) {
  * @param {string} [fg] foreground color
  * @param {string} [bg] background color
  */
-ROT.Display.prototype.draw = function(x, y, ch, fg, bg) {
+ROT.Display.prototype.draw = function(x, y, ch, fg, bg, ov) {
 	if (!fg) { fg = this._options.fg; }
 	if (!bg) { bg = this._options.bg; }
-	this._data[x+","+y] = [x, y, ch, fg, bg];
+	this._data[x+","+y] = [x, y, ch, fg, bg, ov];
 	
 	if (this._dirty === true) { return; } /* will already redraw everything */
 	if (!this._dirty) { this._dirty = {}; } /* first! */
@@ -880,8 +892,23 @@ ROT.Display.prototype.drawText = function(x, y, text, maxWidth) {
 		var token = tokens.shift();
 		switch (token.type) {
 			case ROT.Text.TYPE_TEXT:
+				var isSpace = false, isPrevSpace = false, isFullWidth = false, isPrevFullWidth = false;
 				for (var i=0;i<token.value.length;i++) {
-					this.draw(cx++, cy, token.value.charAt(i), fg, bg);
+					var cc = token.value.charCodeAt(i);
+					var c = token.value.charAt(i);
+					// Assign to `true` when the current char is full-width.
+					isFullWidth = (cc > 0xff && cc < 0xff61) || (cc > 0xffdc && cc < 0xffe8) && cc > 0xffee;
+					// Current char is space, whatever full-width or half-width both are OK.
+					isSpace = (c.charCodeAt(0) == 0x20 || c.charCodeAt(0) == 0x3000);
+					// The previous char is full-width and
+					// current char is nether half-width nor a space.
+					if (isPrevFullWidth && !isFullWidth && !isSpace) { cx++; } // add an extra position
+					// The current char is full-width and
+					// the previous char is not a space.
+					if(isFullWidth && !isPrevSpace) { cx++; } // add an extra position
+					this.draw(cx++, cy, c, fg, bg);
+					isPrevSpace = isSpace;
+					isPrevFullWidth = isFullWidth;
 				}
 			break;
 
@@ -939,6 +966,7 @@ ROT.Display.prototype._draw = function(key, clearBefore) {
 
 	this._backend.draw(data, clearBefore);
 }
+
 /**
  * @class Abstract display backend module
  * @private
@@ -961,6 +989,7 @@ ROT.Display.Backend.prototype.computeFontSize = function(availWidth, availHeight
 
 ROT.Display.Backend.prototype.eventToPosition = function(x, y) {
 }
+
 /**
  * @class Rectangular backend
  * @private
@@ -984,6 +1013,11 @@ ROT.Display.Rect.prototype.compute = function(options) {
 	var charWidth = Math.ceil(this._context.measureText("W").width);
 	this._spacingX = Math.ceil(options.spacing * charWidth);
 	this._spacingY = Math.ceil(options.spacing * options.fontSize);
+
+	if (this._options.forceSquareRatio) {
+		this._spacingX = this._spacingY = Math.max(this._spacingX, this._spacingY);
+	}
+
 	this._context.canvas.width = options.width * this._spacingX;
 	this._context.canvas.height = options.height * this._spacingY;
 }
@@ -1002,8 +1036,9 @@ ROT.Display.Rect.prototype._drawWithCache = function(data, clearBefore) {
 	var ch = data[2];
 	var fg = data[3];
 	var bg = data[4];
+	var ov = data[5];
 
-	var hash = ""+ch+fg+bg;
+	var hash = ""+ch+fg+bg+ov;
 	if (hash in this._canvasCache) {
 		var canvas = this._canvasCache[hash];
 	} else {
@@ -1023,9 +1058,13 @@ ROT.Display.Rect.prototype._drawWithCache = function(data, clearBefore) {
 
 			var chars = [].concat(ch);
 			for (var i=0;i<chars.length;i++) {
-				ctx.fillText(chars[i], this._spacingX/2, this._spacingY/2);
+				ctx.fillText(chars[i], this._spacingX/2, Math.ceil(this._spacingY/2));
 			}
 		}
+        if (ov){
+            ctx.fillStyle = ov;
+            ctx.fillRect(b, b, canvas.width-b, canvas.height-b);
+        }
 		this._canvasCache[hash] = canvas;
 	}
 	
@@ -1051,7 +1090,7 @@ ROT.Display.Rect.prototype._drawNoCache = function(data, clearBefore) {
 
 	var chars = [].concat(ch);
 	for (var i=0;i<chars.length;i++) {
-		this._context.fillText(chars[i], (x+0.5) * this._spacingX, (y+0.5) * this._spacingY);
+		this._context.fillText(chars[i], (x+0.5) * this._spacingX, Math.ceil((y+0.5) * this._spacingY));
 	}
 }
 
@@ -1082,6 +1121,7 @@ ROT.Display.Rect.prototype.computeFontSize = function(availWidth, availHeight) {
 ROT.Display.Rect.prototype.eventToPosition = function(x, y) {
 	return [Math.floor(x/this._spacingX), Math.floor(y/this._spacingY)];
 }
+
 /**
  * @class Hexagonal backend
  * @private
@@ -1099,12 +1139,21 @@ ROT.Display.Hex.extend(ROT.Display.Backend);
 ROT.Display.Hex.prototype.compute = function(options) {
 	this._options = options;
 
+	/* FIXME char size computation does not respect transposed hexes */
 	var charWidth = Math.ceil(this._context.measureText("W").width);
 	this._hexSize = Math.floor(options.spacing * (options.fontSize + charWidth/Math.sqrt(3)) / 2);
 	this._spacingX = this._hexSize * Math.sqrt(3) / 2;
 	this._spacingY = this._hexSize * 1.5;
-	this._context.canvas.width = Math.ceil( (options.width + 1) * this._spacingX );
-	this._context.canvas.height = Math.ceil( (options.height - 1) * this._spacingY + 2*this._hexSize );
+
+	if (options.transpose) {
+		var xprop = "height";
+		var yprop = "width";
+	} else {
+		var xprop = "width";
+		var yprop = "height";
+	}
+	this._context.canvas[xprop] = Math.ceil( (options.width + 1) * this._spacingX );
+	this._context.canvas[yprop] = Math.ceil( (options.height - 1) * this._spacingY + 2*this._hexSize );
 }
 
 ROT.Display.Hex.prototype.draw = function(data, clearBefore) {
@@ -1114,12 +1163,15 @@ ROT.Display.Hex.prototype.draw = function(data, clearBefore) {
 	var fg = data[3];
 	var bg = data[4];
 
-	var cx = (x+1) * this._spacingX;
-	var cy = y * this._spacingY + this._hexSize;
+	var px = [
+		(x+1) * this._spacingX,
+		y * this._spacingY + this._hexSize
+	];
+	if (this._options.transpose) { px.reverse(); }
 
 	if (clearBefore) { 
 		this._context.fillStyle = bg;
-		this._fill(cx, cy);
+		this._fill(px[0], px[1]);
 	}
 	
 	if (!ch) { return; }
@@ -1128,18 +1180,29 @@ ROT.Display.Hex.prototype.draw = function(data, clearBefore) {
 
 	var chars = [].concat(ch);
 	for (var i=0;i<chars.length;i++) {
-		this._context.fillText(chars[i], cx, cy);
+		this._context.fillText(chars[i], px[0], Math.ceil(px[1]));
 	}
 }
 
-
 ROT.Display.Hex.prototype.computeSize = function(availWidth, availHeight) {
+	if (this._options.transpose) {
+		availWidth += availHeight;
+		availHeight = availWidth - availHeight;
+		availWidth -= availHeight;
+	}
+
 	var width = Math.floor(availWidth / this._spacingX) - 1;
 	var height = Math.floor((availHeight - 2*this._hexSize) / this._spacingY + 1);
 	return [width, height];
 }
 
 ROT.Display.Hex.prototype.computeFontSize = function(availWidth, availHeight) {
+	if (this._options.transpose) {
+		availWidth += availHeight;
+		availHeight = availWidth - availHeight;
+		availWidth -= availHeight;
+	}
+
 	var hexSizeWidth = 2*availWidth / ((this._options.width+1) * Math.sqrt(3)) - 1;
 	var hexSizeHeight = availHeight / (2 + 1.5*(this._options.height-1));
 	var hexSize = Math.min(hexSizeWidth, hexSizeHeight);
@@ -1153,6 +1216,7 @@ ROT.Display.Hex.prototype.computeFontSize = function(availWidth, availHeight) {
 
 	hexSize = Math.floor(hexSize)+1; /* closest larger hexSize */
 
+	/* FIXME char size computation does not respect transposed hexes */
 	var fontSize = 2*hexSize / (this._options.spacing * (1 + ratio / Math.sqrt(3)));
 
 	/* closest smaller fontSize */
@@ -1160,9 +1224,17 @@ ROT.Display.Hex.prototype.computeFontSize = function(availWidth, availHeight) {
 }
 
 ROT.Display.Hex.prototype.eventToPosition = function(x, y) {
-	var height = this._context.canvas.height / this._options.height;
-	y = Math.floor(y/height);
-	
+	if (this._options.transpose) {
+		x += y;
+		y = x-y;
+		x -= y;
+		var prop = "width";
+	} else {
+		var prop = "height";
+	}
+	var size = this._context.canvas[prop] / this._options[prop];
+	y = Math.floor(y/size);
+
 	if (y.mod(2)) { /* odd row */
 		x -= this._spacingX;
 		x = 1 + 2*Math.floor(x/(2*this._spacingX));
@@ -1173,20 +1245,35 @@ ROT.Display.Hex.prototype.eventToPosition = function(x, y) {
 	return [x, y];
 }
 
+/**
+ * Arguments are pixel values. If "transposed" mode is enabled, then these two are already swapped.
+ */
 ROT.Display.Hex.prototype._fill = function(cx, cy) {
 	var a = this._hexSize;
 	var b = this._options.border;
 	
 	this._context.beginPath();
-	this._context.moveTo(cx, cy-a+b);
-	this._context.lineTo(cx + this._spacingX - b, cy-a/2+b);
-	this._context.lineTo(cx + this._spacingX - b, cy+a/2-b);
-	this._context.lineTo(cx, cy+a-b);
-	this._context.lineTo(cx - this._spacingX + b, cy+a/2-b);
-	this._context.lineTo(cx - this._spacingX + b, cy-a/2+b);
-	this._context.lineTo(cx, cy-a+b);
+
+	if (this._options.transpose) {
+		this._context.moveTo(cx-a+b,	cy);
+		this._context.lineTo(cx-a/2+b,	cy+this._spacingX-b);
+		this._context.lineTo(cx+a/2-b,	cy+this._spacingX-b);
+		this._context.lineTo(cx+a-b,	cy);
+		this._context.lineTo(cx+a/2-b,	cy-this._spacingX+b);
+		this._context.lineTo(cx-a/2+b,	cy-this._spacingX+b);
+		this._context.lineTo(cx-a+b,	cy);
+	} else {
+		this._context.moveTo(cx,					cy-a+b);
+		this._context.lineTo(cx+this._spacingX-b,	cy-a/2+b);
+		this._context.lineTo(cx+this._spacingX-b,	cy+a/2-b);
+		this._context.lineTo(cx,					cy+a-b);
+		this._context.lineTo(cx-this._spacingX+b,	cy+a/2-b);
+		this._context.lineTo(cx-this._spacingX+b,	cy-a/2+b);
+		this._context.lineTo(cx,					cy-a+b);
+	}
 	this._context.fill();
 }
+
 /**
  * @class Tile backend
  * @private
@@ -1195,6 +1282,7 @@ ROT.Display.Tile = function(context) {
 	ROT.Display.Rect.call(this, context);
 	
 	this._options = {};
+	this._colorCanvas = document.createElement("canvas");
 }
 ROT.Display.Tile.extend(ROT.Display.Rect);
 
@@ -1202,6 +1290,8 @@ ROT.Display.Tile.prototype.compute = function(options) {
 	this._options = options;
 	this._context.canvas.width = options.width * options.tileWidth;
 	this._context.canvas.height = options.height * options.tileHeight;
+	this._colorCanvas.width = options.tileWidth;
+	this._colorCanvas.height = options.tileHeight;
 }
 
 ROT.Display.Tile.prototype.draw = function(data, clearBefore) {
@@ -1217,7 +1307,11 @@ ROT.Display.Tile.prototype.draw = function(data, clearBefore) {
 	if (clearBefore) {
 		var b = this._options.border;
 		this._context.fillStyle = bg;
-		this._context.fillRect(x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+
+		if (this._options.tileColor) {this._context.clearRect(x*tileWidth, y*tileHeight, tileWidth, tileHeight);} else {
+			this._context.fillRect(x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+		}
+		
 	}
 
 	if (!ch) { return; }
@@ -1227,11 +1321,38 @@ ROT.Display.Tile.prototype.draw = function(data, clearBefore) {
 		var tile = this._options.tileMap[chars[i]];
 		if (!tile) { throw new Error("Char '" + chars[i] + "' not found in tileMap"); }
 		
-		this._context.drawImage(
-			this._options.tileSet,
-			tile[0], tile[1], tileWidth, tileHeight,
-			x*tileWidth, y*tileHeight, tileWidth, tileHeight
-		);
+		if (this._options.tileColorize) { /* apply colorization */
+			var canvas = this._colorCanvas;
+			var context = canvas.getContext("2d");
+			context.clearRect(0, 0, tileWidth, tileHeight);
+
+			context.drawImage(
+				this._options.tileSet,
+				tile[0], tile[1], tileWidth, tileHeight,
+				0, 0, tileWidth, tileHeight
+			);
+
+			if (fg != "transparent") {
+				context.fillStyle = fg;
+				context.globalCompositeOperation = "source-atop";
+				context.fillRect(0, 0, tileWidth, tileHeight);
+			}
+
+			if (bg != "transparent") {
+				context.fillStyle = bg;
+				context.globalCompositeOperation = "destination-over";
+				context.fillRect(0, 0, tileWidth, tileHeight);
+			}
+
+			this._context.drawImage(canvas, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+
+		} else { /* no colorizing, easy */
+			this._context.drawImage(
+				this._options.tileSet,
+				tile[0], tile[1], tileWidth, tileHeight,
+				x*tileWidth, y*tileHeight, tileWidth, tileHeight
+			);
+		}
 	}
 }
 
@@ -1246,6 +1367,11 @@ ROT.Display.Tile.prototype.computeFontSize = function(availWidth, availHeight) {
 	var height = Math.floor(availHeight / this._options.height);
 	return [width, height];
 }
+
+ROT.Display.Tile.prototype.eventToPosition = function(x, y) {
+	return [Math.floor(x/this._options.tileWidth), Math.floor(y/this._options.tileHeight)];
+}
+
 /**
  * @namespace
  * This code is an implementation of Alea algorithm; (C) 2010 Johannes Baagøe.
@@ -1329,7 +1455,6 @@ ROT.RNG = {
 	 * @returns {string} whatever
 	 */
 	getWeightedValue: function(data) {
-		var avail = [];
 		var total = 0;
 		
 		for (var id in data) {
@@ -1342,8 +1467,10 @@ ROT.RNG = {
 			part += data[id];
 			if (random < part) { return id; }
 		}
-		
-		return null;
+
+                // If by some floating-point annoyance we have
+                // random >= total, just return the last id.
+                return id;
 	},
 
 	/**
@@ -1366,6 +1493,15 @@ ROT.RNG = {
 		return this;
 	},
 
+	/**
+	 * Returns a cloned RNG
+	 */
+	clone: function() {
+		var clone = Object.create(this);
+		clone.setState(this.getState());
+		return clone;
+	},
+
 	_s0: 0,
 	_s1: 0,
 	_s2: 0,
@@ -1374,6 +1510,7 @@ ROT.RNG = {
 }
 
 ROT.RNG.setSeed(Date.now());
+
 /**
  * @class (Markov process)-based string generator. 
  * Copied from a <a href="http://www.roguebasin.roguelikedevelopment.org/index.php?title=Names_from_a_high_order_Markov_Process_and_a_simplified_Katz_back-off_scheme">RogueBasin article</a>. 
@@ -1512,7 +1649,7 @@ ROT.StringGenerator.prototype._sample = function(context) {
 		available = data;
 	}
 
-	return this._pickRandom(available);
+	return ROT.RNG.getWeightedValue(available);
 }
 
 /**
@@ -1531,21 +1668,6 @@ ROT.StringGenerator.prototype._backoff = function(context) {
 	return context;
 }
 
-
-ROT.StringGenerator.prototype._pickRandom = function(data) {
-	var total = 0;
-	
-	for (var id in data) {
-		total += data[id];
-	}
-	var random = ROT.RNG.getUniform()*total;
-	
-	var part = 0;
-	for (var id in data) {
-		part += data[id];
-		if (random < part) { return id; }
-	}
-}
 /**
  * @class Generic event queue: stores events and retrieves them based on their time
  */
@@ -1624,6 +1746,7 @@ ROT.EventQueue.prototype._remove = function(index) {
 	this._events.splice(index, 1);
 	this._eventTimes.splice(index, 1);
 }
+
 /**
  * @class Abstract scheduler
  */
@@ -1683,6 +1806,7 @@ ROT.Scheduler.prototype.next = function() {
 	this._current = this._queue.get();
 	return this._current;
 }
+
 /**
  * @class Simple fair scheduler (round-robin style)
  * @augments ROT.Scheduler
@@ -1709,6 +1833,7 @@ ROT.Scheduler.Simple.prototype.next = function() {
 	}
 	return ROT.Scheduler.prototype.next.call(this);
 }
+
 /**
  * @class Speed-based scheduler
  * @augments ROT.Scheduler
@@ -1737,6 +1862,7 @@ ROT.Scheduler.Speed.prototype.next = function() {
 	}
 	return ROT.Scheduler.prototype.next.call(this);
 }
+
 /**
  * @class Action-based scheduler
  * @augments ROT.Scheduler
@@ -1787,6 +1913,7 @@ ROT.Scheduler.Action.prototype.setDuration = function(time) {
 	if (this._current) { this._duration = time; }
 	return this;
 }
+
 /**
  * @class Asynchronous main loop
  * @param {ROT.Scheduler} scheduler
@@ -1830,6 +1957,7 @@ ROT.Engine.prototype.unlock = function() {
 
 	return this;
 }
+
 /**
  * @class Base map generator
  * @param {int} [width=ROT.DEFAULT_WIDTH]
@@ -1850,6 +1978,7 @@ ROT.Map.prototype._fillMap = function(value) {
 	}
 	return map;
 }
+
 /**
  * @class Simple empty rectangular room
  * @augments ROT.Map
@@ -1870,6 +1999,7 @@ ROT.Map.Arena.prototype.create = function(callback) {
 	}
 	return this;
 }
+
 /**
  * @class Recursively divided maze, http://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
  * @augments ROT.Map
@@ -1978,6 +2108,7 @@ ROT.Map.DividedMaze.prototype._partitionRoom = function(room) {
 	this._stack.push([room[0], y+1, x-1, room[3]]); /* left bottom */
 	this._stack.push([x+1, y+1, room[2], room[3]]); /* right bottom */
 }
+
 /**
  * @class Icey's Maze generator
  * See http://www.roguebasin.roguelikedevelopment.org/index.php?title=Simple_maze for explanation
@@ -2079,6 +2210,7 @@ ROT.Map.IceyMaze.prototype._isFree = function(map, x, y, width, height) {
 	if (x < 1 || y < 1 || x >= width || y >= height) { return false; }
 	return map[x][y];
 }
+
 /**
  * @class Maze generator - Eller's algorithm
  * See http://homepages.cwi.nl/~tromp/maze.html for explanation
@@ -2174,6 +2306,7 @@ ROT.Map.EllerMaze.prototype._addToList = function(i, L, R) {
 	R[i] = i+1;
 	L[i+1] = i;
 }
+
 /**
  * @class Cellular automaton map generator
  * @augments ROT.Map
@@ -2443,6 +2576,7 @@ ROT.Map.Cellular.prototype._pointKey = function(p) {
 	return p[0] + "." + p[1];
 }
 
+
 /**
  * @class Dungeon map: has rooms and corridors
  * @augments ROT.Map
@@ -2469,6 +2603,7 @@ ROT.Map.Dungeon.prototype.getRooms = function() {
 ROT.Map.Dungeon.prototype.getCorridors = function() {
 	return this._corridors;
 }
+
 /**
  * @class Random dungeon generator using human-like digging patterns.
  * Heavily based on Mike Anderson's ideas from the "Tyrant" algo, mentioned at 
@@ -2703,6 +2838,7 @@ ROT.Map.Digger.prototype._addDoors = function() {
 		room.addDoors(isWallCallback);
 	}
 }
+
 /**
  * @class Dungeon generator which tries to fill the space evenly. Generates independent rooms and tries to connect them.
  * @augments ROT.Map.Dungeon
@@ -2925,7 +3061,7 @@ ROT.Map.Uniform.prototype._connectRooms = function(room1, room2) {
 	
 		var index2 = (index+1)%2;
 		var end = this._placeInWall(room2, dirIndex2);
-		if (!end) { return; }
+		if (!end) { return false; }
 		var mid = Math.round((end[index2] + start[index2])/2);
 
 		var mid1 = [0, 0];
@@ -3034,6 +3170,7 @@ ROT.Map.Uniform.prototype._canBeDugCallback = function(x, y) {
 	return (this._map[x][y] == 1);
 }
 
+
 /**
  * @author hyakugei
  * @class Dungeon generator which uses the "orginal" Rogue dungeon generation algorithm. See http://kuoi.com/~kamikaze/GameDesign/art07_rogue_dungeon.php
@@ -3062,10 +3199,10 @@ ROT.Map.Rogue = function(width, height, options) {
 	*/
 	
 	if (!this._options.hasOwnProperty("roomWidth")) {
-		this._options["roomWidth"] = this._calculateRoomSize(width, this._options["cellWidth"]);
+		this._options["roomWidth"] = this._calculateRoomSize(this._width, this._options["cellWidth"]);
 	}
 	if (!this._options.hasOwnProperty["roomHeight"]) {
-		this._options["roomHeight"] = this._calculateRoomSize(height, this._options["cellHeight"]);
+		this._options["roomHeight"] = this._calculateRoomSize(this._height, this._options["cellHeight"]);
 	}
 	
 }
@@ -3468,6 +3605,7 @@ ROT.Map.Rogue.prototype._createCorridors = function () {
 		}
 	}
 }
+
 /**
  * @class Dungeon feature; has own .create() method
  */
@@ -3528,6 +3666,8 @@ ROT.Map.Feature.Room.createRandomAt = function(x, y, dx, dy, options) {
 		var x2 = x - Math.floor(ROT.RNG.getUniform() * width);
 		return new this(x2, y-height, x2+width-1, y-1, x, y);
 	}
+
+        throw new Error("dx or dy must be 1 or -1");
 }
 
 /**
@@ -3807,13 +3947,15 @@ ROT.Map.Feature.Corridor.prototype.createPriorityWalls = function(priorityWallCa
 	priorityWallCallback(this._endX + dx, this._endY + dy);
 	priorityWallCallback(this._endX + nx, this._endY + ny);
 	priorityWallCallback(this._endX - nx, this._endY - ny);
-}/**
+}
+/**
  * @class Base noise generator
  */
 ROT.Noise = function() {
 };
 
 ROT.Noise.prototype.get = function(x, y) {}
+
 /**
  * A simple 2d implementation of simplex noise by Ondrej Zara
  *
@@ -3930,6 +4072,7 @@ ROT.Noise.Simplex.prototype.get = function(xin, yin) {
 	// The result is scaled to return values in the interval [-1,1].
 	return 70 * (n0 + n1 + n2);
 }
+
 /**
  * @class Abstract FOV algorithm
  * @param {function} lightPassesCallback Does the light pass through x,y?
@@ -4004,6 +4147,7 @@ ROT.FOV.prototype._getCircle = function(cx, cy, r) {
 
 	return result;
 }
+
 /**
  * @class Discrete shadowcasting algorithm. Obsoleted by Precise shadowcasting.
  * @augments ROT.FOV
@@ -4112,6 +4256,7 @@ ROT.FOV.DiscreteShadowcasting.prototype._visibleCoords = function(A, B, blocks, 
 		return true;
 	}
 }
+
 /**
  * @class Precise shadowcasting algorithm
  * @augments ROT.FOV
@@ -4235,6 +4380,7 @@ ROT.FOV.PreciseShadowcasting.prototype._checkVisibility = function(A1, A2, block
 
 	return visibleLength/arcLength;
 }
+
 /**
  * @class Recursive shadowcasting algorithm
  * Currently only supports 4/8 topologies, not hexagonal.
@@ -4389,6 +4535,7 @@ ROT.FOV.RecursiveShadowcasting.prototype._castVisibility = function(startX, star
 		if(blocked) { break; }
 	}
 }
+
 /**
  * @namespace Color operations
  */
@@ -4411,7 +4558,7 @@ ROT.Color = {
 					cached = values;
 				}
 
-			} else if (r = str.match(/rgb\(([0-9, ]+)\)/i)) { /* decimal rgb */
+			} else if ((r = str.match(/rgb\(([0-9, ]+)\)/i))) { /* decimal rgb */
 				cached = r[1].split(/\s*,\s*/).map(function(x) { return parseInt(x); });
 			} else { /* html name */
 				cached = [0, 0, 0];
@@ -4527,7 +4674,7 @@ ROT.Color = {
 	 * @returns {number[]}
 	 */
 	randomize: function(color, diff) {
-		if (!(diff instanceof Array)) { diff = ROT.RNG.getNormal(0, diff); }
+		if (!(diff instanceof Array)) { diff = Math.round(ROT.RNG.getNormal(0, diff)); }
 		var result = color.slice();
 		for (var i=0;i<3;i++) {
 			result[i] += (diff instanceof Array ? Math.round(ROT.RNG.getNormal(0, diff[i])) : diff);
@@ -4576,7 +4723,7 @@ ROT.Color = {
 			l = Math.round(l*255);
 			return [l, l, l];
 		} else {
-			function hue2rgb(p, q, t) {
+			var hue2rgb = function(p, q, t) {
 				if (t < 0) t += 1;
 				if (t > 1) t -= 1;
 				if (t < 1/6) return p + (q - p) * 6 * t;
@@ -4766,6 +4913,7 @@ ROT.Color = {
 		"white": [255,255,255]
 	}
 }
+
 /**
  * @class Lighting computation, based on a traditional FOV for multiple light sources and multiple passes.
  * @param {function} reflectivityCallback Callback to retrieve cell reflectivity (0..1)
@@ -4826,6 +4974,13 @@ ROT.Lighting.prototype.setLight = function(x, y, color) {
 		delete this._lights[key];
 	}
 	return this;
+}
+
+/**
+ * Remove all light sources
+ */
+ROT.Lighting.prototype.clearLights = function() {
+    this._lights = {};
 }
 
 /**
@@ -4979,6 +5134,7 @@ ROT.Lighting.prototype._updateFOV = function(x, y) {
 
 	return cache;
 }
+
 /**
  * @class Abstract pathfinder
  * @param {int} toX Target X coord
@@ -5035,6 +5191,7 @@ ROT.Path.prototype._getNeighbors = function(cx, cy) {
 	
 	return result;
 }
+
 /**
  * @class Simplified Dijkstra's algorithm: all edges have a value of 1
  * @augments ROT.Path
@@ -5095,6 +5252,7 @@ ROT.Path.Dijkstra.prototype._add = function(x, y, prev) {
 	this._computed[x+","+y] = obj;
 	this._todo.push(obj);
 }
+
 /**
  * @class Simplified A* algorithm: all edges have a value of 1
  * @augments ROT.Path
@@ -5185,4 +5343,6 @@ ROT.Path.AStar.prototype._distance = function(x, y) {
 			return Math.max(Math.abs(x-this._fromX), Math.abs(y-this._fromY));
 		break;
 	}
+
+        throw new Error("Illegal topology");
 }
