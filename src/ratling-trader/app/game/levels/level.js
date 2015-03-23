@@ -4,29 +4,52 @@ define(function () {
             width: data.tiles.length,
             height: data.tiles[0].length
         };
+
+        this._private = {
+            size: size,
+            nullTile: tileFactory.nullTile,
+            fov: new ROT.FOV.PreciseShadowcasting(this.checkIfLightPasses.bind(this)),
+            isInitialized: false
+
+        };
+
+        this._private.map = initializeMap(size, data.tiles, tileFactory, this);
+        calculateEntitiesFov(this._private.map);
+        this._private.isInitialized = true;
+    }
+
+    function initializeMap(size, tiles, tileFactory, level) {
         var map = new Array(size.width);
+
         for (var x = 0; x < size.width; x++) {
             var column = new Array(size.height);
             map[x] = column;
             for (var y = 0; y < size.height; y++) {
-                var tileData = data.tiles[x][y];
-                tileData.level = this;
+                var tileData = tiles[x][y];
+                tileData.level = level;
                 tileData.position = {x: x, y: y};
                 column[y] = tileFactory.create(tileData);
             }
         }
 
-        this._private = {
-            map: map,
-            size: size,
-            nullTile: tileFactory.nullTile,
-            fov: new ROT.FOV.PreciseShadowcasting(this.checkIfLightPasses.bind(this))
+        return map;
+    }
 
-        };
-
+    function calculateEntitiesFov(map) {
+        for (var x = 0; x < map.length; x++) {
+            var column = map[x];
+            for (var y = 0; y < column.length; y++) {
+                var entities = column[y].entities.all();
+                for (var i = 0; i < entities.length; i++)
+                    entities[i].calculateFov();
+            }
+        }
     }
 
     Level.prototype = {
+        get isInitialized(){
+            return this._private.isInitialized;
+        },
         get tiles() {
             return this._private.map.slice();
         },

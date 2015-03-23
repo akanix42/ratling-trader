@@ -14,12 +14,13 @@ define(function (require) {
             eventHandlers: eventHandlers,
             entityAttributeFactory: entityAttributeFactory,
             nullTile: nullTile,
-            tilesInFov:null
+            tilesInFov: null
         };
         this.tile = data.tile;
         initAttributes(this, data);
         initMixins(data.mixins, this.mixins);
-        this.calculateFov();
+        if (this.tile.level && this.tile.level.isInitialized)
+            this.calculateFov();
 
     }
 

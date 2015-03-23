@@ -87,10 +87,10 @@ define(function (require) {
             var tiles = [
                 [
                     {
-                        baseArchitecture: 'dirtFloor',
+                        baseArchitecture: {type:'dirtFloor'},
                     },
                     {
-                        baseArchitecture: 'dirtFloor',
+                        baseArchitecture: {type:'dirtFloor'},
                         entities: [playerEntity]
                     },
                 ],
