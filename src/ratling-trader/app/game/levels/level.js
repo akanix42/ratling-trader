@@ -36,11 +36,17 @@ define(function () {
         calculateFov: function calculateFov(x, y, radius) {
             var tilesInFov = {};
             var self = this;
+            var clearSightDistance = radius * 0.667;
+            if (radius === 0)
+                return tilesInFov;
 
             this._private.fov.compute(x, y, radius, function recordVisibleTile(x, y, distance, visibility) {
                 if (visibility === 0 || x < 0 || y < 0 || x >= self.size.width || y >= self.size.height)
                     return;
-                tilesInFov[x + ',' + y] = {x: x, y: y};
+
+                if (distance > clearSightDistance)
+                    visibility = (radius - distance) / (radius - clearSightDistance);
+                tilesInFov[x + ',' + y] = {x: x, y: y, visibility: visibility};
             });
 
             return tilesInFov;

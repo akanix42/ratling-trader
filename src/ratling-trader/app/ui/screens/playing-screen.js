@@ -136,14 +136,30 @@ define(function (require) {
         var display = this._private.display;
         var tiles = this._private.uiToGameBridge.gameState.level.tiles;
         var fov = this._private.uiToGameBridge.gameState.player._private.tilesInFov;
+
+        renderCurrentFov.call(this, display, tiles, fov);
+        renderPreviousFov.call(this, display, tiles, fov);
+        this._private.previousFov = fov;
+    }
+
+    function renderCurrentFov(display, tiles, fov) {
         var fovKeys = Object.keys(fov);
         for (var i = 0; i < fovKeys.length; i++) {
-            var tilePosition = fov[fovKeys[i]];
-            var tile = tiles[tilePosition.x][tilePosition.y];
+            var tileFovData = fov[fovKeys[i]];
+            var tile = tiles[tileFovData.x][tileFovData.y];
             var entities = tile.entities.all();
-            uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
-            uiTile.draw(display, tilePosition.x, tilePosition.y);
+            var uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
+
+            uiTile.draw(display, tileFovData.x, tileFovData.y, calculateOverlay(tileFovData.visibility));
         }
+    }
+
+    function calculateOverlay(visibility) {
+        if (visibility < 1)
+            return 'rgba(156,152,155,' + ((1 - visibility) /4) + ')';
+    }
+
+    function renderPreviousFov(display, tiles, fov) {
         var previousFov = this._private.previousFov;
         if (previousFov) {
             var pFovKeys = Object.keys(previousFov);
@@ -151,16 +167,14 @@ define(function (require) {
                 var key = pFovKeys[i];
                 if (fov[key]) continue;
 
-                var tilePosition = previousFov[key];
-                var tile = tiles[tilePosition.x][tilePosition.y];
+                var tileFovData = previousFov[key];
+                var tile = tiles[tileFovData.x][tileFovData.y];
                 var entities = tile.entities;
                 var entity = entities.floorSpace.last() || entities.architecture;
                 uiTile = this._private.asciiTileFactory.create(entity.type);
-                uiTile.draw(display, tilePosition.x, tilePosition.y, 'rgba(156,152,155,0.5)');
-                //display.draw(tilePosition.x, tilePosition.y, ' ', 'rgba(156,152,155,0.5)', 'rgba(156,152,155,0.4)');
+                uiTile.draw(display, tileFovData.x, tileFovData.y, 'rgba(156,152,155,0.5)');
             }
         }
-        this._private.previousFov = fov;
     }
 
     function renderTiles(tiles) {
