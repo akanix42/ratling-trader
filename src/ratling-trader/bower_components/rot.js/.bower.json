@@ -1,14 +1,35 @@
 {
   "name": "rot.js",
-  "homepage": "https://github.com/ondras/rot.js",
-  "_release": "5e9ce0b2c1",
+  "main": "rot.js",
+  "authors": [
+    "Ondrej Zara <ondrej.zara@gmail.com> (http://ondras.zarovi.cz/)"
+  ],
+  "description": "A roguelike toolkit in JavaScript",
+  "keywords": [
+    "rogue",
+    "roguelike",
+    "game",
+    "ascii",
+    "tiles",
+    "dungeon",
+    "los",
+    "fov",
+    "lighting"
+  ],
+  "license": "BSD License",
+  "homepage": "http://ondras.github.io/rot.js/hp/",
+  "ignore": [
+    "*",
+    "!rot.min.js"
+  ],
+  "_release": "ef5911c96d",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "5e9ce0b2c13985792fd7817cec9b1be0814cbb47"
+    "commit": "ef5911c96d0496719031f12a4c69bebfdfbc03fa"
   },
-  "_source": "git://github.com/ondras/rot.js.git",
-  "_target": "*",
-  "_originalSource": "ondras/rot.js",
+  "_source": "E:\\dev\\rot.js",
+  "_target": "master",
+  "_originalSource": "E:\\dev\\rot.js",
   "_direct": true
 }
