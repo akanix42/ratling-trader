@@ -27,6 +27,7 @@ define(function (require) {
                 self.registerModule('game/tiles/tile'),
                 self.registerModule('game/tiles/tile-factory'),
                 self.registerModule('game/entities/entity-factory'),
+                self.registerModule('game/entities/entity-inventory'),
                 self.registerModule('game/entities/entity-attribute', {
                     factory: function create(data) {
                         return new this.loadedModule(data);

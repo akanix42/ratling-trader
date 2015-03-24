@@ -2,7 +2,7 @@ define(function (require) {
     var EntityMovedEvent = require('game/events/entity-moved');
 
 
-    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, nullTile) {
+    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory, nullTile) {
         this._private = {
             type: data.type,
             space: data.space,
@@ -14,9 +14,13 @@ define(function (require) {
             eventHandlers: eventHandlers,
             entityAttributeFactory: entityAttributeFactory,
             nullTile: nullTile,
-            tilesInFov: null
+            tilesInFov: null,
+            inventory: entityInventory
         };
         this.tile = data.tile;
+
+        entityInventory.entity = this;
+
         initAttributes(this, data);
         initMixins(data.mixins, this.mixins);
         if (this.tile.level && this.tile.level.isInitialized)
@@ -51,6 +55,9 @@ define(function (require) {
         },
         get eventHandlers() {
             return this._private.eventHandlers;
+        },
+        get inventory() {
+            return this._private.inventory;
         },
         get mixins() {
             return this._private.mixins;

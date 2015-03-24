@@ -4,7 +4,7 @@ define(function (require) {
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
     var AttackCommand = require('game/commands/attack-command');
     var arrayExtensions = require('array-extensions');
-
+    var ItemPickupCommand = require('game/commands/item-pickup-command');
 
     function getCommandMap() {
         var commands = {keydown: {}, keyup: {}, keypress: {}};
@@ -26,19 +26,10 @@ define(function (require) {
         keydown[ROT.VK_NUMPAD1] = handleMovementCommand.bind(this, GameCommands.GoDownLeft);
         keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
         keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
+        keydown[ROT.VK_COMMA] = handlePickupCommand.bind(this);
 
         return commands;
 
-
-        //function lose() {
-        //    this._private.ui.screens.push(this._private.losingScreenFactory.create());
-        //
-        //    screenManager.switchTo('losingScreen');
-        //}
-        //
-        //function win() {
-        //    screenManager.switchTo('winningScreen');
-        //}
     }
 
     function handleMovementCommand(moveCommand) {
@@ -49,8 +40,14 @@ define(function (require) {
         return target ? new AttackCommand(target.tile.position) : moveCommand;
     }
 
-    function toggleRenderMode() {
+    function handlePickupCommand() {
+        var player = this._private.uiToGameBridge.gameState.player;
+        var itemIndex = player.tile.entities.floorSpace.length - 1;
 
+        return new ItemPickupCommand([itemIndex]);
+    }
+
+    function toggleRenderMode() {
         if (this._private.renderMode === 'fov')
             this._private.renderMode = 'all';
         else
@@ -156,7 +153,7 @@ define(function (require) {
 
     function calculateOverlay(visibility) {
         if (visibility < 1)
-            return 'rgba(156,152,155,' + ((1 - visibility) /4) + ')';
+            return 'rgba(156,152,155,' + ((1 - visibility) / 4) + ')';
     }
 
     function renderPreviousFov(display, tiles, fov) {

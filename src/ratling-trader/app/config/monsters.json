@@ -5,6 +5,7 @@
     "mixins": [
       "cell-to-cell-movement",
       "destructible",
+      "inventory-manager",
       "player",
       "attacker",
       "collidable"

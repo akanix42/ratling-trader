@@ -6,6 +6,8 @@ define(function (require) {
     var EntityAttackedEvent = require('game/events/entity-attacked-event');
     var stringformat = require('stringformat');
     var arrayExtensions = require('array-extensions');
+    var ItemAddedToInventoryEvent = require('game/events/item-added-to-inventory-event');
+    var ItemRemovedFromInventoryEvent = require('game/events/item-removed-from-inventory-event');
 
     'use strict';
     describe('ui - interacting with a game', function () {
@@ -107,6 +109,7 @@ define(function (require) {
             }
 
         });
+
         it('should attack the occupying entity if the player would move onto an occupied tile', function (done) {
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
@@ -169,7 +172,7 @@ define(function (require) {
                             ],
                             space: 'air',
                             "attributes": {
-                                "health": {base:10}
+                                "health": {base: 10}
                             }
                         };
                     }
@@ -196,5 +199,96 @@ define(function (require) {
             }
 
         });
+
+        it('should pick up the item lying on the tile', function (done) {
+            var roots = {};
+            iocLoader.init(function (gameRoot, uiRoot) {
+                var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
+                gameRoot.injector.register('savedGameFactory', getTestSavedGameFactory(originalSavedGameFactory, getTestGameData()));
+                uiRoot.injector.register('display', new TestDisplay());
+                roots.gameRoot = gameRoot;
+                roots.uiRoot = uiRoot;
+            }).then(function (ui) {
+                return ui.screens.currentScreen.loadGame()
+                    .then(function () {
+                        var start = new Date();
+                        var player = ui.uiBridge._private.gameBridge._private.game.player;
+                        var item = player.tile.entities.floorSpace.last();
+                        player.eventHandlers.subscribe(null, {class: ItemAddedToInventoryEvent, handler: verifyPickUp});
+
+                        item.tile.should.equal(player.tile);
+
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_COMMA});
+
+                        function verifyPickUp(event) {
+                            event.entity.should.equal(player);
+                            event.item.should.equal(item);
+                            event.item.should.equal(player.inventory.items[0]);
+
+                            done(start);
+                        }
+
+                    });
+            });
+
+            function getTestGameData() {
+                var data = {
+                    currentLevel: 0,
+                    levels: [getLevel()]
+                };
+                return data;
+
+
+                function getLevel() {
+                    var level = {
+                        tiles: [
+                            [getTile(), getTile()],
+                            [getTile(), getTile([getPlayer(), getItem()])]
+                        ], hasBeenCreated: true
+                    };
+                    level.size = {
+                        width: level.tiles.length,
+                        height: level.tiles[0].length
+                    };
+                    return level;
+
+                    function getPlayer() {
+                        return {
+                            type: 'player'
+                        };
+                    }
+
+                    function getItem() {
+                        return {
+                            "name": "test",
+                            "type": "item",
+                            "mixins": [],
+                            space: 'floor',
+                        };
+                    }
+
+                    function getTile(entities) {
+                        return {
+                            baseArchitecture: {type: 'dirtFloor'},
+                            entities: entities
+                        };
+                    }
+                }
+            }
+
+        });
     });
+
+    function getTestSavedGameFactory(originalSavedGameFactory, testGameData) {
+        function TestSavedGameFactory() {
+
+        }
+
+        TestSavedGameFactory.prototype.create = function create(gameToUiBridge) {
+            return originalSavedGameFactory.create(gameToUiBridge, testGameData);
+        };
+
+        return TestSavedGameFactory;
+    }
+
 });
