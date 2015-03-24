@@ -3,10 +3,15 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
 <div id="ui">
-    <div id="ui-screen"></div>
+    <div id="ui-screen">
+        <!-- ko if: component -->
+        <div class="knockout-screen" data-bind="component: component">COMPONENT</div>
+        <!-- /ko -->
+    </div>
     <div id="ui-footer"></div>
 </div>
 <script data-main="app/require-config-app" src="bower_components/requirejs/require.js"></script>

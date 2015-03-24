@@ -27,9 +27,14 @@ define(function (require) {
         keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
         keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
         keydown[ROT.VK_COMMA] = handlePickupCommand.bind(this);
+        keydown[ROT.VK_I] = showInventoryCommand.bind(this);
 
         return commands;
 
+    }
+
+    function showInventoryCommand(){
+        this._private.ui.screens.push(this._private.inventoryScreenFactory.create());
     }
 
     function handleMovementCommand(moveCommand) {
@@ -56,14 +61,15 @@ define(function (require) {
         this.render();
     }
 
-    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory) {
+    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory, inventoryScreenFactory) {
         this._private = {
             display: display,
             ui: ui,
             uiToGameBridge: uiToGameBridge,
             asciiTileFactory: asciiTileFactory,
             commandMap: getCommandMap.call(this),
-            renderMode: 'fov'
+            renderMode: 'fov',
+            inventoryScreenFactory:inventoryScreenFactory
 
         };
         window.display = display;

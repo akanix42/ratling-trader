@@ -1,0 +1,15 @@
+#ui-screen {
+  position: relative;
+}
+.knockout-screen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+#inventory-screen {
+  background-color: gray;
+  width: 100%;
+  height: 100%;
+}

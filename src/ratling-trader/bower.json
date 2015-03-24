@@ -20,7 +20,6 @@
     "moment": "~2.8.1",
     "node-uuid": "~1.4.1",
     "requirejs": "~2.1.14",
-    "rot.js": "nathantreid/rot.js",
     "stringformat.js": "jcayzac/stringformat.js#~0.0.6",
     "when": "~3.4.4",
     "requirejs-plugins": "~1.0.2",

@@ -1,8 +1,14 @@
-define(function () {
+define(function (require) {
+    var ko = require('knockout');
+
     function Display() {
         var self = this;
         self._private = {};
         self._private.display = createDisplay();
+        self._private.viewModel = createViewModel();
+
+        ko.applyBindings(self._private.viewModel);
+
         function createDisplay() {
             var height = 24,
                 width = Math.floor(document.getElementById('ui').offsetWidth / 11);
@@ -18,9 +24,18 @@ define(function () {
 
             return display;
         }
+
+        function createViewModel(){
+            return {
+                component: ko.observable()
+            };
+        }
     }
 
     Display.prototype = {
+        get koComponent() {
+            return this._private.viewModel.component;
+        },
         get size() {
             return this._private.size;
         },

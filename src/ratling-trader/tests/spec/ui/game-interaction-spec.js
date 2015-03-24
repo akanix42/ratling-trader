@@ -8,10 +8,11 @@ define(function (require) {
     var arrayExtensions = require('array-extensions');
     var ItemAddedToInventoryEvent = require('game/events/item-added-to-inventory-event');
     var ItemRemovedFromInventoryEvent = require('game/events/item-removed-from-inventory-event');
+    var EntityDroppedItemEvent = require('game/events/entity-dropped-item-event');
 
     'use strict';
     describe('ui - interacting with a game', function () {
-        it('should move the player in response to the arrow keys', function (done) {
+        it('player should move in response to the arrow keys', function (done) {
             var mockDisplay = new TestDisplay(drawCallback);
             var positions = [
                 {x: 1, y: 1, key: ROT.VK_LEFT},
@@ -110,7 +111,7 @@ define(function (require) {
 
         });
 
-        it('should attack the occupying entity if the player would move onto an occupied tile', function (done) {
+        it('player should attack the occupying entity if the player would move onto an occupied tile', function (done) {
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
                 var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
@@ -200,7 +201,7 @@ define(function (require) {
 
         });
 
-        it('should pick up the item lying on the tile', function (done) {
+        it('player should pick up the item lying on the tile when the "pick up" key is pressed', function (done) {
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
                 var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
@@ -277,6 +278,89 @@ define(function (require) {
             }
 
         });
+
+        it('player should drop the item when the "drop" key sequence is pressed', function (done) {
+            var roots = {};
+            iocLoader.init(function (gameRoot, uiRoot) {
+                var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
+                gameRoot.injector.register('savedGameFactory', getTestSavedGameFactory(originalSavedGameFactory, getTestGameData()));
+                uiRoot.injector.register('display', new TestDisplay());
+                roots.gameRoot = gameRoot;
+                roots.uiRoot = uiRoot;
+            }).then(function (ui) {
+                return ui.screens.currentScreen.loadGame()
+                    .then(function () {
+                        var start = new Date();
+                        var player = ui.uiBridge._private.gameBridge._private.game.player;
+                        var item = player.inventory.items[0];
+
+                        player.eventHandlers.subscribe(null, {class: EntityDroppedItemEvent, handler: verifyDrop});
+
+
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_D});
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_A});
+
+                        function verifyDrop(event) {
+                            event.item.should.equal(item);
+                            item.tile.should.equal(player.tile);
+                            player.tile.entities.floorSpace.last().should.equal(item);
+                            done(start);
+                        }
+
+                    });
+            });
+
+            function getTestGameData() {
+                var data = {
+                    currentLevel: 0,
+                    levels: [getLevel()]
+                };
+                return data;
+
+
+                function getLevel() {
+                    var level = {
+                        tiles: [
+                            [getTile(), getTile()],
+                            [getTile(), getTile([getPlayer()])]
+                        ], hasBeenCreated: true
+                    };
+                    level.size = {
+                        width: level.tiles.length,
+                        height: level.tiles[0].length
+                    };
+                    return level;
+
+                    function getPlayer() {
+                        return {
+                            type: 'player',
+                            items: [
+                                getItem()
+                            ]
+                        };
+                    }
+
+                    function getItem() {
+                        return {
+                            "name": "test",
+                            "type": "item",
+                            "mixins": [],
+                            space: 'floor',
+                        };
+                    }
+
+                    function getTile(entities) {
+                        return {
+                            baseArchitecture: {type: 'dirtFloor'},
+                            entities: entities
+                        };
+                    }
+                }
+            }
+
+        });
+
+
     });
 
     function getTestSavedGameFactory(originalSavedGameFactory, testGameData) {
