@@ -27,6 +27,9 @@ define(function (require) {
         },
         render: function render() {
 
+        },
+        show: function show(){
+
         }
     };
 

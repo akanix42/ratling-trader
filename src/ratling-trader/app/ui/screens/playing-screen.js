@@ -33,8 +33,8 @@ define(function (require) {
 
     }
 
-    function showInventoryCommand(){
-        this._private.ui.screens.push(this._private.inventoryScreenFactory.create());
+    function showInventoryCommand() {
+        this._private.ui.screens.push(this._private.inventoryScreen);
     }
 
     function handleMovementCommand(moveCommand) {
@@ -61,7 +61,7 @@ define(function (require) {
         this.render();
     }
 
-    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory, inventoryScreenFactory) {
+    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory, inventoryScreen) {
         this._private = {
             display: display,
             ui: ui,
@@ -69,7 +69,7 @@ define(function (require) {
             asciiTileFactory: asciiTileFactory,
             commandMap: getCommandMap.call(this),
             renderMode: 'fov',
-            inventoryScreenFactory:inventoryScreenFactory
+            inventoryScreen: inventoryScreen
 
         };
         window.display = display;
@@ -85,6 +85,11 @@ define(function (require) {
                 renderFov.call(this);
             else
                 renderLevel.call(this);
+        },
+        show: function show() {
+            this.render();
+        },
+        hide: function () {
         },
         handleInput: function handleInput(inputType, inputData) {
             var command = this._private.commandMap[inputType][inputData.keyCode];

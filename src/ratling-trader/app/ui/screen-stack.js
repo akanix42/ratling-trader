@@ -12,8 +12,14 @@ define(function () {
         },
         push: function (screen) {
             this._private.stack.push(screen);
-            screen.render();
+            screen.show();
         },
+        pop: function () {
+            var screen = this._private.stack.pop();
+            if (screen.hide)
+                screen.hide();
+        }
+
     };
 
     return ScreenStack;

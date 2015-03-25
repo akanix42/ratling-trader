@@ -1,3 +1,11 @@
 <div id="inventory-screen">
-   TEST
+    <h1>Inventory</h1>
+    <!-- ko ifnot: items().length -->
+    Your inventory is empty.
+    <!-- /ko -->
+    <h4 data-bind="visible: mode() === 'drop'">Select an item to drop.</h4>
+    <ol class="items" type="A" data-bind="foreach: items">
+        <li>{{type}}</li>
+    </ol>
+    <h4>Press ESC to exit</h4>
 </div>

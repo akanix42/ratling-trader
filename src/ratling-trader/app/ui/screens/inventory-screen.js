@@ -5,55 +5,26 @@ define(function (require) {
     var arrayExtensions = require('array-extensions');
     var ItemPickupCommand = require('game/commands/item-pickup-command');
     var ko = require('knockout');
+    var koPunch = require('knockout.punches');
 
     function getCommandMap() {
         var commands = {keydown: {}, keyup: {}, keypress: {}};
         var keydown = commands.keydown,
             keyup = commands.keyup;
-        //keyup[ROT.VK_RETURN] = win;
-        //keyup[ROT.VK_ESCAPE] = lose;
-        keydown[ROT.VK_LEFT] = handleMovementCommand.bind(this, GameCommands.GoLeft);
-        keydown[ROT.VK_RIGHT] = handleMovementCommand.bind(this, GameCommands.GoRight);
-        keydown[ROT.VK_UP] = handleMovementCommand.bind(this, GameCommands.GoUp);
-        keydown[ROT.VK_DOWN] = handleMovementCommand.bind(this, GameCommands.GoDown);
-        keydown[ROT.VK_NUMPAD4] = handleMovementCommand.bind(this, GameCommands.GoLeft);
-        keydown[ROT.VK_NUMPAD7] = handleMovementCommand.bind(this, GameCommands.GoUpLeft);
-        keydown[ROT.VK_NUMPAD8] = handleMovementCommand.bind(this, GameCommands.GoUp);
-        keydown[ROT.VK_NUMPAD9] = handleMovementCommand.bind(this, GameCommands.GoUpRight);
-        keydown[ROT.VK_NUMPAD6] = handleMovementCommand.bind(this, GameCommands.GoRight);
-        keydown[ROT.VK_NUMPAD3] = handleMovementCommand.bind(this, GameCommands.GoDownRight);
-        keydown[ROT.VK_NUMPAD2] = handleMovementCommand.bind(this, GameCommands.GoDown);
-        keydown[ROT.VK_NUMPAD1] = handleMovementCommand.bind(this, GameCommands.GoDownLeft);
-        keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
-        keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
-        keydown[ROT.VK_COMMA] = handlePickupCommand.bind(this);
+
+        keydown[ROT.VK_ESCAPE] = hideScreen.bind(this);
+        keydown[combineKeycodes([ROT.VK_ALT, ROT.VK_D])] = switchToDropMode.bind(this);
 
         return commands;
 
     }
 
-    function handleMovementCommand(moveCommand) {
-        var player = this._private.uiToGameBridge.gameState.player;
-
-        var target = player.tile.getNeighbor(moveCommand.direction).entities.airSpace.last();
-
-        return target ? new AttackCommand(target.tile.position) : moveCommand;
+    function switchToDropMode() {
+        this.mode = 'drop';
     }
 
-    function handlePickupCommand() {
-        var player = this._private.uiToGameBridge.gameState.player;
-        var itemIndex = player.tile.entities.floorSpace.length - 1;
-
-        return new ItemPickupCommand([itemIndex]);
-    }
-
-    function toggleRenderMode() {
-        if (this._private.renderMode === 'fov')
-            this._private.renderMode = 'all';
-        else
-            this._private.renderMode = 'fov'
-
-        this.render();
+    function hideScreen() {
+        this._private.ui.screens.pop();
     }
 
     function InventoryScreen(display, ui, uiToGameBridge, asciiTileFactory) {
@@ -63,7 +34,11 @@ define(function (require) {
             uiToGameBridge: uiToGameBridge,
             asciiTileFactory: asciiTileFactory,
             commandMap: getCommandMap.call(this),
-            viewModel: {}
+            viewModel: {
+                items: ko.observableArray(),
+                mode: ko.observable()
+            },
+
         };
 
         ko.components.register('inventory-screen', {
@@ -73,33 +48,53 @@ define(function (require) {
     }
 
     InventoryScreen.prototype = {
-        render: function render() {
-            this._private.display.koComponent('inventory-screen');
+        set mode(mode) {
+            this._private.viewModel.mode(mode);
         },
         handleInput: function handleInput(inputType, inputData) {
-            //var command = this._private.commandMap[inputType][inputData.keyCode];
-            //if (!command) return;
-            //
-            //if (typeof command === 'function')
-            //    command = command();
-            //if (command)
-            //    this._private.uiToGameBridge.queueInput(command);
-            //game.processCommand(command);
+            var command = this._private.commandMap[inputType][getKeyCode(inputData)];
+            if (!command) return;
+
+            if (typeof command === 'function')
+                command = command();
+            if (command)
+                this._private.uiToGameBridge.queueInput(command);
+        },
+        hide: function () {
+            this._private.display.koComponent(null);
+        },
+        show: function () {
+            this._private.viewModel.items(this._private.uiToGameBridge.gameState.player.inventory.items);
+            this._private.display.koComponent('inventory-screen');
         }
     };
 
-    function InventoryScreenFactory(injector) {
-        this._private = {
-            injector: injector
-        };
+    return InventoryScreen;
+
+    function getKeyCode(inputData) {
+        var keypress = inputData.keyCode;
+        var keycodes = [];
+        addModifer(ROT.VK_SHIFT, inputData.shiftKey);
+        addModifer(ROT.VK_CONTROL, inputData.ctrlKey);
+        addModifer(ROT.VK_ALT, inputData.altKey);
+
+        keycodes.push(inputData.keyCode);
+
+        return keycodes.join('+');
+
+        function addModifer(modifierKeycode, isModiferPressed) {
+            if (isModiferPressed && inputData.keyCode != modifierKeycode)
+                keycodes.push(modifierKeycode);
+        }
     }
 
-    InventoryScreenFactory.prototype.create = function create() {
-        return this._private.injector.inject(InventoryScreen)
-    };
+    function combineKeycodes(keycodes) {
+        var keycode = keycodes.splice(keycodes.length - 1, 1);
 
-    InventoryScreenFactory.constructs = InventoryScreen;
+        keycodes.sort();
+        keycodes.push(keycode);
 
-    return InventoryScreenFactory;
+        return keycodes.join('+');
+    }
 
 });
