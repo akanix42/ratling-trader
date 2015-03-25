@@ -25,7 +25,7 @@
     "requirejs-plugins": "~1.0.2",
     "requirejs-promise": "~1.2.0",
     "text": "requirejs/text#~2.0.12",
-    "knockout": "~3.3.0"
+    "knockout": "~3.3.0",
+    "knockout.punches": "mbest/knockout.punches#~0.5.1"
   }
-
 }
