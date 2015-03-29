@@ -7,12 +7,12 @@ define(function (require) {
     function CellToCellMovement() {
         AbstractMixin.apply(this);
 
-        this.addCommandHandler(MoveCommand);
+        this.addCommandHandler(MoveCommand, move);
     }
 
     CellToCellMovement.prototype = Object.create(AbstractMixin.prototype);
 
-    CellToCellMovement.prototype.execute = function execute(command, entity) {
+    function move(command, entity) {
         var oldTile = entity.tile;
         var newTile = entity.tile.getNeighbor(command.direction);
         if (newTile.name === "null") return newTile;
@@ -21,7 +21,7 @@ define(function (require) {
         if (objections.length)
             return false;
         entity.tile = newTile;
-    };
+    }
 
     return CellToCellMovement;
 });

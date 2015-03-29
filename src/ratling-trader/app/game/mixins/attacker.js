@@ -8,12 +8,12 @@ define(function (require) {
     function Attacker() {
         AbstractMixin.apply(this);
 
-        this.addCommandHandler(AttackCommand);
+        this.addCommandHandler(AttackCommand, attack);
     }
 
     Attacker.prototype = Object.create(AbstractMixin.prototype);
 
-    Attacker.prototype.execute = function execute(command, attacker) {
+    function attack(command, attacker) {
         var airSpace = attacker.tile.level.getTileAt(command.target.x, command.target.y).entities.airSpace;
         var target = airSpace[airSpace.length - 1];
         if (!target)
@@ -46,7 +46,7 @@ define(function (require) {
             return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
         }
 
-    };
+    }
 
     return Attacker;
 });
