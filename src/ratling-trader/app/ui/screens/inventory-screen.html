@@ -1,11 +1,13 @@
-<div id="inventory-screen">
+<div id="inventory-screen" data-bind="css: modeCss">
     <h1>Inventory</h1>
     <!-- ko ifnot: items().length -->
     Your inventory is empty.
     <!-- /ko -->
-    <h4 data-bind="visible: mode() === 'drop'">Select an item to drop.</h4>
+    <h4 class="mode-drop-visible">Select items to drop and press ENTER.</h4>
     <ol class="items" type="A" data-bind="foreach: items">
-        <li>{{type}}</li>
+        <li data-bind="css: { selected: isSelected }">
+            <div class="row">{{type}}</div>
+        </li>
     </ol>
-    <h4>Press ESC to exit</h4>
+    <h4>Drop Items: ALT+D | Exit: ESC</h4>
 </div>

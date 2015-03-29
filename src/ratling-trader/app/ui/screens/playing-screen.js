@@ -155,7 +155,12 @@ define(function (require) {
         for (var i = 0; i < fovKeys.length; i++) {
             var tileFovData = fov[fovKeys[i]];
             var tile = tiles[tileFovData.x][tileFovData.y];
-            var entities = tile.entities.all();
+            var entities = tile.entities.airSpace;
+            if (!entities.length)
+                entities = tile.entities.floorSpace;
+            if (!entities.length)
+                entities = tile.entities.all();
+            
             var uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
 
             uiTile.draw(display, tileFovData.x, tileFovData.y, calculateOverlay(tileFovData.visibility));

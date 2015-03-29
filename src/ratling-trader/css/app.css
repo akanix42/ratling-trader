@@ -17,7 +17,25 @@
   right: 0;
   bottom: 0;
   padding-left: 10px;
+  font-family: 'Nova Square', serif;
 }
 #inventory-screen .items {
   margin: 0;
+}
+#inventory-screen .items .row {
+  margin-left: -40px;
+  padding-left: 40px;
+}
+#inventory-screen .mode-drop-visible {
+  display: none;
+}
+#inventory-screen.mode-drop .mode-drop-visible {
+  display: initial;
+}
+#inventory-screen.mode-drop .selected {
+  font-weight: bold;
+  background-color: #2B2B2E;
+}
+#inventory-screen.mode-drop .selected .row {
+  background-color: #2B2B2E;
 }

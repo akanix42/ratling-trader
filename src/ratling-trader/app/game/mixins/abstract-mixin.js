@@ -17,7 +17,7 @@ define(function () {
             this._private.intentHandlers.push({class: EventClass, handler: callback.bind(this)})
         },
         addCommandHandler: function addEvent(EventClass, callback) {
-            this._private.commandHandlers.push({class: EventClass})
+            this._private.commandHandlers.push({class: EventClass, handler: callback.bind(this)})
         },
         addEventHandler: function addEvent(EventClass, callback) {
             this._private.eventHandlers.push({class: EventClass, handler: callback.bind(this)})
@@ -44,7 +44,6 @@ define(function () {
 
             for (var i = 0; i < self._private.commandHandlers.length; i++) {
                 var commandHandler = self._private.commandHandlers[i];
-                commandHandler.handler = self.execute.bind(self);
                 entity.commandHandlers.subscribe(entity, commandHandler);
             }
         },

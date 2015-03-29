@@ -9,11 +9,19 @@
 <div id="ui">
     <div id="ui-screen">
         <!-- ko if: component -->
-        <div class="knockout-screen" data-bind="component: component">COMPONENT</div>
+        <div class="knockout-screen" data-bind="component: component"></div>
         <!-- /ko -->
     </div>
     <div id="ui-footer"></div>
 </div>
+<script src="lib/webfontloader/webfontloader.js"></script>
+<script>
+    WebFont.load({
+        google: {
+            families: ['Nova Square']
+        }
+    });
+</script>
 <script data-main="app/require-config-app" src="bower_components/requirejs/require.js"></script>
 <script>
     var hasDomContentLoaded = false;

@@ -1,5 +1,5 @@
 #inventory-screen {
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   position: absolute;
   top: 0;
@@ -7,8 +7,32 @@
   right: 0;
   bottom: 0;
   padding-left: 10px;
+  font-family: 'Nova Square', serif;
 
   .items {
     margin: 0;
+
+    .row {
+      margin-left: -40px;
+      padding-left: 40px;
+    }
+
+  }
+  .mode-drop-visible {
+    display: none;
+  }
+  &.mode-drop {
+    .mode-drop-visible {
+      display: initial;
+    }
+
+    .selected {
+      font-weight: bold;
+      background-color: #2B2B2E;
+
+      .row {
+        background-color: #2B2B2E;
+      }
+    }
   }
 }
