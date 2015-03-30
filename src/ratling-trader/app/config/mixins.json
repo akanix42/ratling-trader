@@ -3,6 +3,7 @@
   "attacker": "app\\game\\mixins\\attacker.js",
   "cell-to-cell-movement": "app\\game\\mixins\\cell-to-cell-movement.js",
   "collidable": "app\\game\\mixins\\collidable.js",
+  "defender": "app\\game\\mixins\\defender.js",
   "destructible": "app\\game\\mixins\\destructible.js",
   "inventory-manager": "app\\game\\mixins\\inventory-manager.js",
   "mixin-map-factory": "app\\game\\mixins\\mixin-map-factory.js",

@@ -160,7 +160,7 @@ define(function (require) {
                 entities = tile.entities.floorSpace;
             if (!entities.length)
                 entities = tile.entities.all();
-            
+
             var uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
 
             uiTile.draw(display, tileFovData.x, tileFovData.y, calculateOverlay(tileFovData.visibility));

@@ -5,6 +5,11 @@ define(function (require) {
     var EntityAttackedEvent = require('game/events/entity-attacked-event');
     'use strict';
 
+    var attackNormalizers = {
+        strength: 10,
+        dexterity: 10
+    };
+
     function Attacker() {
         AbstractMixin.apply(this);
 
@@ -24,9 +29,7 @@ define(function (require) {
 
         if (isInRange(attacker, target)) {
             window.rat.logger.log('attack!');
-            var attack = {
-                damage: 1
-            };
+            var attack = attackWithMainHand(attacker);
             var attackEvent = new EntityAttackedEvent(attacker, target, attack);
             target.eventHandlers.notify(attackEvent);
             //target.eventHandlers.notify(attackEvent);
@@ -44,6 +47,20 @@ define(function (require) {
 
         function getDistance(x1, y1, x2, y2) {
             return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+        }
+
+        function attackWithMainHand() {
+            var weapon = attacker.mainHand;
+            var strengthModifier = (attacker.attributes.get('strength').current / attackNormalizers.strength);
+            var dexterityModifier = (attacker.attributes.get('dexterity').current / attackNormalizers.dexterity);
+            var physicalDamage = weapon.attributes.get('physicalDamage').current;
+            physicalDamage *= strengthModifier;
+            var toHit = weapon.attributes.get('toHit').current * dexterityModifier;
+
+            return {
+                physicalDamage: physicalDamage,
+                toHit: toHit
+            };
         }
 
     }

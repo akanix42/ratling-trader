@@ -8,10 +8,14 @@
       "inventory-manager",
       "player",
       "attacker",
-      "collidable"
+      "collidable",
+      "defender"
     ],
     "attributes": {
       "strength": {
+        "base": 1
+      },
+      "dexterity": {
         "base": 1
       },
       "health": {
@@ -40,7 +44,8 @@
     },
     "mixins": [
       "destructible",
-      "attacker"
+      "attacker",
+      "defender"
     ],
     "attributes": {
       "strength": {
@@ -73,7 +78,8 @@
     "mixins": [
       "attacker",
       "collidable",
-      "destructible"
+      "destructible",
+      "defender"
     ],
     "attributes": {
       "strength": {"base": 1},

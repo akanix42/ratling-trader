@@ -1,7 +1,7 @@
 define(function (require) {
     var AbstractMixin = require('game/mixins/abstract-mixin');
-    var EntityAttackedEvent = require('game/events/entity-attacked-event');
     var EntityDestroyedEvent = require('game/events/entity-destroyed-event');
+    var EntityDamagedEvent = require('game/events/entity-damaged-event');
 
     'use strict';
 
@@ -11,15 +11,15 @@ define(function (require) {
         this._private.entityFactory = entityFactory;
         this._private.nullTile = nullTile;
 
-        this.addEntityEventHandler(EntityAttackedEvent, this.onAttacked);
+        this.addEntityEventHandler(EntityDamagedEvent, this.onDamaged);
     }
 
     Destructible.prototype = Object.create(AbstractMixin.prototype);
 
-    Destructible.prototype.onAttacked = function onAttacked(event) {
+    Destructible.prototype.onDamaged = function onDamaged(event) {
         var target = event.target;
         var tile = target.tile;
-        target.attributes.get('health').base -= event.attack.damage;
+        target.attributes.get('health').base -= event.damageReceived;
 
         if (target.attributes.get('health').current === 0) {
             createCorpse.call(this, target);

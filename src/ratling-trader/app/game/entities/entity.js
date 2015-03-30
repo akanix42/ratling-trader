@@ -2,12 +2,13 @@ define(function (require) {
     var EntityMovedEvent = require('game/events/entity-moved');
 
 
-    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory, nullTile) {
+    function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
+                    nullTile, entityAttributes) {
         this._private = {
             type: data.type,
             space: data.space,
             data: data,
-            attributes: new Map(),
+            attributes: entityAttributes,
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
             commandHandlers: commandHandlers,
