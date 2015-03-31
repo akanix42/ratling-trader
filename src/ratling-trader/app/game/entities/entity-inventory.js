@@ -2,10 +2,11 @@ define(function (require) {
     var ItemAddedToInventoryEvent = require('game/events/item-added-to-inventory-event');
     var ItemRemovedFromInventoryEvent = require('game/events/item-removed-from-inventory-event');
 
-    function EntityInventory() {
+    function EntityInventory(entityFactory) {
         this._private = {
             items: [],
-            entity: null
+            entity: null,
+            entityFactory: entityFactory
         };
     }
 
@@ -32,7 +33,12 @@ define(function (require) {
                 this._private.entity.eventHandlers.notify(new ItemRemovedFromInventoryEvent(item, this._private.entity));
             return item;
         },
+        initFrom: function (itemsData) {
+            if (!itemsData) return;
+            for (var i = 0; i < itemsData.length; i++)
+                this.add(this._private.entityFactory.create(itemsData[0]));
 
+        }
     };
 
     return EntityInventory;

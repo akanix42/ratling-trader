@@ -19,8 +19,10 @@ define(function (require) {
             type: 'test',
             attributes: {health: {base: 1}},
             tile: level.getTileAt(position.x, position.y),
-            space: 'air'
+            space: 'air',
+
         });
+        entity.mainHand = entityFactory.create({type: 'fist'});
 
         return entity;
     };

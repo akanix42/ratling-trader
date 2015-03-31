@@ -5,6 +5,6 @@ define(function (require) {
         this.attacker = attacker;
         this.target = target;
         this.attack = attack;
-        this.damageReceived = damageReceived;
+        this.damage = damageReceived;
     }
 });

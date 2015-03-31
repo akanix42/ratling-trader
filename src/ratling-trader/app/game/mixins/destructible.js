@@ -19,7 +19,7 @@ define(function (require) {
     Destructible.prototype.onDamaged = function onDamaged(event) {
         var target = event.target;
         var tile = target.tile;
-        target.attributes.get('health').base -= event.damageReceived;
+        target.attributes.get('health').base -= event.damage;
 
         if (target.attributes.get('health').current === 0) {
             createCorpse.call(this, target);

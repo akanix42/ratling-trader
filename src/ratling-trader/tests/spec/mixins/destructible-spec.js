@@ -2,7 +2,7 @@ define(function (require) {
     'use strict';
     var EntityTestDataBuilder = require('tests/builders/entity-test-data-builder');
     var Destructible = require('game/mixins/destructible');
-    var EntityAttackedEvent = require('game/events/entity-attacked-event');
+    var EntityDamagedEvent = require('game/events/entity-damaged-event');
     var EntityDestroyedEvent = require('game/events/entity-destroyed-event');
     var iocLoader = require('ioc-loader');
 
@@ -22,7 +22,7 @@ define(function (require) {
 
             });
         });
-        it('should subscribe to attack events', function test(done) {
+        it('should subscribe to damaged events', function test(done) {
             var roots = {};
             iocLoader.init(function (gameRoot, uiRoot) {
                 roots.gameRoot = gameRoot;
@@ -34,7 +34,7 @@ define(function (require) {
 
                 destructible.mixins.add('destructible');
 
-                (EntityAttackedEvent.name in destructible.eventHandlers._private.events).should.be.true();
+                (EntityDamagedEvent.name in destructible.eventHandlers._private.events).should.be.true();
                 done(start);
             });
         });
@@ -50,7 +50,7 @@ define(function (require) {
                 destructible.mixins.add('destructible');
                 var start = new Date();
 
-                destructible.eventHandlers.notify(new EntityAttackedEvent(destructible, destructible, {damage: 1}));
+                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
                 destructible.attributes.get('health').current.should.equal(0);
                 done(start);
             });
@@ -68,7 +68,7 @@ define(function (require) {
                 destructible.tile.eventHandlers.subscribe(null, {class: EntityDestroyedEvent, handler: eventHandler});
                 var start = new Date();
 
-                destructible.eventHandlers.notify(new EntityAttackedEvent(destructible, destructible, {damage: 1}));
+                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
 
                 function eventHandler(event) {
                     done(start);
@@ -90,7 +90,7 @@ define(function (require) {
                 destructible.tile.eventHandlers.subscribe(null, {class: EntityDestroyedEvent, handler: eventHandler});
                 var start = new Date();
 
-                destructible.eventHandlers.notify(new EntityAttackedEvent(destructible, destructible, {damage: 1}));
+                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
 
                 function eventHandler(event) {
                     var corpse = tile.entities.all().reverse()[0];

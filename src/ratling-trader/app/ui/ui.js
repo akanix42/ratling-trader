@@ -15,6 +15,9 @@ define(function () {
             bindInputEvent('keypress');
 
             function bindInputEvent(event) {
+                var ui = document.getElementById('ui');
+                if (!ui) return;
+
                 window.addEventListener(event, function (e) {
                     if (e.keyCode === ROT.VK_F5)
                         return;
@@ -33,7 +36,7 @@ define(function () {
         get uiBridge() {
             return this._private.uiToGameBridge;
         },
-        init: function init(){
+        init: function init() {
             //this.screens.push(this._private.playingScreenFactory.create());
             this.screens.push(this._private.mainMenuScreenFactory.create(this));
         }

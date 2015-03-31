@@ -9,6 +9,7 @@ define(function (require) {
     var ItemAddedToInventoryEvent = require('game/events/item-added-to-inventory-event');
     var ItemRemovedFromInventoryEvent = require('game/events/item-removed-from-inventory-event');
     var EntityDroppedItemEvent = require('game/events/entity-dropped-item-event');
+    var DroppedItemsEvent = require('game/events/dropped-items-event');
 
     'use strict';
     describe('ui - interacting with a game', function () {
@@ -294,14 +295,19 @@ define(function (require) {
                         var player = ui.uiBridge._private.gameBridge._private.game.player;
                         var item = player.inventory.items[0];
 
-                        player.eventHandlers.subscribe(null, {class: EntityDroppedItemEvent, handler: verifyDrop});
+                        player.eventHandlers.subscribe(null, {
+                            class: DroppedItemsEvent,
+                            handler: verifyDrop
+                        });
 
 
-                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_D});
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_I});
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_D, altKey: true});
                         ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_A});
+                        ui.screens.currentScreen.handleInput('keydown', {keyCode: ROT.VK_RETURN});
 
                         function verifyDrop(event) {
-                            event.item.should.equal(item);
+                            event.items[0].should.equal(item);
                             item.tile.should.equal(player.tile);
                             player.tile.entities.floorSpace.last().should.equal(item);
                             done(start);

@@ -8,74 +8,6 @@ define(function (require) {
     var ko = require('knockout');
     var koPunch = require('knockout.punches');
 
-    function getCommandMaps() {
-        var commandMaps = {
-            normal: getCommandMap.call(this),
-            drop: getDropModeCommandMap.call(this)
-        };
-        return commandMaps;
-    }
-
-    function getCommandMap() {
-        var commands = {keydown: {}, keyup: {}, keypress: {}};
-        var keydown = commands.keydown,
-            keyup = commands.keyup;
-
-        keydown[ROT.VK_ESCAPE] = hideScreen.bind(this);
-        keydown[combineKeycodes([ROT.VK_ALT, ROT.VK_D])] = switchToDropMode.bind(this);
-        //bindRange(keydown, ROT.VK_A, ROT.VK_Z, toggleItemSelection.bind(this));
-        return commands;
-
-    }
-
-    function getDropModeCommandMap() {
-        var commands = {keydown: {}, keyup: {}, keypress: {}};
-        var keydown = commands.keydown,
-            keyup = commands.keyup;
-
-        keydown[ROT.VK_ESCAPE] = hideScreen.bind(this);
-        keydown[combineKeycodes([ROT.VK_ALT, ROT.VK_D])] = switchToNormalMode.bind(this);
-        keydown[ROT.VK_RETURN] = dropSelectedItems.bind(this);
-        bindRange(keydown, ROT.VK_A, ROT.VK_Z, toggleItemSelection.bind(this));
-        return commands;
-
-    }
-
-    function switchToNormalMode() {
-        this.mode = 'normal';
-    }
-
-    function switchToDropMode() {
-        this.mode = 'drop';
-    }
-
-    function hideScreen() {
-        this._private.ui.screens.pop();
-    }
-
-    function toggleItemSelection(inputData) {
-        var index = inputData.keyCode - ROT.VK_A;
-        var item = this._private.viewModel.items()[index];
-        if (item)
-            item.isSelected(!item.isSelected());
-    }
-
-    function dropSelectedItems() {
-        var items = this._private.viewModel.items();
-        if (!items.length)
-            return;
-        var itemsToDrop = [];
-        for (var i = 0; i < items.length; i++)
-            if (items[i].isSelected())
-                itemsToDrop.push(i);
-
-        if (!itemsToDrop.length)
-            return;
-
-        hideScreen.call(this);
-        return new DropItemsCommand(itemsToDrop);
-    }
-
     function InventoryScreen(display, ui, uiToGameBridge, asciiTileFactory) {
         var self = this;
         this._private = {
@@ -95,6 +27,7 @@ define(function (require) {
             return 'mode-' + self._private.viewModel.mode();
         });
 
+        ko.components.unregister('inventory-screen');
         ko.components.register('inventory-screen', {
             viewModel: {instance: this._private.viewModel},
             template: {require: 'text!ui/screens/inventory-screen.html'},
@@ -174,4 +107,74 @@ define(function (require) {
         for (var i = start; i <= end; i++)
             map[i] = command;
     }
+
+
+    function getCommandMaps() {
+        var commandMaps = {
+            normal: getCommandMap.call(this),
+            drop: getDropModeCommandMap.call(this)
+        };
+        return commandMaps;
+    }
+
+    function getCommandMap() {
+        var commands = {keydown: {}, keyup: {}, keypress: {}};
+        var keydown = commands.keydown,
+            keyup = commands.keyup;
+
+        keydown[ROT.VK_ESCAPE] = hideScreen.bind(this);
+        keydown[combineKeycodes([ROT.VK_ALT, ROT.VK_D])] = switchToDropMode.bind(this);
+        //bindRange(keydown, ROT.VK_A, ROT.VK_Z, toggleItemSelection.bind(this));
+        return commands;
+
+    }
+
+    function getDropModeCommandMap() {
+        var commands = {keydown: {}, keyup: {}, keypress: {}};
+        var keydown = commands.keydown,
+            keyup = commands.keyup;
+
+        keydown[ROT.VK_ESCAPE] = hideScreen.bind(this);
+        keydown[combineKeycodes([ROT.VK_ALT, ROT.VK_D])] = switchToNormalMode.bind(this);
+        keydown[ROT.VK_RETURN] = dropSelectedItems.bind(this);
+        bindRange(keydown, ROT.VK_A, ROT.VK_Z, toggleItemSelection.bind(this));
+        return commands;
+
+    }
+
+    function switchToNormalMode() {
+        this.mode = 'normal';
+    }
+
+    function switchToDropMode() {
+        this.mode = 'drop';
+    }
+
+    function hideScreen() {
+        this._private.ui.screens.pop();
+    }
+
+    function toggleItemSelection(inputData) {
+        var index = inputData.keyCode - ROT.VK_A;
+        var item = this._private.viewModel.items()[index];
+        if (item)
+            item.isSelected(!item.isSelected());
+    }
+
+    function dropSelectedItems() {
+        var items = this._private.viewModel.items();
+        if (!items.length)
+            return;
+        var itemsToDrop = [];
+        for (var i = 0; i < items.length; i++)
+            if (items[i].isSelected())
+                itemsToDrop.push(i);
+
+        if (!itemsToDrop.length)
+            return;
+
+        hideScreen.call(this);
+        return new DropItemsCommand(itemsToDrop);
+    }
+
 });

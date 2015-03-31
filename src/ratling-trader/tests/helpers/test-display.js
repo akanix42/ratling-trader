@@ -1,8 +1,12 @@
-define(function () {
+define(function (require) {
+    var ko = require('knockout');
 
     function TestDisplay(drawCallback) {
         this._private = {
-            drawCallback: drawCallback
+            drawCallback: drawCallback,
+            viewModel: {
+                component: ko.observable()
+            }
         };
         this.size = {
             width: 20,
@@ -11,6 +15,9 @@ define(function () {
     }
 
     TestDisplay.prototype = {
+        get koComponent() {
+            return this._private.viewModel.component;
+        },
         draw: function draw() {
             if (this._private.drawCallback)
                 this._private.drawCallback.apply(this, arguments);

@@ -11,6 +11,7 @@ define(function (require) {
     }
 
     CellToCellMovement.prototype = Object.create(AbstractMixin.prototype);
+    CellToCellMovement.prototype.move = move;
 
     function move(command, entity) {
         var oldTile = entity.tile;

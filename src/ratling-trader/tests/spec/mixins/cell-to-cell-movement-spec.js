@@ -21,7 +21,7 @@ define(function (require) {
 
                 originalTile.entities.all().should.include(testEntity, "because the entity has not yet moved from this tile");
 
-                cellToCellMovement.execute(moveCommand, testEntity);
+                cellToCellMovement.move(moveCommand, testEntity);
                 testEntity.tile.position.should.be.like({x: 4, y: 6}, "because this is the new position");
                 originalTile.entities.all().should.not.include(testEntity, "because the entity has moved to another tile");
                 done(start);
@@ -45,7 +45,7 @@ define(function (require) {
 
                 var start = new Date();
 
-                cellToCellMovement.execute(moveCommand, testEntity);
+                cellToCellMovement.move(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
                 done(start);
@@ -64,7 +64,7 @@ define(function (require) {
                 var cellToCellMovement = new CellToCellMovement();
                 var start = new Date();
 
-                cellToCellMovement.execute(moveCommand, testEntity);
+                cellToCellMovement.move(moveCommand, testEntity);
 
                 testEntity.tile.position.should.be.like(originalPosition);
                 done(start);

@@ -8,6 +8,7 @@ define([
     var specs = {
         mixins: [
             'spec/mixins/attacker-spec.js',
+            'spec/mixins/defender-spec.js',
             'spec/mixins/destructible-spec.js',
             'spec/mixins/cell-to-cell-movement-spec.js',
         ],

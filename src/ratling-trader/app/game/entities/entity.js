@@ -19,8 +19,8 @@ define(function (require) {
             inventory: entityInventory
         };
         this.tile = data.tile;
-
         entityInventory.entity = this;
+        entityInventory.initFrom(data.items);
 
         initAttributes(this, data);
         initMixins(data.mixins, this.mixins);

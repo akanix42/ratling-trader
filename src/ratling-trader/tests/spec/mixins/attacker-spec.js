@@ -21,12 +21,11 @@ define(function (require) {
                 var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(level.getTileAt(defenderPosition.x, defenderPosition.y));
                 defender.tile.intentHandlers.add(null, {class: IntentToAttack, handler: attackIntentHandler});
 
-                var attackerMixin = new Attacker();
                 var attackCommand = new AttackCommand(defender.tile.position);
                 attacker.mixins.add('attacker');
 
                 var start = new Date();
-                attackerMixin.execute(attackCommand, attacker);
+                attacker.commandHandlers.notify(attackCommand, attacker);
 
                 function attackIntentHandler(intent, handlingEntity) {
                     intent.attacker.should.equal(attacker);
@@ -48,13 +47,12 @@ define(function (require) {
                 var defender = new EntityTestDataBuilder(roots.gameRoot.injector).atTile(level.getTileAt(defenderPosition.x, defenderPosition.y));
                 defender.eventHandlers.subscribe(null, {class: EntityAttackedEvent, handler: attackEventHandler});
 
-                var attackerMixin = new Attacker();
                 var attackCommand = new AttackCommand(defender.tile.position);
                 attacker.mixins.add('attacker');
 
                 var start = new Date();
 
-                attackerMixin.execute(attackCommand, attacker);
+                attacker.commandHandlers.notify(attackCommand, attacker);
 
                 function attackEventHandler(event, handlingEntity) {
                     event.attacker.should.equal(attacker);
