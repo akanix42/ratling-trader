@@ -27,7 +27,8 @@ define(function (require) {
 
         function createViewModel(){
             return {
-                component: ko.observable()
+                component: ko.observable(),
+                messages: ko.observableArray()
             };
         }
     }
@@ -35,6 +36,9 @@ define(function (require) {
     Display.prototype = {
         get koComponent() {
             return this._private.viewModel.component;
+        },
+        get messages() {
+            return this._private.viewModel.messages;
         },
         get size() {
             return this._private.size;

@@ -12,7 +12,11 @@
         <div class="knockout-screen" data-bind="component: component"></div>
         <!-- /ko -->
     </div>
-    <div id="ui-footer"></div>
+    <div id="ui-footer">
+        <ul data-bind="foreach: messages">
+            <li>{{$data}}</li>
+        </ul>
+    </div>
 </div>
 <script src="lib/webfontloader/webfontloader.js"></script>
 <script>

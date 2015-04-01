@@ -1,6 +1,7 @@
 define(function (require) {
     var when = require('when');
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
+    var GameEventReceivedEvent = require('ui/events/game-event-received-event');
 
     function UiToGameBridge(eventHandlersFactory) {
         this._private = {
@@ -57,6 +58,9 @@ define(function (require) {
         },
         loadGame: function loadGame() {
             return this._private.gameBridge.restoreGame();
+        },
+        receiveGameEvent: function(event){
+            this._private.eventHandlers.notify(new GameEventReceivedEvent(event));
         }
 
     };

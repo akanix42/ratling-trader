@@ -2,14 +2,16 @@ define(function (require) {
     var when = require('when');
     var GameInitializedEvent = require('game/events/game-initialized-event');
 
-    function GameToUiBridge(gameFactory, savedGameFactory, gameEventHub) {
+    function GameToUiBridge(gameFactory, savedGameFactory, gameEventHub, eventRecorder) {
         this._private = {
             gameFactory: gameFactory,
             savedGameFactory: savedGameFactory,
             gameBridge: null,
             game: null,
-            gameEventHub: gameEventHub
+            gameEventHub: gameEventHub,
+            uiBridge: null
         };
+        eventRecorder.gameToUiBridge = this;
     }
 
     GameToUiBridge.prototype = {
@@ -54,6 +56,9 @@ define(function (require) {
 
             this._private.game = this._private.savedGameFactory.create(this);
             return deferred.promise;
+        },
+        sendEvent: function sendEvent(event) {
+            this._private.uiBridge.receiveGameEvent(event);
         }
     };
 
