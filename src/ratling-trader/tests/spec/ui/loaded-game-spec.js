@@ -40,8 +40,8 @@ define(function (require) {
                 });
 
             function registerInjectionSubstitutions(gameRoot, uiRoot) {
-                var SavedGameFactory = getSavedGameFactory(gameData);
-                gameRoot._private.injector.register('savedGameFactory', SavedGameFactory);
+                var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
+                gameRoot.injector.register('savedGameFactory', getTestSavedGameFactory(originalSavedGameFactory, gameData));
                 uiRoot._private.injector.register('display', new TestDisplay(drawCallback));
             }
 
@@ -61,22 +61,6 @@ define(function (require) {
                     done();
             }
 
-            function getSavedGameFactory(gameData) {
-
-                function SavedGameFactory(levelFactory, entityFactory) {
-                    this._private = {
-                        gameData: gameData,
-                        levelFactory: levelFactory,
-                        entityFactory: entityFactory
-                    };
-                }
-
-                SavedGameFactory.prototype.create = function create(gameToUiBridge) {
-                    return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData);
-                };
-
-                return SavedGameFactory;
-            }
 
         });
         it('should restore the player\'s location', function (done) {
@@ -124,32 +108,24 @@ define(function (require) {
                 });
 
             function registerInjectionSubstitutions(gameRoot, uiRoot) {
-                var SavedGameFactory = getSavedGameFactory(gameData);
-                gameRoot._private.injector.register('savedGameFactory', SavedGameFactory);
+                var originalSavedGameFactory = gameRoot.injector.resolve('savedGameFactory');
+                gameRoot.injector.register('savedGameFactory', getTestSavedGameFactory(originalSavedGameFactory, gameData));
                 uiRoot._private.injector.register('display', new TestDisplay());
-            }
-
-            function getSavedGameFactory(gameData) {
-
-                function SavedGameFactory(levelFactory, entityFactory, gameEventHub) {
-                    this._private = {
-                        gameData: gameData,
-                        levelFactory: levelFactory,
-                        entityFactory: entityFactory,
-                        gameEventHub:gameEventHub
-                    };
-                }
-
-                SavedGameFactory.prototype.create = function create(gameToUiBridge) {
-                    //this._private.gameEventHub.subscribe()
-                    return new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, gameData, this._private.gameEventHub);
-
-                };
-
-                return SavedGameFactory;
             }
 
         });
 
     });
+
+    function getTestSavedGameFactory(originalSavedGameFactory, testGameData) {
+        function TestSavedGameFactory() {
+
+        }
+
+        TestSavedGameFactory.prototype.create = function create(gameToUiBridge) {
+            return originalSavedGameFactory.create(gameToUiBridge, testGameData);
+        };
+
+        return TestSavedGameFactory;
+    }
 });
