@@ -5,7 +5,9 @@ define(function (require) {
         this._private = {
             drawCallback: drawCallback,
             viewModel: {
-                component: ko.observable()
+                component: ko.observable(),
+                messages: ko.observableArray()
+
             }
         };
         this.size = {
@@ -17,6 +19,9 @@ define(function (require) {
     TestDisplay.prototype = {
         get koComponent() {
             return this._private.viewModel.component;
+        },
+        get messages() {
+            return this._private.viewModel.messages;
         },
         draw: function draw() {
             if (this._private.drawCallback)
