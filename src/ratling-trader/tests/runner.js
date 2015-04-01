@@ -38,7 +38,22 @@ define([
     for (var i = 0; i < selectedTests.length; i++)
         reqArray = reqArray.concat(specs[selectedTests[i]]);
 
-    require(reqArray, function () {
+    var requireQueue = function(modules, callback) {
+        function load(queue, results) {
+            if (queue.length) {
+                require([queue.shift()], function(result) {
+                    results.push(result);
+                    load(queue, results);
+                });
+            } else {
+                callback.apply(null, results);
+            }
+        }
+
+        load(modules, []);
+    };
+
+    requireQueue(reqArray, function () {
         var roots = {};
         iocLoader.init(function (gameRoot, uiRoot) {
             roots.gameRoot = gameRoot;
