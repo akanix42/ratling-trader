@@ -3,7 +3,7 @@ define(function (require) {
 
 
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
-                    nullTile, entityAttributes) {
+                    nullTile, entityAttributes, scheduler) {
         this._private = {
             type: data.type,
             space: data.space,
@@ -16,7 +16,8 @@ define(function (require) {
             entityAttributeFactory: entityAttributeFactory,
             nullTile: nullTile,
             tilesInFov: null,
-            inventory: entityInventory
+            inventory: entityInventory,
+            scheduler: scheduler
         };
         this.tile = data.tile;
         entityInventory.entity = this;

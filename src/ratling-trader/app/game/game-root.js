@@ -34,6 +34,7 @@ define(function (require) {
                         return new this.loadedModule(data);
                     }
                 }),
+                self.registerModule('game/scheduler', {isSingleton: true}),
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),

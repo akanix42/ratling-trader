@@ -1,16 +1,18 @@
 define(function (require) {
     var PlayerInitializedEvent = require('game/events/player-initialized-event');
     var GameInitializedEvent = require('game/events/game-initialized-event');
+    var ReadyForPlayerInputEvent = require('game/events/ready-for-player-input-event');
     var when = require('when');
     var GameCommands = require('enums/commands');
     var MoveCommand = require('game/commands/move-command');
     //var gameActions = getActions();
 
-    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub) {
+    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub, scheduler) {
         var self = this;
         self._private = {
             player: null,
-            gameToUiBridge: gameToUiBridge
+            gameToUiBridge: gameToUiBridge,
+            scheduler: scheduler
         };
 
         var deferredsMap = notifyWhenInitialized(self, gameEventHub);
@@ -33,9 +35,12 @@ define(function (require) {
             var command = input;//gameActions[input];
             if (!command) return;
 
-            when(this._private.player.commandHandlers.notify(command))
-                .then(this._private.gameToUiBridge.readyForPlayerInput.bind(this._private.gameToUiBridge))
-                .then(handleInput.bind(this));
+            var wasHandled = this._private.player.commandHandlers.notify(command);
+            if (wasHandled)
+                this._private.scheduler.resume();
+            else
+                this._private.gameToUiBridge.readyForPlayerInput.call(this._private.gameToUiBridge);
+
         }
 
 
@@ -43,15 +48,21 @@ define(function (require) {
 
     return Game;
 
+
     function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
         gameEventHub.subscribe(null, {
             class: PlayerInitializedEvent, handler: function (event) {
                 game._private.player = event.player;
-                gameToUiBridge.readyForPlayerInput().then(game.handleInput.bind(game));
+                game._private.scheduler.resume();
                 deferredsMap.get(PlayerInitializedEvent.name).resolve();
             }
         });
-
+        gameEventHub.subscribe(null, {
+            class: ReadyForPlayerInputEvent, handler: function (event) {
+                when(game._private.gameToUiBridge.readyForPlayerInput.call(game._private.gameToUiBridge))
+                    .then(game.handleInput.bind(game));
+            }
+        });
     }
 
     function movePlayerOrCursor(command, action) {
