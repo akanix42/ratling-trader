@@ -1,4 +1,3 @@
-
 define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
@@ -47,9 +46,39 @@ define(function (require) {
         getNeighbor: function getNeighbor(direction) {
             return this.level.getTileAt(this.position.x + (direction.x || 0), this.position.y + (direction.y || 0));
         },
+        getNeighbors: function getNeighbors(distance) {
+            var x = this.position.x;
+            var y = this.position.y;
+            var tiles = [];
+            for (var i = 1; i <= distance; i++)
+                getTilesAtDistance(i, x, y, this.level, tiles);
 
+            return tiles;
+        },
     };
 
+    function getTilesAtDistance(distance, sourceX, sourceY, level, tiles) {
+        var startingX = sourceX - distance;
+        var startingY = sourceY - distance;
+        var endingX = sourceX + distance;
+        var endingY = sourceY + distance;
+
+        var minX = Math.max(startingX, 0);
+        var minY = Math.max(startingY, 0);
+        var maxX = Math.min(endingX, level.size.width);
+        var maxY = Math.min(endingY, level.size.height);
+        for (var x = minX; x < maxX; x++) {
+            if (x === startingX || x === endingX)
+                for (var y = minY; y < maxY; y++)
+                    tiles.push(level.getTileAt(x, y));
+            else {
+                if (minY === startingY)
+                    tiles.push(level.getTileAt(x, startingY));
+                if (maxY === endingY)
+                    tiles.push(level.getTileAt(x, endingY));
+            }
+        }
+    }
 
     return Tile;
 
