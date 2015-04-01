@@ -27,7 +27,6 @@ define(function (require) {
         initMixins(data.mixins, this.mixins);
         if (this.tile.level && this.tile.level.isInitialized)
             this.calculateFov();
-
     }
 
     function initAttributes(entity, data) {

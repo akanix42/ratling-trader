@@ -1,10 +1,12 @@
 define(function (require) {
+    'use strict';
     //var PlayingScreen = require('ui/screens/playing-screen');
     var GameCommands = require('enums/commands');
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
     var AttackCommand = require('game/commands/attack-command');
     var arrayExtensions = require('array-extensions');
     var ItemPickupCommand = require('game/commands/item-pickup-command');
+
 
     function getCommandMap() {
         var commands = {keydown: {}, keyup: {}, keypress: {}};
@@ -56,7 +58,7 @@ define(function (require) {
         if (this._private.renderMode === 'fov')
             this._private.renderMode = 'all';
         else
-            this._private.renderMode = 'fov'
+            this._private.renderMode = 'fov';
 
         this.render();
     }
@@ -74,9 +76,10 @@ define(function (require) {
         };
         window.display = display;
         uiToGameBridge.eventHandlers.subscribe(null, {
-            class: ReadyForPlayerInputEvent,
+            'class': ReadyForPlayerInputEvent,
             handler: this.render.bind(this)
         });
+
     }
 
     PlayingScreen.prototype = {
@@ -184,13 +187,10 @@ define(function (require) {
                 var tile = tiles[tileFovData.x][tileFovData.y];
                 var entities = tile.entities;
                 var entity = entities.floorSpace.last() || entities.architecture;
-                uiTile = this._private.asciiTileFactory.create(entity.type);
+                var uiTile = this._private.asciiTileFactory.create(entity.type);
                 uiTile.draw(display, tileFovData.x, tileFovData.y, 'rgba(156,152,155,0.5)');
             }
         }
     }
 
-    function renderTiles(tiles) {
-
-    }
 });
