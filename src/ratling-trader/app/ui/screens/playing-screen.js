@@ -61,7 +61,7 @@ define(function (require) {
         this.render();
     }
 
-    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory, inventoryScreen) {
+    function PlayingScreen(display, ui, uiToGameBridge, asciiTileFactory, inventoryScreen, messageScreen) {
         this._private = {
             display: display,
             ui: ui,
