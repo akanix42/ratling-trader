@@ -58,6 +58,9 @@ define(function (require) {
         get eventHandlers() {
             return this._private.eventHandlers;
         },
+        get data() {
+            return this._private.data;
+        },
         get inventory() {
             return this._private.inventory;
         },
@@ -89,11 +92,17 @@ define(function (require) {
             newTile.eventHandlers.notify(event);
             this.calculateFov();
         },
+        get tilesInFov() {
+            return this._private.tilesInFov;
+        },
         get type() {
             return this._private.type;
         },
 
         calculateFov: function calculateFov() {
+            if (this.tile === this._private.nullTile)
+                return {};
+
             var sightRange = this.attributes.get('sight-range');
             if (!sightRange || !sightRange.base)
                 return;

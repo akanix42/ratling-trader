@@ -6,6 +6,10 @@ define([
 ], function (iocLoader) {
     'use strict';
     var specs = {
+        behaviors: [
+            'spec/behaviors/attack-enemy-behavior-spec.js',
+
+        ],
         mixins: [
             'spec/mixins/attacker-spec.js',
             'spec/mixins/defender-spec.js',

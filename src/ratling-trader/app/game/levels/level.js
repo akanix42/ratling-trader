@@ -47,7 +47,7 @@ define(function () {
     }
 
     Level.prototype = {
-        get isInitialized(){
+        get isInitialized() {
             return this._private.isInitialized;
         },
         get tiles() {
@@ -92,6 +92,9 @@ define(function () {
             if (x < 0 || y < 0 || x >= this.size.width || y >= this.size.height)
                 return this._private.nullTile;
             return this._private.map[x][y];
+        },
+        getTileAtPosition: function getTileAt(position) {
+            return this.getTileAt(position.x, position.y);
         },
     };
 

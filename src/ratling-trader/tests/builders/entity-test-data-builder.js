@@ -17,7 +17,12 @@ define(function (require) {
         var entityFactory = this.injector.resolve('entityFactory');
         var entity = entityFactory.create({
             type: 'test',
-            attributes: {health: {base: 1}},
+            attributes: {
+                health: {base: 1},
+                "sight-range": {
+                    "base": 5
+                }
+            },
             tile: level.getTileAt(position.x, position.y),
             space: 'air',
 
