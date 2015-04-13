@@ -1,0 +1,29 @@
+#mocha .test a.replay {
+    position: absolute;
+    top: 0;
+    left: -40px;
+    text-decoration: none;
+    vertical-align: middle;
+    display: inline-block;
+    width: 30px;
+    height: 15px;
+    line-height: 15px;
+    text-align: center;
+    background: #eee;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    -webkit-transition: opacity 200ms;
+    -moz-transition: opacity 200ms;
+    transition: opacity 200ms;
+    opacity: 1;
+    color: green;
+    font-size: 25px;
+}
+
+#mocha ul, #mocha li {
+    clear: both;
+}
+
+#mocha .test {
+    overflow: visible;
+}
