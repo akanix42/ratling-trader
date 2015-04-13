@@ -35,6 +35,7 @@ define(function (require) {
                     }
                 }),
                 self.registerModule('game/scheduler', {isSingleton: true}),
+                self.registerModule('helpers/stopwatch'),
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),
@@ -42,6 +43,7 @@ define(function (require) {
                 self.registerModule('game/events/event-handlers-factory'),
                 self.registerModule('game/event-recorder', {isSingleton: true}),
                 self.registerModule('game/maps/random-map-generator'),
+                self.registerModule('game/loaders/behavior-modules-loader', {isSingleton: true}),
                 self.registerModule('game/loaders/mixin-modules-loader', {isSingleton: true}),
                 self.registerModule('game/intents/null-intent-handlers-factory', {isSingleton: true}),
                 self.registerModule('game/loaders/entity-templates-loader', {isSingleton: true}),
@@ -57,6 +59,7 @@ define(function (require) {
             ]).then(function () {
                 return when.all([
                     self.loadAsyncSingleton('loadedMixins'),
+                    self.loadAsyncSingleton('loadedBehaviors'),
                     //self.loadAsyncSingleton('entityTemplatesLoader'),
                 ]);
             });

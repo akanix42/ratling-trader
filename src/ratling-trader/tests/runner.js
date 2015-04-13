@@ -8,6 +8,8 @@ define([
     var specs = {
         behaviors: [
             'spec/behaviors/attack-enemy-behavior-spec.js',
+            'spec/behaviors/behaviors-loader-spec.js',
+            '../lib/state-machine/spec/state-machine-spec.js',
 
         ],
         mixins: [
@@ -35,7 +37,7 @@ define([
             'spec/ui/game-interaction-spec',
         ]
     };
-    var allTests = ['mixins', 'models', 'maps', 'game', 'ui'];
+    var allTests = Object.keys(specs);//['mixins', 'models', 'maps', 'game', 'ui'];
     var qs = queryString.parse(location.search);
     var selectedTests = qs.suite ? [qs.suite] : allTests;
     var reqArray = [];

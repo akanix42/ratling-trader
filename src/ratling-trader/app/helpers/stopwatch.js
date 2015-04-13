@@ -1,9 +1,10 @@
 define(function (require) {
+    'use strict';
     var stringformat = require('stringformat');
 
     return Stopwatch;
 
-    function Stopwatch(logger) {
+    function Stopwatch() {
         var self = this,
             startDate = new Date(),
             endDate = new Date();
@@ -19,7 +20,7 @@ define(function (require) {
             return function () {
                 execute(context, fn, arguments, function (stopwatch) {
                     if (loggingString)
-                        logger.info(stringformat(loggingString, {elapsed: stopwatch.getElapsedMilliseconds}));
+                        rat.logger.info(stringformat(loggingString, {elapsed: stopwatch.getElapsedMilliseconds}));
                 });
             }
         }
