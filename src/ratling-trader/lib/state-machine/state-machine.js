@@ -17,13 +17,20 @@ define(function () {
             if (!this.currentState || !(this.currentState in states))
                 switchToDefaultState.call(this);
         },
+        execute: execute,
         resetPreviousStates: resetPreviousStates,
         switchTo: switchTo
     };
 
+    function execute(entity) {
+        if (!this._private.currentState) return null;
+
+        return this._private.states[this._private.currentState].behavior.execute(entity);
+    }
 
     function switchToDefaultState() {
-        this._private.currentState = this._private.states.default[0];
+        if (this._private.states.default && this._private.states.default.length > 0)
+            this._private.currentState = this._private.states.default[0].name;
     }
 
     function resetPreviousStates() {

@@ -1,14 +1,15 @@
 define(function (require) {
-    var loadModules = require('helpers/module-loader'),
-        mixins = require('json!config/mixins.json'),
-        when = require('when');
+    'use strict';
+    var loadModules = require('helpers/module-loader');
+    var mixins = require('json!config/mixins.json');
+    var when = require('when');
 
     function LoadedMixins(injector) {
         var deferred = when.defer();
         this.promise = deferred.promise;
 
-        loadModules(mixins).then(function (loader) {
-            injectModules(loader);
+        loadModules(mixins, injector).then(function (loader) {
+            //injectModules(loader);
 
             deferred.resolve(loader);
         });

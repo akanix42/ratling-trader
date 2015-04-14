@@ -3,7 +3,7 @@ define(function (require) {
 
 
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
-                    nullTile, entityAttributes, scheduler) {
+                    nullTile, entityAttributes, scheduler, stateMachine) {
         this._private = {
             type: data.type,
             space: data.space,
@@ -17,7 +17,8 @@ define(function (require) {
             nullTile: nullTile,
             tilesInFov: null,
             inventory: entityInventory,
-            scheduler: scheduler
+            scheduler: scheduler,
+            stateMachine: stateMachine
         };
         this.tile = data.tile;
         entityInventory.entity = this;
@@ -25,6 +26,8 @@ define(function (require) {
 
         initAttributes(this, data);
         initMixins(data.mixins, this.mixins);
+        stateMachine.states = data.states;
+
         if (this.tile.level && this.tile.level.isInitialized)
             this.calculateFov();
     }

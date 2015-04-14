@@ -8,8 +8,8 @@ define(function (require) {
         var deferred = when.defer();
         this.promise = deferred.promise;
 
-        loadModules(behaviors).then(function (loader) {
-            injectModules(loader);
+        loadModules(behaviors, injector).then(function (loader) {
+            //injectModules(loader);
 
             deferred.resolve(loader);
         });

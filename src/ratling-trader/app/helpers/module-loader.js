@@ -3,7 +3,7 @@ define(function (require) {
 
     return load;
 
-    function load(modulesToLoad) {
+    function load(modulesToLoad, injector) {
         var deferred = when.defer(),
             modules = [],
             instances = [];
@@ -41,7 +41,7 @@ define(function (require) {
         }
 
         function get(name) {
-            return instances[name];
+            return instances[name] || (instances[name] = injector.inject(modules[name]));
         }
 
         function addModuleInstance(name, instance) {

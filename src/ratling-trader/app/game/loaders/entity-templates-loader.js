@@ -6,7 +6,7 @@ define(function (require) {
 
     return EntityTemplatesLoader;
 
-    function EntityTemplatesLoader() {
+    function EntityTemplatesLoader(loadedBehaviors) {
         var templates = {};
         var logger = rat.logger;
         logger.group(EntityTemplatesLoader.name);
@@ -49,7 +49,20 @@ define(function (require) {
                 space: 'air'
             };
 
+            processStates(template);
+
+
             templates[template.name] = extend({}, defaultData, template);
+        }
+
+        function processStates(template) {
+            if (!template.states)
+                return;
+            var statesList = Object.keys(template.states);
+            for (var i = 0; i < statesList.length; i++) {
+                var state = template.states[statesList[i]];
+                state.behavior = loadedBehaviors.get(state.name);
+            }
         }
 
         function loadCreatures() {
