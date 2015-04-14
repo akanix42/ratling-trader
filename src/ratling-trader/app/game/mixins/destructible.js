@@ -24,6 +24,7 @@ define(function (require) {
         if (target.attributes.get('health').current === 0) {
             createCorpse.call(this, target);
             tile.eventHandlers.notify(new EntityDestroyedEvent(event.attacker, event.target, event.attack));
+            target.eventHandlers.notify(new EntityDestroyedEvent(event.attacker, event.target, event.attack));
         }
 
     };

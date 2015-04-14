@@ -29,19 +29,7 @@
   {
     "name": "fungus",
     "type": "monster",
-    "states": {
-      "default": {
-        "behaviors": [
-          {
-            "name": "attack-enemy",
-            "probability": 0.6
-          },
-          {
-            "name": "clone-self"
-          }
-        ]
-      }
-    },
+
     "mixins": [
       "destructible",
       "attacker",
@@ -61,22 +49,14 @@
     "type": "monster",
     "corpse": "zombie-corpse",
     "states": {
-      "default": {
-        "behaviors": [
-          {
-            "name": "attack-enemy"
-          },
-          {
-            "name": "path-toward-target"
-          },
-          {
-            "name": "move-randomly"
-          }
-        ]
-      }
+      "wandering": {"name": "generic-wandering"},
+      "default": [{"name": "wandering"}]
     },
+
     "mixins": [
+      "ai",
       "attacker",
+      "cell-to-cell-movement",
       "collidable",
       "destructible",
       "defender"
