@@ -31,10 +31,9 @@ define(function (require) {
 
     function verifyTarget(attacker) {
         var target = attacker.data.target;
-        if (!target.attributes.get('health').current)
-            return null;
-
-        if (!isInRange(attacker.tile.position, target.tile.position))
+        if (!target
+            || !target.attributes.get('health').current
+            || !isInRange(attacker.tile.position, target.tile.position))
             return null;
 
         return target;
@@ -57,7 +56,7 @@ define(function (require) {
         var fov = Object.keys(attacker.tilesInFov).randomize();
         for (var i = 0; i < fov.length; i++) {
             var tile = attacker.tile.level.getTileAtPosition(attacker.tilesInFov[fov[i]]);
-            if (tile === attacker.tile) continue;
+            if (tile === attacker.tile || !isInRange(attacker.tile.position, tile.position)) continue;
             var target = searchTileForTarget(tile);
             if (target !== undefined)
                 return attacker.data.target = target;
@@ -69,7 +68,7 @@ define(function (require) {
         for (var i = 0; i < creatures.length; i++) {
             var creature = creatures[i];
             //if (creature.type === 'player' || creature.type === 'test')
-                return creature;
+            return creature;
         }
     }
 
