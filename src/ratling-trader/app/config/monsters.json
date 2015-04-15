@@ -4,7 +4,7 @@
     "type": "player",
     "mixins": [
       "cell-to-cell-movement",
-      "destructible",
+//      "destructible",
       "inventory-manager",
       "player",
       "attacker",
