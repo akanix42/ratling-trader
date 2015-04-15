@@ -10,14 +10,18 @@ define(function (require) {
         dexterity: 10
     };
 
-    function Attacker() {
+    function Attacker(entityFactory) {
         AbstractMixin.apply(this);
+        this._private.entityFactory = entityFactory;
 
         this.addCommandHandler(AttackCommand, attack);
     }
 
     Attacker.prototype = Object.create(AbstractMixin.prototype);
-
+    Attacker.prototype.applyTo = function init(entity) {
+        entity.mainHand = this._private.entityFactory.create({type: 'fist'});
+        AbstractMixin.prototype.applyTo.call(this, entity);
+    };
     function attack(command, attacker) {
         var airSpace = attacker.tile.level.getTileAt(command.target.x, command.target.y).entities.airSpace;
         var target = airSpace[airSpace.length - 1];

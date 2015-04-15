@@ -37,7 +37,7 @@ define(function () {
         this._private.previousStates = {};
     }
 
-    function switchTo(stateName) {
+    function switchTo(stateName, entity) {
         if (!(stateName in this._private.states))
             return null;
 
@@ -47,7 +47,9 @@ define(function () {
         if (stateName in this._private.previousStates)
             return null;
 
-        return this._private.states[stateName].behavior;
+        var behavior = this._private.states[stateName].behavior;
+        behavior.execute(entity);
+        return behavior;
     }
 
     return StateMachine;

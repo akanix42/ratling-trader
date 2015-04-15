@@ -50,6 +50,7 @@
     "corpse": "zombie-corpse",
     "states": {
       "wandering": {"name": "generic-wandering"},
+      "attacking": {"name": "generic-attacking"},
       "default": [{"name": "wandering"}]
     },
 
@@ -63,7 +64,10 @@
     ],
     "attributes": {
       "strength": {"base": 1},
-      "health": {"base": 1}
+      "health": {"base": 1},
+      "sight-range": {
+        "base": 1
+      }
     }
   }
 ]
