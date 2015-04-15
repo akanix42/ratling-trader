@@ -10,16 +10,14 @@ define(function (require) {
     function execute(attacker) {
         if (tryToPerformAttack(attacker))
             return true;
-        console.log('...');
 
+        attacker._private.stateMachine.switchTo('wandering', attacker);
         return true;
     }
 
     function tryToPerformAttack(attacker) {
         var target = getTarget(attacker);
         if (target) {
-            console.log('hiYAAA!');
-
             attacker.commandHandlers.notify(new AttackCommand(target.tile.position));
             return true;
         }
