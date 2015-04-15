@@ -9,7 +9,7 @@ define([
         behaviors: [
             'spec/behaviors/attack-enemy-behavior-spec.js',
             'spec/behaviors/behaviors-loader-spec.js',
-            '../lib/state-machine/spec/state-machine-spec.js',
+            'spec/behaviors/state-machine-spec.js',
 
         ],
         mixins: [
