@@ -10,6 +10,9 @@
                 init: function(ko){
                     ko.punches.enableAll();
                 }
+            },
+            "strip-json-comments": {
+                "exports": "stripJsonComments"
             }
         },
         paths: {
@@ -25,7 +28,8 @@
             "stringformat": "../bower_components/stringformat.js/index",
             "moment": "../bower_components/moment/moment",
             "knockout": "../bower_components/knockout/dist/knockout",
-            "knockout.punches": "helpers/knockout.punches.shim"
+            "knockout.punches": "helpers/knockout.punches.shim",
+            "strip-json-comments": "../bower_components/strip-json-comments/strip-json-comments"
         },
         packages: [
             {

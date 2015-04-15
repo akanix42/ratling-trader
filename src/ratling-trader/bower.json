@@ -22,10 +22,11 @@
     "requirejs": "~2.1.14",
     "stringformat.js": "jcayzac/stringformat.js#~0.0.6",
     "when": "~3.4.4",
-    "requirejs-plugins": "~1.0.2",
     "requirejs-promise": "~1.2.0",
     "text": "requirejs/text#~2.0.12",
     "knockout": "~3.3.0",
-    "knockout.punches": "mbest/knockout.punches#~0.5.1"
+    "knockout.punches": "mbest/knockout.punches#~0.5.1",
+    "requirejs-plugins": "nathantreid/requirejs-plugins#~1.0.3",
+    "strip-json-comments": "~1.0.2"
   }
 }
