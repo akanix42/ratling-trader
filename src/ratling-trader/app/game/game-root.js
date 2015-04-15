@@ -36,7 +36,7 @@ define(function (require) {
                 }),
                 self.registerModule('game/scheduler', {isSingleton: true}),
                 self.registerModule('helpers/stopwatch'),
-                self.registerModule('../lib/state-machine/state-machine'),
+                self.registerModule('game/state-machine'),
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
                 self.registerModule('game/intents/intent-handlers-factory'),
