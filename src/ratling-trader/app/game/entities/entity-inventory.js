@@ -24,13 +24,13 @@ define(function (require) {
         add: function (item) {
             this._private.items.push(item);
             if (this._private.entity)
-                this._private.entity.eventHandlers.notify(new ItemAddedToInventoryEvent(item, this._private.entity));
+                new ItemAddedToInventoryEvent(item, this._private.entity).notifyEntity(this._private.entity);
         },
 
         removeAt: function (index) {
             var item = this._private.items.splice(index, 1)[0];
             if (this._private.entity)
-                this._private.entity.eventHandlers.notify(new ItemRemovedFromInventoryEvent(item, this._private.entity));
+                new ItemRemovedFromInventoryEvent(item, this._private.entity).notifyEntity(this._private.entity);
             return item;
         },
         initFrom: function (itemsData) {

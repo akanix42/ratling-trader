@@ -2,6 +2,8 @@ define(function (require) {
     var PlayerInitializedEvent = require('game/events/player-initialized-event');
     var GameInitializedEvent = require('game/events/game-initialized-event');
     var ReadyForPlayerInputEvent = require('game/events/ready-for-player-input-event');
+    var FovUpdatedEvent = require('game/events/fov-updated-event');
+    var EventPerceivedEvent = require('game/events/event-perceived-event');
     var when = require('when');
     var GameCommands = require('enums/commands');
     var MoveCommand = require('game/commands/move-command');
@@ -21,7 +23,6 @@ define(function (require) {
         var level = self._private.level = gameData
             ? levelFactory.create(gameData.levels[gameData.currentLevel])
             : levelFactory.create();
-        //this._private.player = entityFactory.create(gameData.player);
     }
 
     Game.prototype = {
@@ -57,6 +58,17 @@ define(function (require) {
                 deferredsMap.get(PlayerInitializedEvent.name).resolve();
             }
         });
+        gameEventHub.subscribe(null, {
+            class: FovUpdatedEvent, handler: function (event) {
+                gameToUiBridge.sendEvent(event);
+            }
+        });
+        gameEventHub.subscribe(null, {
+            class: EventPerceivedEvent, handler: function (event) {
+                gameToUiBridge.sendEvent(event);
+            }
+        });
+
         gameEventHub.subscribe(null, {
             class: ReadyForPlayerInputEvent, handler: function (event) {
                 when(game._private.gameToUiBridge.readyForPlayerInput.call(game._private.gameToUiBridge))

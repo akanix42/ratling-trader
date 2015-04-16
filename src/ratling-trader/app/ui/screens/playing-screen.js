@@ -5,9 +5,19 @@ define(function (require) {
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
     var CastSpellCommand = require('game/commands/cast-spell-command');
     var AttackCommand = require('game/commands/attack-command');
+    var EventPerceivedEvent = require('game/events/event-perceived-event');
+    var GameEventReceivedEvent = require('ui/events/game-event-received-event');
+    var EntityAttackedEvent = require('game/events/entity-attacked-event');
+    var EntityDestroyedEvent = require('game/events/entity-destroyed-event');
+    var EntityMovedEvent = require('game/events/entity-moved');
+    var EntityNoLongerOnTileEvent = require('game/events/entity-no-longer-on-tile');
+    var FovUpdatedEvent = require('game/events/fov-updated-event');
+    var AoeDamageEvent = require('game/events/aoe-damage-event');
+
     var arrayExtensions = require('array-extensions');
     var ItemPickupCommand = require('game/commands/item-pickup-command');
 
+    var handledPerceptions = getHandledPerceivedEventsMap();
 
     function getCommandMap() {
         var commands = {keydown: {}, keyup: {}, keypress: {}};
@@ -83,11 +93,18 @@ define(function (require) {
 
         };
         window.display = display;
-        uiToGameBridge.eventHandlers.subscribe(null, {
+        uiToGameBridge.gameEventHandlers.subscribe(null, {
             'class': ReadyForPlayerInputEvent,
             handler: this.render.bind(this)
         });
-
+        uiToGameBridge.gameEventHandlers.subscribe(null, {
+            'class': EventPerceivedEvent,
+            handler: renderEvent.bind(this)
+        });
+        uiToGameBridge.gameEventHandlers.subscribe(null, {
+            'class': FovUpdatedEvent,
+            handler: renderFov.bind(this)
+        });
     }
 
     PlayingScreen.prototype = {
@@ -156,6 +173,7 @@ define(function (require) {
         var tiles = this._private.uiToGameBridge.gameState.level.tiles;
         var fov = this._private.uiToGameBridge.gameState.player._private.tilesInFov;
 
+        //console.log('fov');
         renderCurrentFov.call(this, display, tiles, fov);
         renderPreviousFov.call(this, display, tiles, fov);
         this._private.previousFov = fov;
@@ -166,7 +184,9 @@ define(function (require) {
         for (var i = 0; i < fovKeys.length; i++) {
             var tileFovData = fov[fovKeys[i]];
             var tile = tiles[tileFovData.x][tileFovData.y];
-            var entities = tile.entities.airSpace;
+            var entities = tile.entities.getSpace('spell');
+            if (!entities.length)
+                entities = tile.entities.airSpace;
             if (!entities.length)
                 entities = tile.entities.floorSpace;
             if (!entities.length)
@@ -177,12 +197,6 @@ define(function (require) {
             uiTile.draw(display, tileFovData.x, tileFovData.y, calculateOverlay(tileFovData.visibility));
         }
     }
-
-    function calculateOverlay(visibility) {
-        if (visibility < 1)
-            return 'rgba(156,152,155,' + ((1 - visibility) / 4) + ')';
-    }
-
     function renderPreviousFov(display, tiles, fov) {
         var previousFov = this._private.previousFov;
         if (previousFov) {
@@ -201,4 +215,120 @@ define(function (require) {
         }
     }
 
+    function renderUpdatedFov(event){
+        var display = this._private.display;
+        var tiles = this._private.uiToGameBridge.gameState.level.tiles;
+        renderCurrentFovUpdates.call(this, display, tiles, event.currentFovUpdates);
+        renderPreviousFovUpdates.call(this, display, tiles, event.previousFovUpdates);
+    }
+
+    function renderCurrentFovUpdates(display, tiles, fov) {
+        var fovKeys = Object.keys(fov);
+        for (var i = 0; i < fovKeys.length; i++) {
+            var tileFovData = fov[fovKeys[i]];
+            var tile = tiles[tileFovData.x][tileFovData.y];
+            var entities = tile.entities.getSpace('spell');
+            if (!entities.length)
+                entities = tile.entities.airSpace;
+            if (!entities.length)
+                entities = tile.entities.floorSpace;
+            if (!entities.length)
+                entities = tile.entities.all();
+
+            var uiTile = this._private.asciiTileFactory.create(entities[entities.length - 1].type);
+
+            uiTile.draw(display, tileFovData.x, tileFovData.y, calculateOverlay(tileFovData.visibility));
+        }
+    }
+
+
+    function calculateOverlay(visibility) {
+        if (visibility < 1)
+            return 'rgba(156,152,155,' + ((1 - visibility) / 4) + ')';
+    }
+
+    function renderPreviousFovUpdates(display, tiles, previousFov) {
+        if (previousFov) {
+            var pFovKeys = Object.keys(previousFov);
+            for (var i = 0; i < pFovKeys.length; i++) {
+                var key = pFovKeys[i];
+                var tileFovData = previousFov[key];
+                var tile = tiles[tileFovData.x][tileFovData.y];
+                var entities = tile.entities;
+                var entity = entities.floorSpace.last() || entities.architecture;
+                var uiTile = this._private.asciiTileFactory.create(entity.type);
+                uiTile.draw(display, tileFovData.x, tileFovData.y, 'rgba(156,152,155,0.5)');
+            }
+        }
+    }
+
+
+    function getHandledPerceivedEventsMap() {
+        var handledPerceivedEvents = {};
+        handledPerceivedEvents[EntityAttackedEvent.name] = true;
+        handledPerceivedEvents[EntityDestroyedEvent.name] = true;
+        handledPerceivedEvents[EntityMovedEvent.name] = true;
+        handledPerceivedEvents[EntityNoLongerOnTileEvent.name] = true;
+        handledPerceivedEvents[AoeDamageEvent.name] = true;
+        return handledPerceivedEvents;
+    }
+
+    function renderEvent(perceivedEvent) {
+        var event = perceivedEvent.event;
+        if (!(event.constructor.name in handledPerceptions))
+            return;
+
+
+        var display = this._private.display;
+        var tiles = this._private.uiToGameBridge.gameState.level.tiles;
+        var fov = this._private.uiToGameBridge.gameState.player._private.tilesInFov;
+        var previousFov = this._private.previousFov;
+        var tilesToUpdate = [];
+        var uiTile;
+
+        renderTileUpdate(perceivedEvent.tile, this._private.asciiTileFactory, fov, previousFov, display);
+        //if (event.constructor.name===AoeDamageEvent.name )
+        //renderTileUpdate(event.spellCast.tile);
+        //   uiTile= this._private.asciiTileFactory.create(event.spellCast.type);
+        //else if (event.constructor.name===EntityAttackedEvent.name )
+        //    uiTile= this._private.asciiTileFactory.create(event.spellCast.type);
+        //
+        //else if (event.constructor.name===EntityDestroyedEvent.name )
+    }
+
+    function renderTileUpdate(tile, asciiTileFactory, fov, previousFov, display) {
+        var uiTile;
+        var combinedXy = combineXy(tile.position);
+        if (combinedXy in fov)
+            uiTile = renderVisibleTileUpdate(tile, asciiTileFactory, fov[combinedXy], display);
+        else if (combinedXy in previousFov)
+            uiTile = renderNotVisibleTileUpdate(display, tile, asciiTileFactory);
+
+        return uiTile;
+    }
+
+    function combineXy(position) {
+        return position.x + ',' + position.y;
+    }
+
+    function renderVisibleTileUpdate(tile, asciiTileFactory, tileFovData, display) {
+        var entities = tile.entities.getSpace('spell');
+        if (!entities.length)
+            entities = tile.entities.airSpace;
+        if (!entities.length)
+            entities = tile.entities.floorSpace;
+        if (!entities.length)
+            entities = tile.entities.all();
+
+        var uiTile = asciiTileFactory.create(entities[entities.length - 1].type);
+        uiTile.draw(display, tile.position.x, tile.position.y, calculateOverlay(tileFovData.visibility));
+
+    }
+
+    function renderNotVisibleTileUpdate(display, tile, asciiTileFactory) {
+        var entities = tile.entities;
+        var entity = entities.floorSpace.last() || entities.architecture;
+        var uiTile = asciiTileFactory.create(entity.type);
+        uiTile.draw(display, tile.position.x, tile.position.y, 'rgba(156,152,155,0.5)');
+    }
 });

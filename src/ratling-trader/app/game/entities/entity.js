@@ -1,6 +1,7 @@
 define(function (require) {
     var EntityMovedEvent = require('game/events/entity-moved');
-
+    var EntityNoLongerOnTileEvent = require('game/events/entity-no-longer-on-tile');
+    var FovUpdatedEvent = require('game/events/fov-updated-event');
 
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
                     nullTile, entityAttributes, scheduler, stateMachine) {
@@ -90,8 +91,9 @@ define(function (require) {
             this._private.tile = newTile;
 
             var event = new EntityMovedEvent(this, oldTile, newTile);
-            this.eventHandlers.notify(event);
-            newTile.eventHandlers.notify(event);
+            event.notifyEntity(this);
+            if (oldTile)
+                new EntityNoLongerOnTileEvent().notifyTile(oldTile, this);
             this.calculateFov();
         },
         get tilesInFov() {
@@ -111,6 +113,9 @@ define(function (require) {
 
             this._private.tilesInFov = this.tile.level.calculateFov(this.tile.position.x,
                 this.tile.position.y, this.attributes.get('sight-range').current);
+
+            new FovUpdatedEvent().notifyEntity(this);
+
         },
         destroy: function destroy() {
             this.tile = this._private.nullTile;

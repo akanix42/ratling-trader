@@ -1,9 +1,9 @@
 define(function (require) {
     var AbstractEvent = require('game/events/abstract-event');
     var inheritance = require('helpers/inheritance');
-    inheritance.inheritPrototype(ReadyForPlayerInputEvent, AbstractEvent);
-    return ReadyForPlayerInputEvent;
+    inheritance.inheritPrototype(EmptyEvent, AbstractEvent);
+    return EmptyEvent;
 
-    function ReadyForPlayerInputEvent() {
+    function EmptyEvent() {
     }
 });

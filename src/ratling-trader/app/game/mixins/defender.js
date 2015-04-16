@@ -23,7 +23,7 @@ define(function (require) {
         var attack = event.attack;
         damageReceived += attack.physicalDamage - target.attributes.get('armor').current;
         if (damageReceived > 0)
-            event.target.eventHandlers.notify(new EntityDamagedEvent(event.attacker, event.target, event.attack, damageReceived));
+            new EntityDamagedEvent(event.attacker, event.target, event.attack, damageReceived).notifyEntity(event.target);
     };
 
     return Defender;

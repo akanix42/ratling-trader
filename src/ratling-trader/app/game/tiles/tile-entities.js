@@ -34,11 +34,17 @@ define(function () {
             this._private.architecture = entity;
         }
         else if (entity.space) {
-            var space = this._private[entity.space + 'SpaceEntities'];
+            var space = this.getSpace(entity.space);
             space.push(entity);
             this._private.entitySpacesMap.set(entity, space);
         }
         return true;
+    };
+
+    TileEntities.prototype.getSpace = function getSpace(spaceName) {
+        var spaceKey = spaceName + 'SpaceEntities';
+
+        return this._private[spaceKey] || (this._private[spaceKey] = []);
     };
 
     TileEntities.prototype.all = function all() {

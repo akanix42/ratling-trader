@@ -35,8 +35,7 @@ define(function (require) {
             window.rat.logger.log('attack!');
             var attack = attackWithMainHand(attacker);
             var attackEvent = new EntityAttackedEvent(attacker, target, attack);
-            target.eventHandlers.notify(attackEvent);
-            //target.eventHandlers.notify(attackEvent);
+            attackEvent.notifyEntity(target);
 
             return true;
         }

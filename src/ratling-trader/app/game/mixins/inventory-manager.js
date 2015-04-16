@@ -21,7 +21,7 @@ define(function (require) {
             droppedItems.push(item);
         }
         var event = new DroppedItemsEvent(entity, droppedItems);
-        entity.eventHandlers.notify(event);
+        event.notifyEntity(entity);
     }
 
     InventoryManager.prototype = Object.create(AbstractMixin.prototype);

@@ -47,8 +47,7 @@ define(function (require) {
                 defender.mixins.add('defender');
                 defender.eventHandlers.subscribe(null, {class: EntityDamagedEvent, handler: eventHandler});
                 var start = new Date();
-
-                defender.eventHandlers.notify(new EntityAttackedEvent(defender, defender, {physicalDamage: 1}));
+                new EntityAttackedEvent(defender, defender, {physicalDamage: 1}).notifyEntity(defender);
 
                 function eventHandler() {
                     done(start);
@@ -66,7 +65,7 @@ define(function (require) {
                 defender.eventHandlers.subscribe(null, {class: EntityDamagedEvent, handler: eventHandler});
                 var start = new Date();
 
-                defender.eventHandlers.notify(new EntityAttackedEvent(defender, defender, {physicalDamage: 1}));
+                new EntityAttackedEvent(defender, defender, {physicalDamage: 1}).notifyEntity(defender);
 
                 function eventHandler(event) {
                     event.damage.should.equal(1);

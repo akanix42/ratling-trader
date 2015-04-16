@@ -49,8 +49,7 @@ define(function (require) {
 
                 destructible.mixins.add('destructible');
                 var start = new Date();
-
-                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
+                new EntityDamagedEvent(destructible, destructible, null, 1).notifyEntity(destructible);
                 destructible.attributes.get('health').current.should.equal(0);
                 done(start);
             });
@@ -68,7 +67,7 @@ define(function (require) {
                 destructible.tile.eventHandlers.subscribe(null, {class: EntityDestroyedEvent, handler: eventHandler});
                 var start = new Date();
 
-                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
+                new EntityDamagedEvent(destructible, destructible, null, 1).notifyEntity(destructible);
 
                 function eventHandler(event) {
                     done(start);
@@ -90,7 +89,7 @@ define(function (require) {
                 destructible.tile.eventHandlers.subscribe(null, {class: EntityDestroyedEvent, handler: eventHandler});
                 var start = new Date();
 
-                destructible.eventHandlers.notify(new EntityDamagedEvent(destructible, destructible, null, 1));
+                new EntityDamagedEvent(destructible, destructible, null, 1).notifyEntity(destructible);
 
                 function eventHandler(event) {
                     var corpse = tile.entities.all().reverse()[0];

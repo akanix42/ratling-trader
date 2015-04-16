@@ -8,7 +8,8 @@ define(function (require) {
             gameBridge: null,
             inputDeferred: null,
             inputQueue: [],
-            eventHandlers: eventHandlersFactory.create()
+            eventHandlers: eventHandlersFactory.create(),
+            gameEventHandlers: eventHandlersFactory.create()
         };
         this._private.ui = null;
     }
@@ -16,6 +17,9 @@ define(function (require) {
     UiToGameBridge.prototype = {
         get eventHandlers() {
             return this._private.eventHandlers;
+        },
+        get gameEventHandlers() {
+            return this._private.gameEventHandlers;
         },
         get gameState() {
             return this._private.gameBridge.gameState;
@@ -54,14 +58,15 @@ define(function (require) {
             this._private.ui.init();
         },
         startGame: function startGame() {
-            this._private.gameBridge.startGame();
+            return this._private.gameBridge.startGame();
         },
         loadGame: function loadGame() {
             return this._private.gameBridge.restoreGame();
         },
-        receiveGameEvent: function(event){
-            this._private.eventHandlers.notify(new GameEventReceivedEvent(event));
-        }
+        receiveGameEvent: function (event) {
+            this._private.gameEventHandlers.notify(event);
+        },
+
 
     };
     //

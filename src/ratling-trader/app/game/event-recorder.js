@@ -17,9 +17,10 @@ define(function () {
             return;
         this._private.events.push(event);
         this._private.eventsMap.set(event, null);
-        if (this._private.gameToUiBridge)
-            this._private.gameToUiBridge.sendEvent(event);
+        //if (this._private.gameToUiBridge)
+        //    this._private.gameToUiBridge.sendEvent(event);
     };
+
 
     return EventRecorder;
 });
