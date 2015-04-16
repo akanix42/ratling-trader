@@ -96,10 +96,25 @@ define(function () {
         getTileAtPosition: function getTileAt(position) {
             return this.getTileAt(position.x, position.y);
         },
+        toDto: function toDto() {
+            var level = this;
+            return {
+                tiles: saveTiles(level._private.map)
+            };
+        }
     };
 
     return Level;
 
+    function saveTiles(tiles) {
+        var tilesDto = [];
+        for (var x = 0; x < tiles.length; x++) {
+            var column = tiles[x];
+            for (var y = 0; y < column.length; y++)
+                tilesDto.push(column[y].toDto());
+        }
 
-})
-;
+        return tilesDto;
+    }
+
+});

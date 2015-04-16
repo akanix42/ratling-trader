@@ -5,12 +5,12 @@ define(function (require) {
 
     var id = 1;
 
-    function getNextId(){
+    function getNextId() {
         return id++;
     }
 
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
-                    nullTile, entityAttributes, scheduler, stateMachine) {
+                    nullTile, entityAttributes, scheduler, stateMachine, gameEntities) {
         this._private = {
             id: getNextId(),
             type: data.type,
@@ -26,7 +26,8 @@ define(function (require) {
             tilesInFov: null,
             inventory: entityInventory,
             scheduler: scheduler,
-            stateMachine: stateMachine
+            stateMachine: stateMachine,
+            gameEntities: gameEntities
         };
         this.tile = data.tile;
         entityInventory.entity = this;
@@ -71,7 +72,7 @@ define(function (require) {
         get data() {
             return this._private.data;
         },
-        get id(){
+        get id() {
             return this._private.id;
         },
         get inventory() {
@@ -130,10 +131,17 @@ define(function (require) {
         destroy: function destroy() {
             this.tile = this._private.nullTile;
 
+            this._private.gameEntities.remove(this);
             //
             //this.commandHandlers.destroy();
             //this.eventHandlers.destroy();
             //this.intentHandlers.destroy();
+        },
+        toDto: function toDto() {
+            var entity = this;
+            return {
+                type: entity._private.type
+            };
         }
 
     };

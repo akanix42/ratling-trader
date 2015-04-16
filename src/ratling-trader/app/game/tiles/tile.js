@@ -55,6 +55,11 @@ define(function (require) {
 
             return tiles;
         },
+        toDto: function toDto(){
+            return {
+                entities: this._private.entities.toDto(),
+            };
+        }
     };
 
     function getTilesAtDistance(distance, sourceX, sourceY, level, tiles) {

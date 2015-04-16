@@ -2,12 +2,13 @@ define(function (require) {
     var Entity = require('game/entities/entity'),
         extend = require('extend');
 
-    function EntityFactory(injector, mixinMapFactory, entityTemplatesLoader, nullTile, commandHandlersFactory, eventHandlersFactory) {
+    function EntityFactory(injector, mixinMapFactory, entityTemplatesLoader, nullTile, commandHandlersFactory, eventHandlersFactory, gameEntities) {
         this._private = {
             mixinMapFactory: mixinMapFactory,
             entityTemplatesLoader: entityTemplatesLoader,
             commandHandlersFactory: commandHandlersFactory,
             eventHandlersFactory: eventHandlersFactory,
+            gameEntities: gameEntities,
             injector: injector
         };
         this._private.defaultEntityData = getDefaultEntityData.call(this, nullTile);
@@ -20,6 +21,7 @@ define(function (require) {
             commandHandlers: this._private.commandHandlersFactory.create(),
             eventHandlers: this._private.eventHandlersFactory.create()
         });
+        this._private.gameEntities.add(entity);
         return entity;
     };
 

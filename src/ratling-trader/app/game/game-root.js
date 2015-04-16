@@ -35,6 +35,7 @@ define(function (require) {
                     }
                 }),
                 self.registerModule('game/scheduler', {isSingleton: true}),
+                self.registerModule('game/entities/game-entities', {isSingleton: true}),
                 self.registerModule('helpers/stopwatch'),
                 self.registerModule('game/state-machine'),
                 self.registerModule('game/levels/level-factory'),

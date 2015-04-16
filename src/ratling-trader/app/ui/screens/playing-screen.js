@@ -38,6 +38,7 @@ define(function (require) {
         keydown[ROT.VK_NUMPAD2] = handleMovementCommand.bind(this, GameCommands.GoDown);
         keydown[ROT.VK_NUMPAD1] = handleMovementCommand.bind(this, GameCommands.GoDownLeft);
         keydown[ROT.VK_NUMPAD5] = GameCommands.WaitInPlace;
+        keydown[ROT.VK_S] = GameCommands.SaveGame;
         keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
         keydown[ROT.VK_COMMA] = handlePickupCommand.bind(this);
         keydown[ROT.VK_I] = showInventoryCommand.bind(this);

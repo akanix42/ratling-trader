@@ -59,6 +59,12 @@ define(function () {
             removeArrayElementAt(findEntity(entity, space), space);
     };
 
+    TileEntities.prototype.toDto = function toDto(){
+        return this._private.entities.map(function(entity){
+            return entity.id;
+        });
+    };
+
     function removeArrayElementAt(index, array) {
         if (index === undefined)
             return;

@@ -7,14 +7,20 @@ define(function (require) {
     var when = require('when');
     var GameCommands = require('enums/commands');
     var MoveCommand = require('game/commands/move-command');
-    //var gameActions = getActions();
+    var SaveGameCommand = require('game/commands/save-game-command');
+//var gameActions = getActions();
 
-    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub, scheduler) {
+    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub, scheduler, commandHandlers, gameEntities) {
         var self = this;
+
         self._private = {
             player: null,
+            seed: ROT.RNG.getSeed(),
             gameToUiBridge: gameToUiBridge,
-            scheduler: scheduler
+            scheduler: scheduler,
+            commandHandlers: commandHandlers,
+            gameEntities: gameEntities,
+            gameEventHub:gameEventHub
         };
 
         var deferredsMap = notifyWhenInitialized(self, gameEventHub);
@@ -23,6 +29,11 @@ define(function (require) {
         var level = self._private.level = gameData
             ? levelFactory.create(gameData.levels[gameData.currentLevel])
             : levelFactory.create();
+
+        commandHandlers.subscribe(self, {
+            'class': SaveGameCommand,
+            handler: saveGame.bind(self)
+        });
     }
 
     Game.prototype = {
@@ -36,11 +47,16 @@ define(function (require) {
             var command = input;//gameActions[input];
             if (!command) return;
 
-            var wasHandled = this._private.player.commandHandlers.notify(command);
+            var wasHandled = false;
+
+            if (!this._private.commandHandlers.notify(command))
+                wasHandled = this._private.player.commandHandlers.notify(command);
             if (wasHandled)
                 this._private.scheduler.resume();
             else
-                this._private.gameToUiBridge.readyForPlayerInput.call(this._private.gameToUiBridge);
+                this._private.gameEventHub.notify(new ReadyForPlayerInputEvent());
+
+            //this._private.gameToUiBridge.readyForPlayerInput.call(this._private.gameToUiBridge);
 
         }
 
@@ -118,5 +134,17 @@ define(function (require) {
             deferreds.push(deferredsMap.get(name).promise);
 
         }
+    }
+
+    function saveGame() {
+        var game = this;
+        var gameDataDto = {
+            seed: game._private.seed,
+            level: game.level.toDto(),
+            entities: game._private.gameEntities.toDto()
+        };
+        var serializedData = JSON.stringify(gameDataDto, null, 2);
+        localStorage.setItem('game', serializedData);
+        console.log('game saved!:' + serializedData);
     }
 });

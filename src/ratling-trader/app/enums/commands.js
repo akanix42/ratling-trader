@@ -1,5 +1,6 @@
 define(function (require) {
     var MoveCommand = require('game/commands/move-command');
+    var SaveGameCommand = require('game/commands/save-game-command');
 
     var i = 1;
     return {
@@ -12,6 +13,7 @@ define(function (require) {
         GoDownRight: new MoveCommand({x: 1, y: 1}),
         GoDownLeft: new MoveCommand({x: -1, y: 1}),
         WaitInPlace: new MoveCommand({x: 0, y: 0}),
+        SaveGame: new SaveGameCommand()
     };
 
 });
