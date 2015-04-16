@@ -67,9 +67,9 @@ define(function (require) {
         var minY = Math.max(startingY, 0);
         var maxX = Math.min(endingX, level.size.width);
         var maxY = Math.min(endingY, level.size.height);
-        for (var x = minX; x < maxX; x++) {
+        for (var x = minX; x <= maxX; x++) {
             if (x === startingX || x === endingX)
-                for (var y = minY; y < maxY; y++)
+                for (var y = minY; y <= maxY; y++)
                     tiles.push(level.getTileAt(x, y));
             else {
                 if (minY === startingY)

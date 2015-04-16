@@ -54,10 +54,15 @@
     "color": "rgb(127,127,0)"
   },
 
-  // Spells
+  // Spells and Effects
   {
     "name": "fireball",
-    "character": "*",
+    "character": "•",
+    "color": "red"
+  },
+  {
+    "name": "fire-explosion",
+    "character": "∗",
     "color": "red"
   }
 ]

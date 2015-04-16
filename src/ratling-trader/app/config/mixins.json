@@ -6,6 +6,7 @@
   "collidable": "app\\game\\mixins\\collidable.js",
   "defender": "app\\game\\mixins\\defender.js",
   "destructible": "app\\game\\mixins\\destructible.js",
+  "explosion": "app\\game\\mixins\\explosion.js",
   "inventory-manager": "app\\game\\mixins\\inventory-manager.js",
   "mixin-map-factory": "app\\game\\mixins\\mixin-map-factory.js",
   "player": "app\\game\\mixins\\player.js",

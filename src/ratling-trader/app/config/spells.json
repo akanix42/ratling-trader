@@ -10,5 +10,14 @@
     },
     "space": "spell"
 
+  },
+  {
+    "name": "fire-explosion",
+    "type": "explosion",
+    "mixins": [
+      "explosion"
+    ],
+    "space": "spell"
+
   }
 ]

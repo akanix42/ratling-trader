@@ -21,7 +21,7 @@ define(function (require) {
         var tile = target.tile;
         target.attributes.get('health').base -= event.damage;
 
-        if (target.attributes.get('health').current === 0) {
+        if (target.attributes.get('health').current <= 0) {
             createCorpse.call(this, target);
             new EntityDestroyedEvent(event.attacker, event.target, event.attack).notifyEntity(target);
         }

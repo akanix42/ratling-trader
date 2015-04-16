@@ -1,6 +1,5 @@
 define(function (require) {
     'use strict';
-    var AoeDamageEvent = require('game/events/aoe-damage-event');
     var MoveCommand = require('game/commands/move-command');
 
     function FireballSpell(entityFactory) {
@@ -58,9 +57,11 @@ define(function (require) {
 
     FireballSpell.prototype.explode = function explode(spellCast) {
         var neighboringTiles = spellCast.tile.getNeighbors(1);
-        var aoeDamageEvent = new AoeDamageEvent(spellCast, {fire: 5});
         for (var i = 0; i < neighboringTiles.length; i++)
-            aoeDamageEvent.notifyTile(neighboringTiles[i]);
+            this._private.entityFactory.create({
+                type: 'fire-explosion',  tile: neighboringTiles[i], damage: {fire: 5}
+            });
+
 
         spellCast.destroy();
     };

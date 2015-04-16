@@ -53,7 +53,7 @@ define(function (require) {
 
     EventHandlers.prototype.unsubscribe = function unsubscribe(entity, event) {
         var events = this._private.events;
-        var subscriptions = events[event.constructor.name];
+        var subscriptions = events[event.name];
         if (subscriptions === undefined)
             return;
 
