@@ -52,5 +52,12 @@
     "name": "zombie-corpse",
     "character": "%",
     "color": "rgb(127,127,0)"
+  },
+
+  // Spells
+  {
+    "name": "fireball",
+    "character": "*",
+    "color": "red"
   }
 ]

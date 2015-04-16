@@ -2,6 +2,7 @@ define(function (require) {
     var architectures = require('json!config/architectures.json'),
         items = require('json!config/items.json'),
         monsters = require('json!config/monsters.json'),
+        spells = require('json!config/spells.json'),
         extend = require('extend');
 
     return EntityTemplatesLoader;
@@ -15,6 +16,7 @@ define(function (require) {
         loadArchitectures();
         loadCreatures();
         loadItems();
+        loadSpells();
 
         logger.info('loaded entities');
         logger.groupEnd();
@@ -77,6 +79,11 @@ define(function (require) {
             };
             for (var i = 0; i < items.length; i++)
                 addEntityTemplate(extend({}, defaultData, items[i]));
+        }
+
+        function loadSpells() {
+            for (var i = 0; i < spells.length; i++)
+                addEntityTemplate(spells[i]);
         }
 
         function getAll() {

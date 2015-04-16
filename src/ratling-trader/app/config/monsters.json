@@ -9,7 +9,8 @@
       "player",
       "attacker",
       "collidable",
-      "defender"
+      "defender",
+      "spellcaster"
     ],
     "attributes": {
       "strength": {

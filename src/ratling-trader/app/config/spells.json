@@ -1,0 +1,14 @@
+[
+  {
+    "name": "fireball",
+    "type": "spell",
+    "mixins": [
+      "cell-to-cell-movement",
+      "spell"
+    ],
+    "attributes": {
+    },
+    "space": "spell"
+
+  }
+]

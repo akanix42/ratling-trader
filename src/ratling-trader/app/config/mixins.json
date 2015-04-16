@@ -8,5 +8,7 @@
   "destructible": "app\\game\\mixins\\destructible.js",
   "inventory-manager": "app\\game\\mixins\\inventory-manager.js",
   "mixin-map-factory": "app\\game\\mixins\\mixin-map-factory.js",
-  "player": "app\\game\\mixins\\player.js"
+  "player": "app\\game\\mixins\\player.js",
+  "spell": "app\\game\\mixins\\spell.js",
+  "spellcaster": "app\\game\\mixins\\spellcaster.js"
 }

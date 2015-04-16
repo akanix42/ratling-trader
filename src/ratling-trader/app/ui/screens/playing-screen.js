@@ -3,6 +3,7 @@ define(function (require) {
     //var PlayingScreen = require('ui/screens/playing-screen');
     var GameCommands = require('enums/commands');
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
+    var CastSpellCommand = require('game/commands/cast-spell-command');
     var AttackCommand = require('game/commands/attack-command');
     var arrayExtensions = require('array-extensions');
     var ItemPickupCommand = require('game/commands/item-pickup-command');
@@ -30,6 +31,7 @@ define(function (require) {
         keydown[ROT.VK_F1] = toggleRenderMode.bind(this);
         keydown[ROT.VK_COMMA] = handlePickupCommand.bind(this);
         keydown[ROT.VK_I] = showInventoryCommand.bind(this);
+        keydown[ROT.VK_Z] = handleSpellCastCommand.bind(this);
 
         return commands;
 
@@ -37,6 +39,12 @@ define(function (require) {
 
     function showInventoryCommand() {
         this._private.ui.screens.push(this._private.inventoryScreen);
+    }
+
+    function handleSpellCastCommand() {
+        var player = this._private.uiToGameBridge.gameState.player;
+        var targetXY = {x: player.tile.position.x - 3, y: player.tile.position.y};
+        return new CastSpellCommand(targetXY);
     }
 
     function handleMovementCommand(moveCommand) {
