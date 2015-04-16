@@ -3,9 +3,16 @@ define(function (require) {
     var EntityNoLongerOnTileEvent = require('game/events/entity-no-longer-on-tile');
     var FovUpdatedEvent = require('game/events/fov-updated-event');
 
+    var id = 1;
+
+    function getNextId(){
+        return id++;
+    }
+
     function Entity(data, mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
                     nullTile, entityAttributes, scheduler, stateMachine) {
         this._private = {
+            id: getNextId(),
             type: data.type,
             space: data.space,
             data: data,
@@ -63,6 +70,9 @@ define(function (require) {
         },
         get data() {
             return this._private.data;
+        },
+        get id(){
+            return this._private.id;
         },
         get inventory() {
             return this._private.inventory;
