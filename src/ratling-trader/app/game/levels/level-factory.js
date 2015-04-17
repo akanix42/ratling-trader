@@ -17,7 +17,7 @@ define(function (require) {
             return createNewLevel.call(this);
 
         function restoreLevel() {
-            return new Level(levelData, self._private.tileFactory, self._private.nullTile);
+            return new Level(self._private.tileFactory, self._private.nullTile).init(levelData);
         }
 
 
@@ -38,7 +38,7 @@ define(function (require) {
             data.tiles = map;
             settleLevel.call(this, data);
 
-            return new Level(data, self._private.tileFactory);
+            return new Level(self._private.tileFactory, self._private.nullTile).init(data);
         }
 
         function settleLevel(level) {

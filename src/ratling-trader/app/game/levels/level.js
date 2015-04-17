@@ -1,21 +1,13 @@
 define(function () {
-    function Level(data, tileFactory, nullTile) {
-        var size = {
-            width: data.tiles.length,
-            height: data.tiles[0].length
-        };
-
+    function Level(tileFactory, nullTile) {
         this._private = {
-            size: size,
+            size: null,
             nullTile: nullTile,
+            tileFactory:tileFactory,
             fov: new ROT.FOV.PreciseShadowcasting(this.checkIfLightPasses.bind(this)),
-            isInitialized: false
-
+            isInitialized: false,
+            map: null
         };
-
-        this._private.map = initializeMap(size, data.tiles, tileFactory, this);
-        calculateEntitiesFov(this._private.map);
-        this._private.isInitialized = true;
     }
 
     function initializeMap(size, tiles, tileFactory, level) {
@@ -82,6 +74,19 @@ define(function () {
             if (y >= column.length)
                 return false;
             return column[y].entities.architecture.passesLight;
+        },
+        init: function init(data) {
+            var size = {
+                width: data.tiles.length,
+                height: data.tiles[0].length
+            };
+
+            this._private.size = size;
+            this._private.map = initializeMap(size, data.tiles, this._private.tileFactory, this);
+            calculateEntitiesFov(this._private.map);
+            this._private.isInitialized = true;
+
+            return this;
         },
         getRandomTile: function getRandomTile() {
             var x = ROT.RNG.getUniformInt(0, this.size.width - 1);

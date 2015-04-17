@@ -10,7 +10,7 @@ define(function (require) {
     var SaveGameCommand = require('game/commands/save-game-command');
 //var gameActions = getActions();
 
-    function Game(gameToUiBridge, levelFactory, gameEventHub, scheduler, commandHandlers, gameEntities) {
+    function Game(gameToUiBridge, levelFactory, gameEventHub, scheduler, commandHandlers, gameEntities, idGenerator) {
         var self = this;
 
         self._private = {
@@ -22,7 +22,7 @@ define(function (require) {
             gameEntities: gameEntities,
             gameEventHub: gameEventHub,
             levelFactory: levelFactory,
-
+            idGenerator:idGenerator
         };
 
         var deferredsMap = notifyWhenInitialized(self, gameEventHub);
@@ -127,6 +127,7 @@ define(function (require) {
         var game = this;
         var gameDataDto = {
             seed: game._private.seed,
+            ids: game._private.idGenerator.toDto(),
             level: game.level.toDto(),
             entities: game._private.gameEntities.toDto()
         };

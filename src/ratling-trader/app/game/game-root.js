@@ -24,6 +24,7 @@ define(function (require) {
                 self.registerModule('game/game-to-ui-bridge', {isSingleton: true}),
                 self.registerModule('game/game'),
                 self.registerModule('game/game-factory'),
+                self.registerModule('game/id-generator', {isSingleton: true}),
                 self.registerModule('game/saved-game-factory'),
                 self.registerModule('game/tiles/tile'),
                 self.registerModule('game/tiles/tile-factory'),

@@ -15,7 +15,6 @@ define(function () {
             rat.logger.warn(value + ' is not a valid mixin.');
             return;
         }
-        //rat.logger.info(value + ' mixin loaded.');
         mixin.applyTo(this._private.entity);
         this._private.map.set(mixin.constructor.name, mixin);
     };
