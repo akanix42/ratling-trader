@@ -3,17 +3,6 @@ define(function (require) {
     var ReadyForPlayerInputEvent = require('ui/events/ready-for-player-input-event');
     var GameEventReceivedEvent = require('ui/events/game-event-received-event');
 
-    function UiToGameBridge(eventHandlersFactory) {
-        this._private = {
-            gameBridge: null,
-            inputDeferred: null,
-            inputQueue: [],
-            eventHandlers: eventHandlersFactory.create(),
-            gameEventHandlers: eventHandlersFactory.create()
-        };
-        this._private.ui = null;
-    }
-
     UiToGameBridge.prototype = {
         get eventHandlers() {
             return this._private.eventHandlers;
@@ -69,6 +58,17 @@ define(function (require) {
 
 
     };
+
+    function UiToGameBridge(eventHandlers, gameEventHandlers$eventHandlers) {
+        this._private = {
+            gameBridge: null,
+            inputDeferred: null,
+            inputQueue: [],
+            eventHandlers: eventHandlers,
+            gameEventHandlers: gameEventHandlers$eventHandlers
+        };
+        this._private.ui = null;
+    }
     //
     //function UiToGameBridgeFactory() {
     //
