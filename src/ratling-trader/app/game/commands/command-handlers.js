@@ -36,12 +36,6 @@ define(function (require) {
         }
     };
 
-    function CommandHandlersFactory() {
+    return CommandHandlers;
 
-    }
-
-    CommandHandlersFactory.prototype.create = function create() {
-        return new CommandHandlers();
-    };
-    return CommandHandlersFactory;
 });

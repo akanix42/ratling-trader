@@ -1,13 +1,13 @@
 define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
-    function NullTile(nullIntentHandlersFactory, eventHandlersFactory) {
+    function NullTile(nullIntentHandlersFactory, eventHandlers) {
         this._private = {
             position: {x: -1, Y: -1},
             name: 'null',
             entities: new TileEntities(),
             intentHandlers: nullIntentHandlersFactory.create(this),
-            eventHandlers: eventHandlersFactory.create(),
+            eventHandlers: eventHandlers,
 
         };
     }

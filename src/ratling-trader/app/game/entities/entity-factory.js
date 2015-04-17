@@ -1,13 +1,11 @@
 define(function (require) {
+    'use strict';
     var Entity = require('game/entities/entity'),
         extend = require('extend');
 
-    function EntityFactory(injector, mixinMapFactory, entityTemplatesLoader, nullTile, commandHandlersFactory, eventHandlersFactory, gameEntities) {
+    function EntityFactory(injector, entityTemplatesLoader, nullTile, gameEntities) {
         this._private = {
-            mixinMapFactory: mixinMapFactory,
             entityTemplatesLoader: entityTemplatesLoader,
-            commandHandlersFactory: commandHandlersFactory,
-            eventHandlersFactory: eventHandlersFactory,
             gameEntities: gameEntities,
             injector: injector
         };
@@ -18,8 +16,6 @@ define(function (require) {
         data = normalizeData.call(this, data, this._private.entityTemplatesLoader.get(data.type));
         var entity = this._private.injector.inject(Entity, {
             data: data,
-            commandHandlers: this._private.commandHandlersFactory.create(),
-            eventHandlers: this._private.eventHandlersFactory.create()
         });
         this._private.gameEntities.add(entity);
         return entity;

@@ -1,30 +1,18 @@
 define(function (require) {
     var TileEntities = require('game/tiles/tile-entities');
 
-    function Tile(tileData, intentHandlers, eventHandlers, entityFactory) {
+    function Tile(intentHandlers, eventHandlers, entityFactory, tileEntities) {
         var self = this;
         self._private = {
-            baseArchitecture: tileData.baseArchitecture,
-            entities: new TileEntities(),
-            level: tileData.level,
-            position: tileData.position,
+            baseArchitecture: null,
+            entityFactory: entityFactory,
+            entities: tileEntities,
+            level: null,
+            position: null,
 
             intentHandlers: intentHandlers,
             eventHandlers: eventHandlers
         };
-        addEntities();
-
-        function addEntities() {
-            var _ = self._private;
-            tileData.tile = self;
-            _.entities.add(entityFactory.create(tileData.baseArchitecture));
-            if (!tileData.entities) return;
-            for (var i = 0; i < tileData.entities.length; i++) {
-                var entityData = tileData.entities[i];
-                entityData.tile = self;
-                _.entities.add(entityFactory.create(entityData));
-            }
-        }
     }
 
     Tile.prototype = {
@@ -55,13 +43,34 @@ define(function (require) {
 
             return tiles;
         },
-        toDto: function toDto(){
+        init: function init(tileData) {
+            var _ = this._private;
+
+            _.baseArchitecture = tileData.baseArchitecture;
+            _.level = tileData.level;
+            _.position = tileData.position;
+            addEntities(this, tileData);
+
+        },
+        toDto: function toDto() {
             return {
                 entities: this._private.entities.toDto(),
             };
         }
     };
 
+    function addEntities(self, tileData) {
+        var _ = self._private;
+        var entityFactory = _.entityFactory;
+        tileData.tile = self;
+        _.entities.add(entityFactory.create(tileData.baseArchitecture));
+        if (!tileData.entities) return;
+        for (var i = 0; i < tileData.entities.length; i++) {
+            var entityData = tileData.entities[i];
+            entityData.tile = self;
+            _.entities.add(entityFactory.create(entityData));
+        }
+    }
     function getTilesAtDistance(distance, sourceX, sourceY, level, tiles) {
         var startingX = sourceX - distance;
         var startingY = sourceY - distance;

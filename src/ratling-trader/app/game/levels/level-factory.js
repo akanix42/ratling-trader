@@ -1,10 +1,11 @@
 define(function (require) {
     var Level = require('game/levels/level');
 
-    function LevelFactory(tileFactory, entityFactory) {
+    function LevelFactory(tileFactory, entityFactory, nullTile) {
         this._private = {
             tileFactory: tileFactory,
             entityFactory: entityFactory,
+            nullTile: nullTile
         };
     }
 
@@ -16,7 +17,7 @@ define(function (require) {
             return createNewLevel.call(this);
 
         function restoreLevel() {
-            return new Level(levelData, self._private.tileFactory);
+            return new Level(levelData, self._private.tileFactory, self._private.nullTile);
         }
 
 
@@ -29,7 +30,7 @@ define(function (require) {
                 var column = new Array(size.height);
                 map[x] = column;
                 for (var y = 0; y < size.height; y++) {
-                    column[y] = {baseArchitecture: {type:'dirtFloor'}, entities: []};
+                    column[y] = {baseArchitecture: {type: 'dirtFloor'}, entities: []};
                     allTiles.push(column[y]);
                 }
             }

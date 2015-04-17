@@ -25,15 +25,6 @@ define(function (require) {
             intents[intent.class.name] = [];
         intents[intent.class.name].push({entity: entity, handler: intent.handler});
     };
-    //
-    //IntentHandlers.prototype.subscribeAll = function subscribe(entity, intents) {
-    //    var self = this;
-    //
-    //    for (var i = 0, l = intents.length; i < l; i++) {
-    //        var intent = intents[i];
-    //        self.subscribe(entity, intent.fn, intent.callback);
-    //    }
-    //};
 
     IntentHandlers.prototype.remove = function remove(entity, intent) {
         var intents = this._private.intents;
@@ -49,13 +40,5 @@ define(function (require) {
         }
     };
 
-    function IntentHandlersFactory() {
-
-    }
-
-    IntentHandlersFactory.prototype.create = function create() {
-        return new IntentHandlers();
-    };
-
-    return IntentHandlersFactory;
+    return IntentHandlers;
 });

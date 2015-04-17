@@ -2,24 +2,24 @@ define(function (require) {
     'use strict';
     var Game = require('game/game');
 
-    function GameFactory(levelFactory, entityFactory, gameEventHub, scheduler, commandHandlersFactory, gameEntities) {
-        this._private = {
+    function GameFactory(injector, levelFactory, entityFactory, gameEventHub, scheduler, commandHandlers, gameEntities) {
+        this._ = {
             levelFactory: levelFactory,
             entityFactory: entityFactory,
-            commandHandlersFactory: commandHandlersFactory,
+            commandHandlersFactory: commandHandlers,
             gameEventHub: gameEventHub,
             scheduler: scheduler,
-            gameEntities: gameEntities
+            gameEntities: gameEntities,
+            injector:injector
         };
     }
 
     GameFactory.prototype = {
         create: function create(gameToUiBridge) {
-            var game = new Game(gameToUiBridge, this._private.levelFactory, this._private.entityFactory, null,
-                this._private.gameEventHub, this._private.scheduler, this._private.commandHandlersFactory.create(),
-                this._private.gameEntities);
+            var game = this._.injector.resolve('game');
+            game.init();
             var playerData = {type: 'player', tile: game.level.getRandomTile()};
-            playerData.tile.entities.add(this._private.entityFactory.create(playerData));
+            playerData.tile.entities.add(this._.entityFactory.create(playerData));
             return game;
         }
     };

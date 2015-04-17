@@ -1,5 +1,5 @@
 define(function () {
-    function Level(data, tileFactory) {
+    function Level(data, tileFactory, nullTile) {
         var size = {
             width: data.tiles.length,
             height: data.tiles[0].length
@@ -7,7 +7,7 @@ define(function () {
 
         this._private = {
             size: size,
-            nullTile: tileFactory.nullTile,
+            nullTile: nullTile,
             fov: new ROT.FOV.PreciseShadowcasting(this.checkIfLightPasses.bind(this)),
             isInitialized: false
 

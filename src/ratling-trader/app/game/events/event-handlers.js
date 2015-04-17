@@ -10,6 +10,7 @@ define(function (require) {
     }
 
     EventHandlers.prototype.notify = function notify(event, entity, tile) {
+        //console.log('event');
         //this._private.eventRecorder.record(event);
         var events = this._private.events;
         var subscriptions = events[event.constructor.name];
@@ -82,12 +83,7 @@ define(function (require) {
                 wildcards.splice(entity, 1);
         }
     };
-    function EventHandlersFactory(injector) {
-        this._private = {injector: injector};
-    }
 
-    EventHandlersFactory.prototype.create = function create() {
-        return this._private.injector.inject(EventHandlers);
-    };
-    return EventHandlersFactory;
+    return EventHandlers;
+
 });

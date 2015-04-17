@@ -10,7 +10,7 @@ define(function (require) {
     var SaveGameCommand = require('game/commands/save-game-command');
 //var gameActions = getActions();
 
-    function Game(gameToUiBridge, levelFactory, entityFactory, gameData, gameEventHub, scheduler, commandHandlers, gameEntities) {
+    function Game(gameToUiBridge, levelFactory, gameEventHub, scheduler, commandHandlers, gameEntities) {
         var self = this;
 
         self._private = {
@@ -20,15 +20,13 @@ define(function (require) {
             scheduler: scheduler,
             commandHandlers: commandHandlers,
             gameEntities: gameEntities,
-            gameEventHub:gameEventHub
+            gameEventHub: gameEventHub,
+            levelFactory: levelFactory,
+
         };
 
         var deferredsMap = notifyWhenInitialized(self, gameEventHub);
         getPlayer(self, gameEventHub, gameToUiBridge, deferredsMap);
-
-        var level = self._private.level = gameData
-            ? levelFactory.create(gameData.levels[gameData.currentLevel])
-            : levelFactory.create();
 
         commandHandlers.subscribe(self, {
             'class': SaveGameCommand,
@@ -44,7 +42,7 @@ define(function (require) {
             return this._private.player;
         },
         handleInput: function handleInput(input) {
-            var command = input;//gameActions[input];
+            var command = input;
             if (!command) return;
 
             var wasHandled = false;
@@ -55,11 +53,15 @@ define(function (require) {
                 this._private.scheduler.resume();
             else
                 this._private.gameEventHub.notify(new ReadyForPlayerInputEvent());
-
-            //this._private.gameToUiBridge.readyForPlayerInput.call(this._private.gameToUiBridge);
+        },
+        init: function init(gameData) {
+            var self = this;
+            var levelFactory = self._private.levelFactory;
+            self._private.level = gameData
+                ? levelFactory.create(gameData.levels[gameData.currentLevel])
+                : levelFactory.create();
 
         }
-
 
     };
 
@@ -68,25 +70,25 @@ define(function (require) {
 
     function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
         gameEventHub.subscribe(null, {
-            class: PlayerInitializedEvent, handler: function (event) {
+            'class': PlayerInitializedEvent, handler: function (event) {
                 game._private.player = event.player;
                 game._private.scheduler.resume();
                 deferredsMap.get(PlayerInitializedEvent.name).resolve();
             }
         });
         gameEventHub.subscribe(null, {
-            class: FovUpdatedEvent, handler: function (event) {
+            'class': FovUpdatedEvent, handler: function (event) {
                 gameToUiBridge.sendEvent(event);
             }
         });
         gameEventHub.subscribe(null, {
-            class: EventPerceivedEvent, handler: function (event) {
+            'class': EventPerceivedEvent, handler: function (event) {
                 gameToUiBridge.sendEvent(event);
             }
         });
 
         gameEventHub.subscribe(null, {
-            class: ReadyForPlayerInputEvent, handler: function (event) {
+            'class': ReadyForPlayerInputEvent, handler: function (event) {
                 when(game._private.gameToUiBridge.readyForPlayerInput.call(game._private.gameToUiBridge))
                     .then(game.handleInput.bind(game));
             }
@@ -101,20 +103,6 @@ define(function (require) {
         lockCursorToPlayer();
         updateUI();
     }
-
-    //function getActions() {
-    //    var actions = {};
-    //    actions[GameCommands.GoLeft] = new MoveCommand({x: -1});
-    //    actions[GameCommands.GoRight] = new MoveCommand({x: 1});
-    //    actions[GameCommands.GoUp] = new MoveCommand({y: -1});
-    //    actions[GameCommands.GoDown] = new MoveCommand({y: 1});
-    //    actions[GameCommands.GoUpLeft] = new MoveCommand({x: -1, y: -1});
-    //    actions[GameCommands.GoUpRight] = new MoveCommand({x: 1, y: -1});
-    //    actions[GameCommands.GoDownRight] = new MoveCommand({x: 1, y: 1});
-    //    actions[GameCommands.GoDownLeft] = new MoveCommand({x: -1, y: 1});
-    //    actions[GameCommands.WaitInPlace] = new MoveCommand({x: 0, y: 0});
-    //    return actions;
-    //}
 
     function notifyWhenInitialized(game, gameEventHub) {
         var deferreds = [];
@@ -132,7 +120,6 @@ define(function (require) {
         function addDeferred(name) {
             deferredsMap.set(name, when.defer());
             deferreds.push(deferredsMap.get(name).promise);
-
         }
     }
 

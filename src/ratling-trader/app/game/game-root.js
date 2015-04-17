@@ -22,10 +22,12 @@ define(function (require) {
             rat.logger = self._private.injector.inject(Logger);
             return when.all([
                 self.registerModule('game/game-to-ui-bridge', {isSingleton: true}),
+                self.registerModule('game/game'),
                 self.registerModule('game/game-factory'),
                 self.registerModule('game/saved-game-factory'),
                 self.registerModule('game/tiles/tile'),
                 self.registerModule('game/tiles/tile-factory'),
+                self.registerModule('game/tiles/tile-entities'),
                 self.registerModule('game/entities/entity-factory'),
                 self.registerModule('game/entities/entity-inventory'),
                 self.registerModule('game/entities/entity-attributes'),
@@ -40,9 +42,9 @@ define(function (require) {
                 self.registerModule('game/state-machine'),
                 self.registerModule('game/levels/level-factory'),
                 self.registerModule('game/mixins/mixin-map-factory'),
-                self.registerModule('game/intents/intent-handlers-factory'),
-                self.registerModule('game/commands/command-handlers-factory'),
-                self.registerModule('game/events/event-handlers-factory'),
+                self.registerModule('game/intents/intent-handlers'),
+                self.registerModule('game/commands/command-handlers'),
+                self.registerModule('game/events/event-handlers'),
                 self.registerModule('game/event-recorder', {isSingleton: true}),
                 self.registerModule('game/maps/random-map-generator'),
                 self.registerModule('game/loaders/behavior-modules-loader', {isSingleton: true}),
@@ -54,8 +56,8 @@ define(function (require) {
                     return self._private.injector.inject(NullTile);
                 }),
 
-                self.registerObject('gameEventHub', function (eventHandlersFactory) {
-                    return eventHandlersFactory.create();
+                self.registerObject('gameEventHub', function (eventHandlers) {
+                    return eventHandlers;
                 }),
 
             ]).then(function () {

@@ -1,23 +1,23 @@
 define(function (require) {
+    'use strict';
     var Tile = require('game/tiles/tile');
 
-    function TileFactory(intentHandlersFactory, eventHandlersFactory, entityFactory, nullTile) {
-        this._private = {
-            entityFactory: entityFactory,
-            intentHandlersFactory: intentHandlersFactory,
-            eventHandlersFactory: eventHandlersFactory,
-            nullTile: nullTile
+    function TileFactory(nullTile, injector) {
+        this._ = {
+            nullTile: nullTile,
+            injector: injector
         };
     }
 
     TileFactory.prototype = {
-        get nullTile() {
-            return this._private.nullTile;
-        },
+        //get nullTile() {
+        //    return this._.nullTile;
+        //},
 
         create: function (tileData) {
-            return new Tile(tileData, this._private.intentHandlersFactory.create(),
-                this._private.eventHandlersFactory.create(), this._private.entityFactory);
+            var tile = this._.injector.inject(Tile);
+            tile.init(tileData);
+            return tile;
         }
     };
 
