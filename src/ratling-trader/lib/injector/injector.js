@@ -119,12 +119,7 @@ define(function (require) {
         }
 
         function construct(constructor, args) {
-            function F() {
-                return constructor.apply(this, args);
-            }
-
-            F.prototype = constructor.prototype;
-            return new F();
+            return new (Function.prototype.bind.apply(constructor, [null].concat(args)));
         }
 
         function createObjectInitializationSteps() {
