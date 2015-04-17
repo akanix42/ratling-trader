@@ -104,7 +104,7 @@ define(function (require) {
             var text = item.toString();
             var dependencies = text.match(FN_ARGS)[1].split(',');
             dependencies = dependencies.map(function (dependency) {
-                return dependency.replace(/\s+/g, '');
+                return dependency.replace(/\s+/g, '').replace(/.*\$/, '');
             });
 
             self.initialize = function (dependencyTree, registeredModules, substitutions) {
