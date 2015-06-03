@@ -6,7 +6,6 @@ define(function (require) {
         AbstractMixin.apply(this);
 
         this.addEntityEventHandler(EntityDestroyedEvent, onDestroyed);
-
     }
 
     SpellMixin.prototype = Object.create(AbstractMixin.prototype);
@@ -15,6 +14,11 @@ define(function (require) {
         entity._private.scheduler.addEntity(entity);
         AbstractMixin.prototype.applyTo.call(this, entity);
     };
+
+    SpellMixin.prototype.fromDto = function fromDto(){
+        
+    };
+
     return SpellMixin;
 
 

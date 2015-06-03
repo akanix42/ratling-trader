@@ -1,11 +1,11 @@
 define(function (require) {
     'use strict';
     var EntityTestDataBuilder = require('tests/builders/entity-test-data-builder');
-    var AttackEnemy = require('game/behaviors/attack-enemy');
+    var AttackEnemy = require('game/behaviors/generic-attacking');
     var AttackCommand = require('game/commands/attack-command');
     var iocLoader = require('ioc-loader');
 
-    describe('behaviors - attack enemy', function () {
+    describe('behaviors - generic attacking', function () {
         it('should target and attack a nearby enemy', function test(done) {
             var attackerPosition = {x: 5, y: 5};
             var defenderPosition = {x: 4, y: 5};
@@ -25,7 +25,7 @@ define(function (require) {
                 attacker.data.target.should.equal(defender);
 
                 function attackCommandHandler(event) {
-                    event.target.should.equal(defender);
+                    event.target.should.equal(defender.tile.position);
                     done(start);
                 }
             });

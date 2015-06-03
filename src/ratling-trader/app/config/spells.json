@@ -4,7 +4,9 @@
     "type": "spell",
     "mixins": [
       "cell-to-cell-movement",
-      "spell"
+      "ball-spell",
+      "add-to-scheduler-on-init",
+      "remove-from-scheduler-when-destroyed"
     ],
     "attributes": {
     },

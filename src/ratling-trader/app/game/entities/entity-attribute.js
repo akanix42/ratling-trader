@@ -43,6 +43,16 @@ define(function (require) {
         },
         get modifiers() {
             return this._private.modifiers;
+        },
+
+        toDto: function toDto(){
+            var _ = this._private;
+            return {
+                base: _.base,
+                bonus: _.bonus,
+                max: _.max,
+                modifiers: _.modifiers.toDto()
+            }
         }
     };
 
@@ -64,7 +74,14 @@ define(function (require) {
         if (oldModifier)
             value = value - oldModifier.value;
         this._private.attribute._private.bonus += value;
-    }
+    };
+
+    AttributeModifiers.prototype.toDto = function toDto(){
+        var dto = {};
+        for (var attribute of this._private.modifiers)
+            dto[attribute[0]] = attribute[1];
+        return dto;
+    };
 
     return EntityAttribute;
 });

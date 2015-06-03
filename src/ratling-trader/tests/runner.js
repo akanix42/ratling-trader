@@ -7,7 +7,7 @@ define([
     'use strict';
     var specs = {
         behaviors: [
-            'spec/behaviors/attack-enemy-behavior-spec.js',
+            //'spec/behaviors/attack-enemy-behavior-spec.js',
             'spec/behaviors/behaviors-loader-spec.js',
             'spec/behaviors/state-machine-spec.js',
 

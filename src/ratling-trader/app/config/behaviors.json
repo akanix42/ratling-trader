@@ -1,5 +1,4 @@
 {
-  "attack-enemy": "app\\game\\behaviors\\attack-enemy.js",
   "clone-self": "app\\game\\behaviors\\clone-self.js",
   "generic-attacking": "app\\game\\behaviors\\generic-attacking.js",
   "generic-wandering": "app\\game\\behaviors\\generic-wandering.js",

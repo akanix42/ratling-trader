@@ -1,8 +1,5 @@
 define(function (require) {
     'use strict';
-    var EntityTestDataBuilder = require('tests/builders/entity-test-data-builder');
-    var AttackEnemy = require('game/behaviors/attack-enemy');
-    var AttackCommand = require('game/commands/attack-command');
     var iocLoader = require('ioc-loader');
     var behaviorsJSON = require('json!config/behaviors.json');
 

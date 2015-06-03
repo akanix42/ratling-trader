@@ -24,8 +24,9 @@ define(function (require) {
     };
 
     function castSpell(command, caster) {
-        var spell = new FireballSpell(this._private.entityFactory);
-        return spell.cast(caster, command.target);
+        //var spell = new FireballSpell(this._private.entityFactory);
+        //return spell.cast(caster, command.target);
+        return castBallSpell(caster, command.target);
         //    var objections = caster.intentHandlers.notify(new IntentToCast(caster, spell)),
         //        caster
         //.
@@ -71,5 +72,27 @@ define(function (require) {
 
     }
 
+    function castBallSpell(caster, target) {
+        var spellData = {
+            target: {
+                x: target.x,
+                y: target.y,
+                level: level.toLookup()
+            },
+            caster: caster.toDto(),
+        };
+//var targetTile = caster.tile.level.getTileAt();
+        this._.entityFactory.create({
+            type: 'fireball',
+            tile: caster.tile,
+            extra: {
+                spellData: spellData
+            },
+        });
+
+        return true;
+    }
+
     return Spellcaster;
-});
+})
+;

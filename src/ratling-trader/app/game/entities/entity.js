@@ -5,11 +5,6 @@ define(function (require) {
     var FovUpdatedEvent = require('game/events/fov-updated-event');
 
 
-    Entity.lastEntityId = 1;
-    function getNextId() {
-        return Entity.lastEntityId++;
-    }
-
     function Entity(mixinMapFactory, commandHandlers, eventHandlers, entityAttributeFactory, entityInventory,
                     nullTile, entityAttributes, scheduler, stateMachine, gameEntities) {
         this._ = this._private = {
@@ -17,6 +12,7 @@ define(function (require) {
             type: null,
             space: null,
             data: null,
+            extra: {},
             attributes: entityAttributes,
             characteristics: new Set(),
             mixins: mixinMapFactory.create(this),
@@ -62,6 +58,9 @@ define(function (require) {
         },
         get data() {
             return this._.data;
+        },
+        get extra(){
+            return this._.extra;
         },
         get id() {
             return this._.id;
@@ -151,9 +150,12 @@ define(function (require) {
         },
         toDto: function toDto() {
             var entity = this;
+            var _ = entitiy._;
             return {
-                id: entity._.id,
-                type: entity._.type
+                id: _.id,
+                type: _.type,
+                extra: _.extra,
+                attributes: _.attributes.toDto()
             };
         }
 
