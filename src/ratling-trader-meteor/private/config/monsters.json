@@ -1,0 +1,74 @@
+[
+  {
+    "name": "player",
+    "type": "player",
+    "mixins": [
+      "cell-to-cell-movement",
+//      "destructible",
+      "inventory-manager",
+      "player",
+      "attacker",
+      "collidable",
+      "defender",
+      "spellcaster"
+    ],
+    "attributes": {
+      "strength": {
+        "base": 1
+      },
+      "dexterity": {
+        "base": 1
+      },
+      "health": {
+        "base": 10
+      },
+      "sight-range": {
+        "base": 15
+      }
+    }
+  },
+  {
+    "name": "fungus",
+    "type": "monster",
+
+    "mixins": [
+      "destructible",
+      "attacker",
+      "defender"
+    ],
+    "attributes": {
+      "strength": {
+        "base": 2
+      },
+      "health": {
+        "base": 5
+      }
+    }
+  },
+  {
+    "name": "zombie",
+    "type": "monster",
+    "corpse": "zombie-corpse",
+    "states": {
+      "wandering": {"name": "generic-wandering"},
+      "attacking": {"name": "generic-attacking"},
+      "default": [{"name": "wandering"}]
+    },
+
+    "mixins": [
+      "ai",
+//      "attacker",
+      "cell-to-cell-movement",
+      "collidable",
+      "destructible",
+      "defender"
+    ],
+    "attributes": {
+      "strength": {"base": 1},
+      "health": {"base": 1},
+      "sight-range": {
+        "base": 1
+      }
+    }
+  }
+]

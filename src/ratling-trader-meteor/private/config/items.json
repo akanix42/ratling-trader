@@ -1,0 +1,30 @@
+[
+  {
+    "name": "apple"
+  },
+  {
+    "name": "rock"
+  },
+  {
+    "name": "zombie-corpse",
+    "type": "item",
+    "mixins": [
+      "destructible"
+    ],
+    "attributes": {
+      "health": 10
+    }
+  },
+  {
+    "name": "fist",
+    "type": "item",
+    "attributes": {
+      "physicalDamage": {
+        "base": 5
+      },
+      "toHit": {
+        "base": 50
+      }
+    }
+  }
+]

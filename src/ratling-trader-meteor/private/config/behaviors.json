@@ -1,0 +1,9 @@
+{
+  "clone-self": "app\\game\\behaviors\\clone-self.js",
+  "generic-attacking": "app\\game\\behaviors\\generic-attacking.js",
+  "generic-wandering": "app\\game\\behaviors\\generic-wandering.js",
+  "move-away-from-target": "app\\game\\behaviors\\move-away-from-target.js",
+  "move-randomly": "app\\game\\behaviors\\move-randomly.js",
+  "move-toward-target": "app\\game\\behaviors\\move-toward-target.js",
+  "path-toward-target": "app\\game\\behaviors\\path-toward-target.js"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "null"
+  },
+  {
+    "name": "stoneWall",
+    "baseEntity": "stoneFloor",
+    "isWalkable": false,
+    "mixins": [
+      "collidable"
+    ],
+    "space": "air",
+    "passesLight": false
+
+  },
+  {
+    "name": "stoneFloor",
+    "isWalkable": true
+  },
+  {
+    "name": "dirtWall",
+    "baseEntity": "dirtFloor",
+    "isWalkable": false,
+    "isDiggable": true,
+    "space": "air",
+    "passesLight": false
+  },
+  {
+    "name": "dirtFloor",
+    "isWalkable": true
+  }
+]

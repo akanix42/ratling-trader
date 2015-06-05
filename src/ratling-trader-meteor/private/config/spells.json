@@ -1,0 +1,25 @@
+[
+  {
+    "name": "fireball",
+    "type": "spell",
+    "mixins": [
+      "cell-to-cell-movement",
+      "ball-spell",
+      "add-to-scheduler-on-init",
+      "remove-from-scheduler-when-destroyed"
+    ],
+    "attributes": {
+    },
+    "space": "spell"
+
+  },
+  {
+    "name": "fire-explosion",
+    "type": "explosion",
+    "mixins": [
+      "explosion"
+    ],
+    "space": "spell"
+
+  }
+]

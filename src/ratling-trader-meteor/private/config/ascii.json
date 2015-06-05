@@ -1,0 +1,74 @@
+[
+  {
+    "name": "null",
+    "character": "",
+    "color": "gray"
+  },
+  {
+    "name": "unknown",
+    "character": "?",
+    "color": "purple"
+  },
+  {
+    "name": "apple",
+    "character": "%",
+    "color": "limegreen"
+  },
+  {
+    "name": "dirtFloor",
+    "character": "·",
+    "color": "goldenrod"
+  },
+  {
+    "name": "dirtWall",
+    "character": "#",
+    "color": "goldenrod"
+  },
+  {
+    "name": "fungus",
+    "character": "F",
+    "color": "#66FF00"
+  },
+  {
+    "name": "player",
+    "character": "@",
+    "color": "white"
+  },
+  {
+    "name": "stoneFloor",
+    "character": "·"
+  },
+  {
+    "name": "stoneWall",
+    "character": "#",
+    "color": "gray"
+  },
+  {
+    "name": "zombie",
+    "character": "z",
+    "color": "rgb(127,127,0)"
+  },
+
+  {
+    "name": "red-zombie",
+    "character": "z",
+    "color": "red"
+  },
+  {
+    "name": "zombie-corpse",
+    "character": "%",
+    "color": "rgb(127,127,0)"
+  },
+
+  // Spells and Effects
+  {
+    "name": "fireball",
+    "character": "•",
+    "color": "red"
+  },
+  {
+    "name": "fire-explosion",
+    "character": "∗",
+    "color": "red"
+  }
+]
