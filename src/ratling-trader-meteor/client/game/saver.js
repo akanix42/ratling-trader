@@ -1,6 +1,8 @@
 "use strict";
 Saver.$inject = ["world"];
-App.containers.game.register("saver", Saver, Ioc.lifecycles.singleton);
+Saver.typeName = "saver";
+App.containers.game.register(Saver.typeName, Saver, Ioc.lifecycles.singleton);
+Classes.register(Saver);
 
 function Saver(world) {
     var self = this;

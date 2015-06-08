@@ -13,7 +13,7 @@ World.$inject = ['levelFactory', 'scheduler', 'entities'];
 World.typeName = "world";
 var ioc = App.containers.game;
 App.containers.game.register(World.typeName, World, Ioc.lifecycles.singleton);
-EJSON.addType(World.typeName, deserialize);
+Classes.register(World);
 
 function World(levelFactory, scheduler, entities) {
     this.player = null;
@@ -61,14 +61,14 @@ function deserialize(data) {
 //}
 
 World.prototype = {
-    init: function init(gameData) {
-        var self = this;
-        var levelFactory = self._private.levelFactory;
-        self._private.level = gameData
-            ? levelFactory.create(gameData.levels[gameData.currentLevel])
-            : levelFactory.create();
-
-    },
+    //init: function init(gameData) {
+    //    var self = this;
+    //    var levelFactory = self._private.levelFactory;
+    //    self._private.level = gameData
+    //        ? levelFactory.create(gameData.levels[gameData.currentLevel])
+    //        : levelFactory.create();
+    //
+    //},
 
     toJSONValue: function toJSONValue() {
         return {

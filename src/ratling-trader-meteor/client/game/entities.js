@@ -1,6 +1,8 @@
 "use strict";
 
-App.containers.game.register("entities", Entities, Ioc.lifecycles.singleton);
+Entities.typeName = "entities";
+App.containers.game.register(Entities.typeName, Entities, Ioc.lifecycles.singleton);
+Classes.register(Entities);
 
 function Entities() {
 
