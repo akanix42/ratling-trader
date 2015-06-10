@@ -5,7 +5,7 @@ Ioc.Container = Container;
 function Container() {
     this.registry = {};
     var lifecycles = this.lifecycles = {};
-    lifecycles[Ioc.lifecycles.singleton] = new Map();
+    lifecycles[Ioc.lifecycles.singleton] = {};
 }
 
 var factoryFacility = {
@@ -31,7 +31,7 @@ Container.prototype = {
         this.registry[key] = new Ioc.Registration(key, value, lifecycle || Ioc.lifecycles.unique);
     },
     serialize: function serialize(obj) {
-      return new Ioc.Serializer(obj).serialize();
+        return new Ioc.Serializer(obj).serialize();
     }
 };
 
@@ -61,11 +61,11 @@ function getInstance(container, registration) {
 
 function getSingleton(container, key, registration) {
     var instance;
-    if (instance = container.lifecycles[registration.lifecycle].get(key))
+    if (instance = container.lifecycles[registration.lifecycle][key])
         return instance;
 
     instance = getInstance(container, registration);
-    container.lifecycles[registration.lifecycle].set(key, instance);
+    container.lifecycles[registration.lifecycle][key] = instance;
 
     return instance;
 }
