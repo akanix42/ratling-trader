@@ -2,7 +2,7 @@
 Saver.$inject = ["world"];
 Saver.typeName = "saver";
 App.containers.game.register(Saver.typeName, Saver, Ioc.lifecycles.singleton);
-Classes.register(Saver);
+JSONC.register(Saver);
 
 function Saver(world) {
     var self = this;

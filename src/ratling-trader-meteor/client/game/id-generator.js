@@ -1,7 +1,7 @@
 "use strict";
 IdGenerator.typeName = "idGenerator";
 App.containers.game.register(IdGenerator.typeName, IdGenerator, Ioc.lifecycles.singleton);
-Classes.register(IdGenerator);
+JSONC.register(IdGenerator);
 
 function IdGenerator() {
     this.ids = {};

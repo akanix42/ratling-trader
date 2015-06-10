@@ -38,7 +38,7 @@ function createLevel(biome) {
 }
 
 Tile.typeName = "tile";
-Classes.register(Tile);
+JSONC.register(Tile);
 function Tile(x, y) {
     this.x = x;
     this.y = y;

@@ -13,7 +13,7 @@ World.$inject = ['levelFactory', 'scheduler', 'entities'];
 World.typeName = "world";
 var ioc = App.containers.game;
 App.containers.game.register(World.typeName, World, Ioc.lifecycles.singleton);
-Classes.register(World);
+JSONC.register(World);
 
 function World(levelFactory, scheduler, entities) {
     this.player = null;

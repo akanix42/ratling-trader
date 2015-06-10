@@ -2,7 +2,7 @@
 
 Entities.typeName = "entities";
 App.containers.game.register(Entities.typeName, Entities, Ioc.lifecycles.singleton);
-Classes.register(Entities);
+JSONC.register(Entities);
 
 function Entities() {
 
