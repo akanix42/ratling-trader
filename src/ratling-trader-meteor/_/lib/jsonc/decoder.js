@@ -33,6 +33,9 @@ function instantiateValue(value) {
     if (isRegisteredType(value))
         return instantiateRegisteredType.call(this, value);
 
+    if (isNativeType(value))
+        return instantiateNativeType.call(this, value);
+
     return value;
 }
 
@@ -47,8 +50,19 @@ function isRegisteredType(obj) {
     return "$$type" in obj && obj.$$type && JSONC.hasTypeName(obj.$$type);
 }
 
+function isNativeType(obj) {
+    return "$$type" in obj && (obj.$$type === "$$object" || obj.$$type === "$$array");
+}
+
 function instantiateRegisteredType(obj) {
     var instance = new JSONC.registry[obj.$$type]();
+    return _.assign(instance, obj.$$value);
+}
+
+function instantiateNativeType(obj) {
+    var instance = obj.$$type === "$$object"
+        ? {}
+        : [];
     return _.assign(instance, obj.$$value);
 }
 
@@ -60,7 +74,7 @@ function restoreProperties(obj) {
     _.forOwn(obj, restoreProperty, this);
 }
 
-function restoreProperty(value, key, obj){
+function restoreProperty(value, key, obj) {
     var typeCategory = getTypeCategory(value);
     if (typeCategory !== "object")
         return;

@@ -57,12 +57,15 @@ function mapObject(obj) {
     }
 
     if (obj.constructor.typeName)
-        return convertGameObjectToDto.call(this, obj);
+        return convertRegisteredTypeToDto.call(this, obj);
 
-    return convertNativeObjectToDto.call(this, obj);
+    if (obj.constructor === Object)
+        return convertPlainObjectToDto.call(this, obj);
+
+    return convertNativeTypeToDto.call(this, obj);
 }
 
-function convertGameObjectToDto(obj) {
+function convertRegisteredTypeToDto(obj) {
     var reference = getInstance.call(this, obj);
     if (reference)
         return reference;
@@ -81,15 +84,33 @@ function convertGameObjectToDto(obj) {
     return reference;
 }
 
-function convertNativeObjectToDto(obj) {
+function convertPlainObjectToDto(obj) {
     var reference = getInstance.call(this, obj);
     if (reference)
         return reference;
 
-    reference = addInstance.call(this, obj, obj);
+    var instance = {
+        $$type: "$$object"
+    };
+    reference = addInstance.call(this, obj, instance);
 
-    if (obj instanceof Array)
-        map.call(this, obj);
+    instance.$$value = map.call(this, obj);
+
+    return reference;
+}
+
+function convertNativeTypeToDto(obj) {
+    var reference = getInstance.call(this, obj);
+    if (reference)
+        return reference;
+
+    var instance = {
+        $$type: "$$array"
+    };
+    reference = addInstance.call(this, obj, instance);
+
+    instance.$$value = map.call(this, obj);
+
     return reference;
 }
 
