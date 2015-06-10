@@ -1,25 +1,10 @@
 "use strict";
 LevelFactory.typeName = "levelFactory";
-
+LevelFactory.$inject = ["idGenerator"];
 App.containers.game.register(LevelFactory.typeName, LevelFactory, Ioc.lifecycles.singleton);
-EJSON.addType(LevelFactory.typeName, deserialize);
+Classes.register(LevelFactory);
 
-function LevelFactory() {
 
-}
-LevelFactory.prototype = {
-
-    toJSONValue: function toJSONValue() {
-        return {
-
-        };
-    },
-    typeName: function typeName() {
-        return LevelFactory.typeName;
-    }
-};
-
-function deserialize(data) {
-    debugger
-    return "testing!!!";
+function LevelFactory(idGenerator) {
+    this.idGenerator = idGenerator;
 }
