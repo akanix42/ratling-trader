@@ -2,6 +2,8 @@ JSONC = new Jsonc();
 
 function Jsonc() {
     this.registry = {};
+    this.Decoder = null;
+    this.Encoder = null;
 }
 
 Jsonc.prototype.register = function register(type) {
@@ -25,3 +27,18 @@ Jsonc.prototype.hasTypeName = function hasType(typeName) {
     return typeName in this.registry;
 };
 
+Jsonc.prototype.stringify = function stringify(data) {
+    return JSON.stringify(this.encode(data));
+};
+
+Jsonc.prototype.parse = function parse(json) {
+    return this.decode(JSON.parse(json));
+};
+
+Jsonc.prototype.encode = function encode(data) {
+    return new this.Encoder(data).encode();
+};
+
+Jsonc.prototype.decode = function decode(data) {
+    return new this.Decoder(data).decode();
+};

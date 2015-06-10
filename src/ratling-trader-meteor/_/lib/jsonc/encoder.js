@@ -1,36 +1,32 @@
 "use strict";
-JSONC.Serializer = Serializer;
+JSONC.Encoder = Encoder;
 
-function Serializer(data) {
+function Encoder(data) {
     this.data = data;
     this.instancesMap = new Map();
     this.instances = [];
 }
 
-Serializer.prototype.serialize = function serializePublic() {
+Encoder.prototype.encode = function encodePublic() {
     return {
         instances: this.instances,
         root: map.call(this, this.data)
     };
 };
 
-Serializer.prototype.addInstance = function addInstancePublic(originalObject, instance) {
+function addInstance(originalObject, instance) {
     if (this.instancesMap.get(originalObject))
         return;
     var reference = {$$index: this.instances.length};
     this.instances.push(instance);
     this.instancesMap.set(originalObject, reference);
     return reference;
-};
-Serializer.prototype.getInstance = function addInstancePublic(instance) {
-    return this.instancesMap.get(instance);
-};
-
-function mapValues(obj) {
-    var dto = _.mapValues(obj, mapValue, this);
-
-    return dto;
 }
+
+function getInstance(instance) {
+    return this.instancesMap.get(instance);
+}
+
 function map(obj) {
     if (obj instanceof Array)
         return _.map(obj, mapValue, this);
@@ -67,7 +63,7 @@ function mapObject(obj) {
 }
 
 function convertGameObjectToDto(obj) {
-    var reference = this.getInstance(obj);
+    var reference = getInstance.call(this, obj);
     if (reference)
         return reference;
 
@@ -75,7 +71,7 @@ function convertGameObjectToDto(obj) {
         $$type: obj.constructor.typeName
     };
 
-    reference = this.addInstance(obj, instance);
+    reference = addInstance.call(this, obj, instance);
 
     var toDto = null;
     if ('toDto' in obj)
@@ -86,7 +82,12 @@ function convertGameObjectToDto(obj) {
 }
 
 function convertNativeObjectToDto(obj) {
-    var reference = this.addInstance(obj, obj);
+    var reference = getInstance.call(this, obj);
+    if (reference)
+        return reference;
+
+    reference = addInstance.call(this, obj, obj);
+
     if (obj instanceof Array)
         map.call(this, obj);
     return reference;
@@ -97,7 +98,7 @@ function isSerializableObject(obj) {
         return false;
 
     var constructor = obj.constructor;
-    if ((constructor.typeName !== undefined && Classes.hasType(constructor)) || constructor === Object || constructor === Array)
+    if ((constructor.typeName !== undefined && JSONC.hasType(constructor)) || constructor === Object || constructor === Array)
         return true;
 
     return false;
