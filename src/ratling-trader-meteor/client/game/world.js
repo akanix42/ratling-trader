@@ -60,27 +60,6 @@ function deserialize(data) {
 //        this._private.gameEventHub.notify(new ReadyForPlayerInputEvent());
 //}
 
-World.prototype = {
-    //init: function init(gameData) {
-    //    var self = this;
-    //    var levelFactory = self._private.levelFactory;
-    //    self._private.level = gameData
-    //        ? levelFactory.create(gameData.levels[gameData.currentLevel])
-    //        : levelFactory.create();
-    //
-    //},
-
-    toJSONValue: function toJSONValue() {
-        return {
-            seed: this.seed,
-            levelFactory: EJSON.toJSONValue(this.levelFactory)
-        };
-    },
-    typeName: function typeName(){
-        return World.typeName;
-    }
-};
-
 function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
     gameEventHub.subscribe(null, {
         "class": PlayerInitializedEvent, handler: function (event) {
