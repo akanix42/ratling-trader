@@ -28,7 +28,9 @@ Container.prototype = {
         return get(this, key);
     },
     register: function register(key, value, lifecycle) {
-        this.registry[key] = new Ioc.Registration(key, value, lifecycle || Ioc.lifecycles.unique);
+        var registration = this.registry[key] = new Ioc.Registration(key, value, lifecycle || Ioc.lifecycles.unique);
+        if (!this.registry[key + "Factory"])
+            this.registry[key + "Factory"] = new Ioc.FactoryRegistration(this, registration, resolve);
     },
     serialize: function serialize(obj) {
         return new Ioc.Serializer(obj).serialize();
@@ -42,7 +44,11 @@ function get(container, key) {
     //    var facility = getFacility(container, key);
     //    return facility.handle(container, key, registration);
     //}
+    return resolve(container, key, registration);
 
+}
+
+function resolve(container, key, registration) {
     if (!registration)
         throw new Error("Registration not found for: " + key);
 

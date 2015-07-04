@@ -1,10 +1,16 @@
-<template name="game">
-    <div id="ui-screen">
-        <div class="knockout-screen"></div>
-    </div>
-    <div id="ui-footer">
-        <ul data-bind="foreach: messages">
-            <li>{{this}}</li>
-        </ul>
+<template name="display">
+    <div id="ui">
+        <div id="ui-screen">
+            <div class="knockout-screen">
+                {{> UI.dynamic template=overlayTemplate}}
+            </div>
+        </div>
+        <div id="ui-footer">
+            <ul>
+                {{#each messages}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
     </div>
 </template>

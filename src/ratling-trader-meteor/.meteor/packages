@@ -12,3 +12,7 @@ mquandalle:bower
 iron:router
 siyfion:webfontloader
 stevezhu:lodash
+sanjo:jasmine
+velocity:html-reporter
+manuel:reactivearray
+reactive-var

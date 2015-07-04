@@ -10,10 +10,7 @@
 //var SaveGameCommand = require("game/commands/save-game-command");
 //var gameActions = getActions();
 World.$inject = ['levelFactory', 'scheduler', 'entities'];
-World.typeName = "world";
-var ioc = App.containers.game;
-App.containers.game.register(World.typeName, World, Ioc.lifecycles.singleton);
-JSONC.register(World);
+Game.registerSingleton("world", World);
 
 function World(levelFactory, scheduler, entities) {
     this.player = null;
@@ -21,20 +18,12 @@ function World(levelFactory, scheduler, entities) {
     this.scheduler = scheduler;
     this.gameEntities = entities;
     this.levelFactory = levelFactory;
-
-    //subscribeToInput(this);
-    //var deferredsMap = notifyWhenInitialized(self, gameEventHub);
-    //getPlayer(self, gameEventHub, gameToUiBridge, deferredsMap);
+    this.zones = [];
 }
 
-function deserialize(data) {
-    var levelFactory = EJSON.fromJSONValue(data.levelFactory);
-    ROT.RNG.setSeed(data.seed);
-    var world = ioc.using(levelFactory).get(World.typeName);
-    //world.seed = data.seed;
-    //world.levelFactory = ioc.get
-}
-
+World.prototype.addZone = function addZone(zone){
+    this.zones.push(zone);
+};
 //
 //function subscribeToInput(world){
 //    postal.subscribe({
@@ -63,8 +52,8 @@ function deserialize(data) {
 function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
     gameEventHub.subscribe(null, {
         "class": PlayerInitializedEvent, handler: function (event) {
-            game._private.player = event.player;
-            game._private.scheduler.resume();
+            game._.player = event.player;
+            game._.scheduler.resume();
             deferredsMap.get(PlayerInitializedEvent.name).resolve();
         }
     });
@@ -81,7 +70,7 @@ function getPlayer(game, gameEventHub, gameToUiBridge, deferredsMap) {
 
     gameEventHub.subscribe(null, {
         "class": ReadyForPlayerInputEvent, handler: function (event) {
-            when(game._private.gameToUiBridge.readyForPlayerInput.call(game._private.gameToUiBridge))
+            when(game._.gameToUiBridge.readyForPlayerInput.call(game._.gameToUiBridge))
                 .then(game.handleInput.bind(game));
         }
     });

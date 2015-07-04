@@ -1,20 +1,5 @@
-NewGameFactory.$inject = ['world', 'zoneFactory'];
-NewGameFactory.typeName = "newGameFactory";
-
-function NewGameFactory(world, zoneFactory) {
-    this.world = world;
-    this.zoneFactory = zoneFactory;
-}
-
-NewGameFactory.prototype.get = function (player) {
-    var firstZone = this.zoneFactory.get();
-    this.world.addZone(firstZone);
-    player.setTile(firstZone.levels[0].tiles[5][5]);
-
-    return this.world;
-};
-
-ZoneFactory.typeName = "zoneFactory";
+"use strict";
+Game.registerSingleton("zoneFactory", ZoneFactory);
 
 function ZoneFactory() {
 
@@ -28,7 +13,9 @@ ZoneFactory.prototype.get = function () {
 
     return zone;
 };
+
 function createLevel(biome) {
+    var Level = Game.getType("level");
     var levelData = generateLevelData(biome);
     var level = new Level();
     level.tiles = levelData.tiles;
@@ -36,16 +23,10 @@ function createLevel(biome) {
 
     return level;
 }
-
-Tile.typeName = "tile";
-JSONC.register(Tile);
-function Tile(x, y) {
-    this.x = x;
-    this.y = y;
-}
-
 var width = 20, height = 20;
+
 function generateLevelData() {
+    var Tile = Game.getType("tile");
     var tiles = [];
     var portals = [];
 
@@ -56,3 +37,4 @@ function generateLevelData() {
     }
     return {tiles: tiles, portals: portals};
 }
+
